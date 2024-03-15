@@ -1,7 +1,6 @@
 package com.example.clientsellingmedicine.Adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +16,57 @@ import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.Product;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
-public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHolder> {
+public class productDiscountAdapter extends RecyclerView.Adapter <productDiscountAdapter.ViewHolder>  {
 
     private List<Product> mProducts;
     private Context mContext;
 
-    public productAdapter(List<Product> list) {
+    public productDiscountAdapter(List<Product> list) {
         this.mProducts = list;
 //        this.mContext = mContext;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View newsView =
+                inflater.inflate(R.layout.product_item, parent, false);
+
+        productDiscountAdapter.ViewHolder viewHolder = new productDiscountAdapter.ViewHolder(newsView,context);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+
+        Product product = (Product) mProducts.get(position);
+
+        holder.tvNameProductItem.setText(product.getName());
+        String unit = product.getUnit();
+        String price = convertPrice(product.getPrice());
+        holder.tvProductPrice.setText(price+" đ/"+unit);
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImage())
+                .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải
+                .error(R.drawable.error_image) // Hình ảnh thay thế khi có lỗi
+                .into(holder.ivProductItem);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mProducts.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameProductItem,tvProductPrice;
         public ImageView ivProductItem;
-
         public LinearLayout layout_Discount;
-
 
 
 
@@ -63,42 +92,6 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
 
         }
     }
-
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View newsView = inflater.inflate(R.layout.product_item, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(newsView,context);
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.layout_Discount.setVisibility(View.GONE);
-        Product product = (Product) mProducts.get(position);
-
-        holder.tvNameProductItem.setText(product.getName());
-        String unit = product.getUnit();
-        String price = convertPrice(product.getPrice());
-        holder.tvProductPrice.setText(price+" đ/"+unit);
-        Glide.with(holder.itemView.getContext())
-                .load(product.getImage())
-                .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải
-                .error(R.drawable.error_image) // Hình ảnh thay thế khi có lỗi
-                .into(holder.ivProductItem);
-
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return mProducts.size();
-    }
-
     public String convertPrice(double number) {
         long integerPart = (long) number;
         int decimalPart = (int) ((number - integerPart) * 1000);

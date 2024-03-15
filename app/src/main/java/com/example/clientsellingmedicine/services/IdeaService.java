@@ -23,6 +23,7 @@ public interface IdeaService {
     @GET("products")
     Call<List<Product>> getIdeas();
 
+
     @GET("ideas/{id}")
     Call<Product> getIdea(@Path("id")int id);
 

@@ -10,12 +10,12 @@
         android:title="Danh mục"
         android:icon="@drawable/pills" />
 
-<!--    <item-->
-<!--        android:id="@+id/navigation_prescription"-->
-<!--        android:title="Đơn hàng"-->
-<!--        android:icon="@drawable/prescription" />-->
-<!--    <item-->
-<!--        android:id="@+id/navigation_user"-->
-<!--        android:title="Cá nhân"-->
-<!--        android:icon="@drawable/user" />-->
+    <item
+        android:id="@+id/navigation_prescription"
+        android:title="Đơn hàng"
+        android:icon="@drawable/prescription" />
+    <item
+        android:id="@+id/navigation_user"
+        android:title="Cá nhân"
+        android:icon="@drawable/user" />
 </menu>
