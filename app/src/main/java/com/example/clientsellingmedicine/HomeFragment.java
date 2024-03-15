@@ -34,8 +34,6 @@ public class HomeFragment extends Fragment {
 
     }
 
-
-
     private void addControl(View view) {
         tvTopSale = view.findViewById(R.id.tvTopSale);
     }

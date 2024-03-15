@@ -35,9 +35,6 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
         public TextView tvNameProductItem,tvProductPrice;
         public ImageView ivProductItem;
 
-
-
-
         public Button btnAddtoCartProduct;
 
         public ViewHolder(View itemView, Context context) {
@@ -64,8 +61,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View newsView =
-                inflater.inflate(R.layout.product_item, parent, false);
+        View newsView = inflater.inflate(R.layout.product_item, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(newsView,context);
         return viewHolder;
