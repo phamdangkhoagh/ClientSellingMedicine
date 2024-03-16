@@ -157,7 +157,9 @@ public class HomeFragment extends Fragment {
         ivCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Click on Cart", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), CartActivity.class);
+                startActivity(intent);
+//                Toast.makeText(mContext, "Click on Cart", Toast.LENGTH_LONG).show();
             }
         });
 

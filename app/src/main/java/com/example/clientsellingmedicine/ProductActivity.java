@@ -30,8 +30,6 @@ public class ProductActivity extends AppCompatActivity {
     RecyclerView rcvProduct;
     productAdapter productAdapter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,8 +41,6 @@ public class ProductActivity extends AppCompatActivity {
         addEvents();
 
     }
-
-
 
     private void addControl() {
         rcvProduct = findViewById(R.id.rcvProduct);
@@ -80,8 +76,6 @@ public class ProductActivity extends AppCompatActivity {
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
                 }
             }
-
-
 
         });
     }
