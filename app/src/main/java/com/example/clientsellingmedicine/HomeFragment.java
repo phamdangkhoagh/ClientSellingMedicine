@@ -44,6 +44,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.clientsellingmedicine.Adapter.productAdapter;
 import com.example.clientsellingmedicine.Adapter.productDiscountAdapter;
 import com.example.clientsellingmedicine.models.Product;
@@ -52,6 +55,7 @@ import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,6 +78,8 @@ public class HomeFragment extends Fragment {
     TextInputEditText searchText;
 
     FrameLayout redCircle;
+
+    ImageSlider imageSlider;
     private SearchView searchView;
     private String lastQuery;
 
@@ -113,6 +119,7 @@ public class HomeFragment extends Fragment {
         ivNotification = view.findViewById(R.id.ivNotification);
         tvNumberCart = view.findViewById(R.id.tvNumberCart);
         redCircle = view.findViewById(R.id.redCircle);
+        imageSlider = view.findViewById(R.id.image_slider);
     }
     private void addEvents(){
         tvTopSale.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +163,7 @@ public class HomeFragment extends Fragment {
 
         getTopProductsSelling();
         getTopProductsDiscount();
-
+        showSlider();
     }
 
     private void getTopProductsSelling(){
@@ -253,4 +260,18 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void showSlider(){
+        ArrayList<SlideModel> imageList = new ArrayList<>();
+
+        imageList.add(new SlideModel("https://data-service.pharmacity.io/pmc-ecm-webapp-config-api/production/banner/795%20x%20302%20(x2)%20(1)-1710388934651.png", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://prod-cdn.pharmacity.io/e-com/images/ecommerce/20240308081457-0-795%20x%20302%20%28x2%29.png", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://prod-cdn.pharmacity.io/e-com/images/ecommerce/20240305075612-0-PMCE_795x302(x2).png", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://prod-cdn.pharmacity.io/e-com/images/ecommerce/20240311085012-0-795x302%28x2%29%20%281%29.png", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://data-service.pharmacity.io/pmc-ecm-webapp-config-api/production/banner/795%20x%20302%20(x2)%20(1)-1710388934651.png", ScaleTypes.FIT));
+        // imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
+         imageList.add(new SlideModel("https://prod-cdn.pharmacity.io/e-com/images/ecommerce/20240308084056-0-dealhot_dealhot_1590x604.jpg", ScaleTypes.FIT));
+
+        imageSlider.setImageList(imageList,ScaleTypes.FIT);
+
+    }
 }

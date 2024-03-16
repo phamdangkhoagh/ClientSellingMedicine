@@ -29,6 +29,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
@@ -48,4 +49,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:3.9.0")
     // load image
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    //slider
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
 }
