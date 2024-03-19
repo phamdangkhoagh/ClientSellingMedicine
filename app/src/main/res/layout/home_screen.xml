@@ -293,6 +293,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/cardiology"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -318,6 +320,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/aid_box"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -343,6 +347,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/drug"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -368,6 +374,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/epidemic_prevention"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -393,6 +401,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/medicine"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -418,6 +428,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/drops"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -443,6 +455,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/pharmacist"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
@@ -468,6 +482,8 @@
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
+                                android:src="@drawable/injection"
+                                android:scaleType="fitXY"
                                 android:contentDescription="TODO" />
 
                             <TextView
