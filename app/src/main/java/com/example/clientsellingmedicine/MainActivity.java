@@ -28,30 +28,54 @@ public class MainActivity extends AppCompatActivity
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
-    HomeFragment firstFragment = new HomeFragment();
-    CategoryFragment secondFragment = new CategoryFragment();
+    HomeFragment homeFragment = new HomeFragment();
+    CategoryFragment categoryFragment = new CategoryFragment();
+    OrderFragment orderFragment = new OrderFragment();
+
+    ProfileFragment profileFragment = new ProfileFragment();
+
+    UnLoginProfileFragment unLoginProfileFragment = new UnLoginProfileFragment();
 
 
     @Override
     public boolean
-    onNavigationItemSelected(@NonNull MenuItem item)
-    {
+    onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.navigation_home){
+        if (id == R.id.navigation_home) {
             getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, firstFragment)
-                        .commit();
-                return true;
-        }
-        else if(id == R.id.navigation_pills) {
+                    .beginTransaction()
+                    .replace(R.id.container, homeFragment)
+                    .commit();
+            return true;
+        } else if (id == R.id.navigation_pills) {
             getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, secondFragment)
-                        .commit();
-                return true;
+                    .beginTransaction()
+                    .replace(R.id.container, categoryFragment)
+                    .commit();
+            return true;
 
-                    }
+        } else if (id == R.id.navigation_prescription) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, orderFragment)
+                    .commit();
+            return true;
+
+//        } else if (id == R.id.navigation_user) {
+//            if(true){
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.container, profileFragment)
+//                        .commit();
+//            }
+//            else {
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.container, unLoginProfileFragment)
+//                        .commit();
+//            }
+//            return true;
+        }
         return false;
     }
 }
