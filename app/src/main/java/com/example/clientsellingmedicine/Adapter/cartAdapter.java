@@ -19,7 +19,7 @@ import java.util.List;
 
 public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
-    List<Cart> listProductSelected;
+    private List<Cart> listProductSelected;
     private Context mContext;
 
     public cartAdapter(List<Cart> list){
@@ -31,7 +31,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         public TextView tvNameCartItem, tvPriceCartItem;
         public ImageView ivCartItem;
 
-        public LinearLayout  layout_cart;
+
 
         public ViewHolder (View itemView, Context context){
             super(itemView);
@@ -55,12 +55,11 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull cartAdapter.ViewHolder holder, int position) {
-        holder.layout_cart.setVisibility(View.GONE);
         Cart cart = (Cart) listProductSelected.get(position);
 
         holder.tvNameCartItem.setText(cart.getName());
         String price = convertPrice(cart.getPrice());
-        holder.tvPriceCartItem.setText(price+" đ/");
+        holder.tvPriceCartItem.setText(price+" đ");
         Glide.with(holder.itemView.getContext())
                 .load(cart.getImage())
                 .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải

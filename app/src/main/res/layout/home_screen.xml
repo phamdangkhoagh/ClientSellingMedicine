@@ -32,19 +32,19 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/search_header"
                 android:hint="@string/txtTimKiem"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:paddingStart="4dp"
                 android:paddingEnd="0dp"
                 android:textAlignment="viewStart"
                 app:drawableStartCompat="@drawable/ic_search"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.466"
                 app:layout_constraintWidth_percent="0.6"
-                tools:ignore="MissingConstraints"
-                android:imeOptions="actionSearch"/>
+                tools:ignore="MissingConstraints" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
