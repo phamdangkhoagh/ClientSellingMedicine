@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import com.example.clientsellingmedicine.services.IdeaService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,6 +40,10 @@ public class CartActivity extends AppCompatActivity {
     LinearLayout bottom_view,linear_layout_dynamic;
 
     ImageView icon_arrow_up;
+
+    CheckBox checkboxCartItem,masterCheckboxCart;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +62,53 @@ public class CartActivity extends AppCompatActivity {
         bottom_view = findViewById(R.id.bottom_view);
         linear_layout_dynamic = findViewById(R.id.linear_layout_dynamic);
         icon_arrow_up = findViewById(R.id.icon_arrow_up);
+        checkboxCartItem = findViewById(R.id.checkboxCartItem);
+        masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
     }
 
     private void addEvents() {
         getCartItems();
 
+//        masterCheckboxCart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                checkboxCartItem.setChecked(isChecked);
+//            }
+//        });
+
+        // Listener for the individual checkboxes
+//        checkboxCartItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (!isChecked) {
+//                    masterCheckboxCart.setChecked(false);
+//                } else {
+//                    // Check if all checkboxes are checked
+//                    boolean allChecked = areAllCheckboxesChecked();
+//                    // Update masterCheckbox's state
+//                    if(allChecked) {
+//                        masterCheckboxCart.setChecked(true);
+//                    }
+//                }
+//            }
+//        });
+
+
+//        checkboxCartItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    // Đánh dấu CheckBox đã được tích
+//                    checkboxCartItem.setChecked(true);
+//                    isChecked = true;
+//                } else {
+//                    // Đánh dấu CheckBox chưa được tích
+//                    checkboxCartItem.setChecked(false);
+//                    isChecked = false;
+//                }
+//            }
+//        });
+        //  display detail price cart
         icon_arrow_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +117,7 @@ public class CartActivity extends AppCompatActivity {
                 Log.d("Height", "onClick: "+height);
                 if(height == 440){
                     // set new height
-                    int desiredHeightInDp = 360;
+                    int desiredHeightInDp = 260;
 
                     float scale = getResources().getDisplayMetrics().density;
                     int desiredHeightInPixels = (int) (desiredHeightInDp * scale + 0.5f);
@@ -80,7 +129,7 @@ public class CartActivity extends AppCompatActivity {
                     //display view
                     linear_layout_dynamic.setVisibility(v.VISIBLE);
                     // set icon down
-                   icon_arrow_up.setImageResource(R.drawable.ic_plus);
+                   icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
                 }
                 else {
                     // set new height
@@ -96,11 +145,16 @@ public class CartActivity extends AppCompatActivity {
                     //display view
                     linear_layout_dynamic.setVisibility(v.GONE);
                     // set icon up
-                    icon_arrow_up.setImageResource(R.drawable.arrow_up);
+                    icon_arrow_up.setImageResource(R.drawable.ic_arrow_up);
                 }
 
             }
         });
+
+
+        //set state checkbox
+
+
     }
 
     public void getCartItems(){
@@ -133,7 +187,20 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-    private void displayLayout(int height, String s, String rs){
 
+    // Function to check if all checkboxes are checked
+    private boolean areAllCheckboxesChecked() {
+        // Add other checkboxes to this list as needed
+        List<CheckBox> checkboxes = new ArrayList<>();
+        checkboxes.add(checkboxCartItem);
+        // Add other checkboxes here
+
+        for (CheckBox checkbox : checkboxes) {
+            if (!checkbox.isChecked()) {
+            }
+            return false;
+        }
+        return true;
     }
+
 }

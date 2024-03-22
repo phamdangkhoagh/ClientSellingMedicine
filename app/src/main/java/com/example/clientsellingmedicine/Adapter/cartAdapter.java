@@ -1,9 +1,11 @@
 package com.example.clientsellingmedicine.Adapter;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     private List<Cart> listProductSelected;
     private Context mContext;
 
+    public CheckBox checkboxCartItem,masterCheckboxCart;
+
     public cartAdapter(List<Cart> list){
         this.listProductSelected = list;
 
@@ -31,13 +35,35 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         public TextView tvNameCartItem, tvPriceCartItem;
         public ImageView ivCartItem;
 
+        private SparseBooleanArray itemStateArray= new SparseBooleanArray();
 
 
-        public ViewHolder (View itemView, Context context){
+
+        public ViewHolder (View itemView, Context context) {
             super(itemView);
             tvNameCartItem = itemView.findViewById(R.id.tvNameCartItem);
             tvPriceCartItem = itemView.findViewById(R.id.tvPriceCartItem);
             ivCartItem = itemView.findViewById(R.id.ivCartItem);
+
+            masterCheckboxCart = itemView.findViewById(R.id.masterCheckboxCart);
+            CheckBox checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
+
+            itemView.setOnClickListener(this);
+            this.setIsRecyclable(false);
+
+            masterCheckboxCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int adapterPosition = getAdapterPosition();
+                    if (!itemStateArray.get(adapterPosition, false)) {
+                        checkboxCartItem.setChecked(true);
+                        itemStateArray.put(adapterPosition, true);
+                    } else {
+                        checkboxCartItem.setChecked(false);
+                        itemStateArray.put(adapterPosition, false);
+                    }
+                }
+            });
         }
     }
 
@@ -65,6 +91,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                 .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải
                 .error(R.drawable.error_image) // Hình ảnh thay thế khi có lỗi
                 .into(holder.ivCartItem);
+
+        holder.setIsRecyclable(false);
     }
 
     @Override
