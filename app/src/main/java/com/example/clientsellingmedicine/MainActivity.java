@@ -61,20 +61,20 @@ public class MainActivity extends AppCompatActivity
                     .commit();
             return true;
 
-//        } else if (id == R.id.navigation_user) {
-//            if(true){
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.container, profileFragment)
-//                        .commit();
-//            }
-//            else {
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.container, unLoginProfileFragment)
-//                        .commit();
-//            }
-//            return true;
+        } else if (id == R.id.navigation_user) {
+            if(true){
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, profileFragment)
+                        .commit();
+            }
+            else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, unLoginProfileFragment)
+                        .commit();
+            }
+            return true;
         }
         return false;
     }
