@@ -84,4 +84,6 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
 
         return formattedIntegerPart + "." + formattedDecimalPart;
     }
+
+
 }
