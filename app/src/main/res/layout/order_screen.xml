@@ -44,6 +44,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/img_filter_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -203,6 +204,40 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <LinearLayout
+            android:id="@+id/layout_empty_order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="46dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints">
+            <TextView
+                android:id="@+id/tv_empty_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Bạn chưa có đơn hàng nào!"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_shopping_now"
+                android:layout_width="200dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="70dp"
+                android:background="@color/header_color"
+                android:text="Mua sắm ngay"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
         <ScrollView
             android:id="@+id/scrollview_content"
             android:layout_width="match_parent"
@@ -213,7 +248,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.416"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizontal_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
@@ -230,102 +264,6 @@
                     android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical">-->
-<!--                    &lt;!&ndash;                       header order &ndash;&gt;-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="42dp"-->
-<!--                        android:layout_marginStart="16dp"-->
-<!--                        android:layout_marginTop="26dp"-->
-<!--                        android:layout_marginEnd="16dp"-->
-<!--                        android:background="@drawable/header_order_background"-->
-<!--                        android:gravity="center"-->
-<!--                        android:orientation="horizontal">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center_vertical"-->
-<!--                                android:layout_marginStart="26dp"-->
-<!--                                android:gravity="start"-->
-<!--                                android:text="Mua tại nhà thuốc"-->
-<!--                                android:textSize="14sp"-->
-<!--                                android:textStyle="bold" />-->
-
-<!--                        </LinearLayout>-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="90dp"-->
-<!--                            android:layout_height="24dp"-->
-<!--                            android:layout_marginEnd="16dp"-->
-<!--                            android:background="@drawable/success_background"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="match_parent"-->
-<!--                                android:gravity="center"-->
-<!--                                android:text="Thành công"-->
-<!--                                android:textAlignment="center"-->
-
-<!--                                android:textColor="@color/white"-->
-<!--                                android:textSize="10sp"-->
-<!--                                android:textStyle="bold" />-->
-
-<!--                        </LinearLayout>-->
-
-<!--                    </LinearLayout>-->
-<!--                    &lt;!&ndash;                       Content order&ndash;&gt;-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="16dp"-->
-<!--                        android:layout_marginEnd="16dp"-->
-<!--                        android:background="@drawable/content_order_background"-->
-<!--                        android:orientation="vertical">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginTop="26dp"-->
-<!--                            android:layout_marginBottom="16dp"-->
-<!--                            android:orientation="vertical">-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginStart="26dp"-->
-<!--                                android:text="Mã đơn hàng: SJHLKAJFHLWEKY"-->
-<!--                                android:textStyle="bold" />-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginStart="26dp"-->
-<!--                                android:layout_marginTop="16dp"-->
-<!--                                android:text="Giá trị đơn: 74.000 đ"-->
-<!--                                android:textStyle="bold" />-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginStart="26dp"-->
-<!--                                android:layout_marginTop="16dp"-->
-<!--                                android:text="Mua tại nhà thuốc: SJHLKAJFHLWEKY"-->
-<!--                                android:textStyle="bold" />-->
-<!--                        </LinearLayout>-->
-<!--                    </LinearLayout>-->
-<!--                </LinearLayout>-->
-
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

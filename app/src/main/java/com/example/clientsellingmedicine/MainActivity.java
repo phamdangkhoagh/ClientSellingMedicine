@@ -78,5 +78,13 @@ public class MainActivity extends AppCompatActivity
         }
         return false;
     }
+
+    public void goToHomeFragment() {
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+    }
 }
+
+
+
+
 

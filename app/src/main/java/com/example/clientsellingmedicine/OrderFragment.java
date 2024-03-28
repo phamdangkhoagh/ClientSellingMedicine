@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,9 +40,15 @@ import retrofit2.Response;
 public class OrderFragment extends Fragment {
     private Context mContext;
 
-    LinearLayout layout_allOrder,layout_processingStatus,layout_inTransitStatus,layout_deliveredStatus,layout_cancelledStatus;
+    LinearLayout layout_allOrder, layout_processingStatus, layout_inTransitStatus, layout_deliveredStatus, layout_cancelledStatus, layout_empty_order;
 
-    TextView processingStatus,inTransitStatus,deliveredStatus,cancelledStatus,allOrder;
+    TextView processingStatus, inTransitStatus, deliveredStatus, cancelledStatus, allOrder, tv_empty_order;
+
+    Button btn_shopping_now;
+
+    ImageView img_filter_order;
+
+    ScrollView scrollview_content;
 
     RecyclerView rcvOrder;
 
@@ -47,10 +56,12 @@ public class OrderFragment extends Fragment {
 
     HorizontalScrollView horizontal_statusOrder;
 
-    private static List<Order> listOrder ; //list order for search status
+    private static List<Order> listOrder; //list order for search status
+
     public OrderFragment() {
         // Required empty public constructor
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,26 +76,33 @@ public class OrderFragment extends Fragment {
     }
 
 
-
-    private void addControl(View view){
+    private void addControl(View view) {
         layout_processingStatus = view.findViewById(R.id.layout_processingStatus);
         layout_inTransitStatus = view.findViewById(R.id.layout_inTransitStatus);
         layout_deliveredStatus = view.findViewById(R.id.layout_deliveredStatus);
         layout_cancelledStatus = view.findViewById(R.id.layout_cancelledStatus);
         layout_allOrder = view.findViewById(R.id.layout_allOrder);
+        layout_empty_order = view.findViewById(R.id.layout_empty_order);
 
         processingStatus = view.findViewById(R.id.processingStatus);
         inTransitStatus = view.findViewById(R.id.inTransitStatus);
         deliveredStatus = view.findViewById(R.id.deliveredStatus);
         cancelledStatus = view.findViewById(R.id.cancelledStatus);
         allOrder = view.findViewById(R.id.allOrder);
+        tv_empty_order = view.findViewById(R.id.tv_empty_order);
 
         horizontal_statusOrder = view.findViewById(R.id.horizontal_statusOrder);
+        scrollview_content = view.findViewById(R.id.scrollview_content);
 
         rcvOrder = view.findViewById(R.id.rcvOrder);
 
+        btn_shopping_now = view.findViewById(R.id.btn_shopping_now);
+
+        img_filter_order = view.findViewById(R.id.img_filter_order);
+
 
     }
+
     private void addEvents() {
         // Set the horizontal scroll position to the first position
         horizontal_statusOrder.post(new Runnable() {
@@ -93,6 +111,20 @@ public class OrderFragment extends Fragment {
                 horizontal_statusOrder.scrollTo(0, 0);
             }
         });
+
+
+        // click on the shopping now button or login now button
+        View.OnClickListener shoppingNowClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == btn_shopping_now) {
+                    //go to home fragment
+                    ((MainActivity) getActivity()).goToHomeFragment();
+                }
+            }
+        };
+        btn_shopping_now.setOnClickListener(shoppingNowClickListener);
+
 
         //get order status
         View.OnClickListener statusClickListener = new View.OnClickListener() {
@@ -111,32 +143,38 @@ public class OrderFragment extends Fragment {
                     layout_inTransitStatus.setBackgroundResource(R.drawable.order_selection_background);
 
                 } else if (view == deliveredStatus) {
-
+                    //set background color delivered status
                     layout_deliveredStatus.setBackgroundResource(R.drawable.order_selection_background);
-                    //get orders delivered
-                    List<Order> ordersDelivered = listOrder.stream()
-                            .filter(order -> order.getStatus() == 1)
-                            .collect(Collectors.toList());
+                    if (listOrder != null) {
+                        //get orders delivered
+                        List<Order> ordersDelivered = listOrder.stream()
+                                .filter(order -> order.getStatus() == 1)
+                                .collect(Collectors.toList());
 
-                    orderAdapter = new orderAdapter(ordersDelivered);
-                    rcvOrder.setAdapter(orderAdapter);
+                        orderAdapter = new orderAdapter(ordersDelivered);
+                        rcvOrder.setAdapter(orderAdapter);
 
+                    }
 
                 } else if (view == cancelledStatus) {
+                    //set background color cancelled status
                     layout_cancelledStatus.setBackgroundResource(R.drawable.order_selection_background);
-                    //get orders cancelled
-                    List<Order> ordersCancelled = listOrder.stream()
-                            .filter(order -> order.getStatus() == 0)
-                            .collect(Collectors.toList());
+                    if (listOrder != null) {
+                        //get orders cancelled
+                        List<Order> ordersCancelled = listOrder.stream()
+                                .filter(order -> order.getStatus() == 0)
+                                .collect(Collectors.toList());
 
-                    orderAdapter = new orderAdapter(ordersCancelled);
-                    rcvOrder.setAdapter(orderAdapter);
-
-                } else if (view == allOrder){
+                        orderAdapter = new orderAdapter(ordersCancelled);
+                        rcvOrder.setAdapter(orderAdapter);
+                    }
+                } else if (view == allOrder) {
                     layout_allOrder.setBackgroundResource(R.drawable.order_selection_background);
+                    if (listOrder != null) {
+                        orderAdapter = new orderAdapter(listOrder);
+                        rcvOrder.setAdapter(orderAdapter);
+                    }
 
-                    orderAdapter = new orderAdapter(listOrder);
-                    rcvOrder.setAdapter(orderAdapter);
                 }
             }
         };
@@ -148,28 +186,34 @@ public class OrderFragment extends Fragment {
         cancelledStatus.setOnClickListener(statusClickListener);
         allOrder.setOnClickListener(statusClickListener);
 
-        getOrder();
+        // get all orders
+        getOrders();
     }
 
-    public void getOrder(){
+    public void getOrders() {
         OrderService orderService = ServiceBuilder.buildService(OrderService.class);
         Call<List<Order>> request = orderService.getOrders();
 
         request.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     listOrder = new ArrayList<>();
                     listOrder = response.body(); //get list order for search status
+                    if(listOrder != null && listOrder.size() > 0) {
+                        // add list order to recycle view
+                        orderAdapter = new orderAdapter(listOrder);
+                        rcvOrder.setAdapter(orderAdapter);
+                        LinearLayoutManager layoutManager
+                                = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                        rcvOrder.setLayoutManager(layoutManager);
+                    }
+                    else {
+//                        showOrderHistoryWithoutLogin();
+                        showOrderHistoryWithEmptyOrder();
+                    }
 
-                    // add list order to recycle view
-                    orderAdapter = new orderAdapter(listOrder);
-                    rcvOrder.setAdapter(orderAdapter);
-                    LinearLayoutManager layoutManager
-                            = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-                    rcvOrder.setLayoutManager(layoutManager);
-
-                } else if(response.code() == 401) {
+                } else if (response.code() == 401) {
                     Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
@@ -178,7 +222,7 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-                if (t instanceof IOException){
+                if (t instanceof IOException) {
                     Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
@@ -186,5 +230,23 @@ public class OrderFragment extends Fragment {
             }
 
         });
+    }
+
+    public void showOrderHistoryWithoutLogin() {
+        tv_empty_order.setText("Bạn cần đăng nhập để xem lịch sử đơn hàng!");
+        btn_shopping_now.setText("Đăng nhập ngay");
+        layout_empty_order.setVisibility(View.VISIBLE);
+        scrollview_content.setVisibility(View.GONE);
+        horizontal_statusOrder.setVisibility(View.GONE);
+        img_filter_order.setVisibility(View.GONE);
+    }
+
+    public void showOrderHistoryWithEmptyOrder() {
+        tv_empty_order.setText("Bạn chưa có đơn hàng nào!");
+        btn_shopping_now.setText("Mua sắm ngay");
+        layout_empty_order.setVisibility(View.VISIBLE);
+        scrollview_content.setVisibility(View.GONE);
+        horizontal_statusOrder.setVisibility(View.GONE);
+        img_filter_order.setVisibility(View.GONE);
     }
 }
