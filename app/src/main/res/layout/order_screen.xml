@@ -204,6 +204,9 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+
+
+<!--        // This is the layout that will be displayed when the user has no orders or no login-->
         <LinearLayout
             android:id="@+id/layout_empty_order"
             android:layout_width="match_parent"

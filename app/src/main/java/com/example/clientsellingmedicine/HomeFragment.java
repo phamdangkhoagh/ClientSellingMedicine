@@ -49,12 +49,14 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.clientsellingmedicine.Adapter.productAdapter;
 import com.example.clientsellingmedicine.Adapter.productDiscountAdapter;
+import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.services.IdeaService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,12 +64,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements IOnItemClickListenerRecyclerView {
     private Context mContext;
 
+    IOnItemClickListenerRecyclerView listener;
     productAdapter productAdapter;
 
     productDiscountAdapter productDiscountAdapter;
@@ -176,7 +176,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if(response.isSuccessful()){
-                    productAdapter = new productAdapter(response.body());
+                    productAdapter = new productAdapter(response.body(), HomeFragment.this);
 
                     rcvTopProductSelling.setAdapter(productAdapter);
                     LinearLayoutManager layoutManager
@@ -275,5 +275,14 @@ public class HomeFragment extends Fragment {
 
         imageSlider.setImageList(imageList,ScaleTypes.FIT);
 
+    }
+
+    @Override
+    public void onItemClick(Product product) {
+        Intent intent = new Intent(getActivity(), DetailProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", (Serializable) product);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

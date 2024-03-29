@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
             return true;
 
         } else if (id == R.id.navigation_user) {
-            if(true){
+            if(false){
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, profileFragment)
