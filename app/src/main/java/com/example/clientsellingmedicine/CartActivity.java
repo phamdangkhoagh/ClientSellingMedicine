@@ -1,16 +1,13 @@
 package com.example.clientsellingmedicine;
 
 
-import static com.example.clientsellingmedicine.Adapter.cartAdapter.listProductsCart;
-
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,13 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
-import com.example.clientsellingmedicine.models.Cart;
+import com.example.clientsellingmedicine.SQLite.CartDAO;
+import com.example.clientsellingmedicine.SQLite.DBHelper;
+import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,11 +33,7 @@ import retrofit2.Response;
 
 public class CartActivity extends AppCompatActivity {
     private Context mContext;
-
-//    List<Cart> listProductsCart = new ArrayList<>(); // Your list of carts
-
     cartAdapter cartAdapter;
-//    cartAdapter adapterCart = new cartAdapter(listProductsCart);
     RecyclerView rcvCart;
     LinearLayout bottom_view,linear_layout_dynamic;
 
@@ -51,9 +44,8 @@ public class CartActivity extends AppCompatActivity {
 
     CheckBox checkboxCartItem,masterCheckboxCart;
 
-//    private List<Cart> listProductsToBuy;
-
-
+    CartDAO cartDAO;
+    List<CartItem> listProductsToBuy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +56,8 @@ public class CartActivity extends AppCompatActivity {
 
         addControl();
         addEvents();
+
+
 
     }
 
@@ -85,9 +79,9 @@ public class CartActivity extends AppCompatActivity {
 //        Log.d("TAG", "totalAmount: " + totalAmount);
 //        Log.d("j", "total: " + totalCartItem);
 
-        double totalAmount = calculateTotalAmount();
-        String totalCartItem = convertPrice(totalAmount);
-        tvTotalAmountCart.setText(totalCartItem);
+//        double totalAmount = calculateTotalAmount();
+//        String totalCartItem = convertPrice(totalAmount);
+//        tvTotalAmountCart.setText(totalCartItem);
 
         icon_arrow_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,11 +129,11 @@ public class CartActivity extends AppCompatActivity {
 
     public void getCartItems(){
         CartService cartService = ServiceBuilder.buildService(CartService.class);
-        Call<List<Cart>> request = cartService.getCart();
-        request.enqueue(new Callback<List<Cart>>() {
+        Call<List<CartItem>> request = cartService.getCart();
+        request.enqueue(new Callback<List<CartItem>>() {
 
             @Override
-            public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
+            public void onResponse(Call<List<CartItem>> call, Response<List<CartItem>> response) {
                 if(response.isSuccessful()){
                     cartAdapter = new cartAdapter(response.body());
                     rcvCart.setAdapter(cartAdapter);
@@ -155,7 +149,7 @@ public class CartActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Cart>> call, Throwable t) {
+            public void onFailure(Call<List<CartItem>> call, Throwable t) {
                 if (t instanceof IOException){
                     Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
                 } else
@@ -174,18 +168,18 @@ public class CartActivity extends AppCompatActivity {
         return formattedIntegerPart + "." + formattedDecimalPart;
     }
 
-    private double calculateTotalAmount() {
-        double totalAmount = 0;
-        if (cartAdapter.listProductsToBuy != null) {
-            Log.d("TAG", "--------cartAdapter-----:  " + cartAdapter.listProductsToBuy.size());
-            for (int i = 0; i < cartAdapter.listProductsToBuy.size(); i++) {
-                Cart cart = cartAdapter.listProductsToBuy.get(i);
-
-                totalAmount += cart.getPrice() * cart.getQuantity();
-            }
-        }
-        Log.d("TAG", "calculateTotalAmount: " + totalAmount);
-        return totalAmount;
-    }
+//    public double calculateTotalAmount() {
+//        double totalAmount = 0;
+//        if (cartAdapter.listProductsToBuy != null) {
+//            Log.d("TAG", "--------cartAdapter-----:  " + cartAdapter.listProductsToBuy.size());
+//            for (int i = 0; i < cartAdapter.listProductsToBuy.size(); i++) {
+//                Cart cart = cartAdapter.listProductsToBuy.get(i);
+//
+//                totalAmount += cart.getPrice() * cart.getQuantity();
+//            }
+//        }
+//        Log.d("TAG", "calculateTotalAmount: " + totalAmount);
+//        return totalAmount;
+//    }
 
 }

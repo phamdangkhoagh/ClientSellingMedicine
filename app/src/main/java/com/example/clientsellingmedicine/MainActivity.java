@@ -1,12 +1,15 @@
 package com.example.clientsellingmedicine;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.clientsellingmedicine.SQLite.DBHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity
@@ -27,6 +30,17 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+
+
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        if (db != null) {
+            Toast.makeText(this, "Kết nối cơ sở dữ liệu thành công", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Kết nối cơ sở dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
     }
     HomeFragment homeFragment = new HomeFragment();
     CategoryFragment categoryFragment = new CategoryFragment();
