@@ -28,18 +28,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:layout_marginStart="14dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:gravity="start">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginEnd="120dp"
+                    android:layout_gravity="center"
                     android:src="@drawable/arrow_left_color"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
                     android:text="Đăng ký"
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -75,9 +78,10 @@
                 android:layout_marginTop="38dp"
                 android:gravity="center">
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/ic_phone"/>
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -87,6 +91,7 @@
                     android:layout_marginEnd="16dp"
                     android:hint="Số điện thoại"
                     android:textAlignment="center"
+
                     android:textSize="20sp" />
             </RelativeLayout>
 
@@ -97,8 +102,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/txtDangKy"
-                android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <RelativeLayout
                 android:orientation="vertical"
@@ -112,9 +116,11 @@
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="26dp"
                 android:background="@drawable/btn_login"
+                android:enabled="false"
                 android:text="Đăng ký"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+
                 android:textAllCaps="false"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,60 +150,48 @@
                     android:layout_marginEnd="30dp"
                     android:background="@color/gray"/>
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="26dp"
-                    android:layout_marginEnd="26dp"
-                    android:background="@drawable/btn_facebook"
-                    android:gravity="center"
-                    android:text="Tiếp tục với facebook"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginStart="64dp"
-                    android:src="@drawable/ic_facebook"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="140dp"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="26dp"
-                    android:layout_marginEnd="26dp"
-                    android:textAlignment="center"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:background="@drawable/btn_google"
-                    android:text="Tiếp tục với google" />
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="36dp"
-                    android:layout_marginStart="64dp"
-                    android:src="@drawable/ic_google"/>
-            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
                 android:gravity="center"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_google_signin"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:text="Tiếp tục với Google"
+                    android:textAllCaps="false"
+                    android:background="@drawable/btn_google"
+                    android:drawableLeft="@drawable/ic_google"
+                    android:textAlignment="textStart"
+                    android:paddingLeft="30dp"
+                    android:drawablePadding="40dp"
+                   />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"></View>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_facebook_signin"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:text="Tiếp tục với Facebook"
+                    android:background="@drawable/btn_facebook"
+                    android:textAllCaps="false"
+                    android:drawableStart="@drawable/ic_facebook"
+                    android:textAlignment="textStart"
+                    android:paddingLeft="30dp"
+                    android:drawablePadding="40dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="bottom|center"
+                android:layout_gravity="bottom"
                 >
                 <TextView
                     android:layout_width="wrap_content"

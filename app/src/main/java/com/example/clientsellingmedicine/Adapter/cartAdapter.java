@@ -48,7 +48,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             masterCheckboxCart = itemView.findViewById(R.id.masterCheckboxCart);
             CheckBox checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
 
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
             this.setIsRecyclable(false);
 
             masterCheckboxCart.setOnClickListener(new View.OnClickListener() {

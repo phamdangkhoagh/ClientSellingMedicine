@@ -1,6 +1,7 @@
 package com.example.clientsellingmedicine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,19 +41,23 @@ public class UnLoginProfileFragment extends Fragment {
         btn_register = view.findViewById(R.id.btn_register);
     }
     private void addEvents(){
+        // onClick event for login button
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Chuyển sang màn hình đăng nhập
-                Toast.makeText(mContext, "Chuyển sang màn hình đăng nhập", Toast.LENGTH_SHORT).show();
+                // function to handle login button click event
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                startActivity(intent);
             }
         });
 
+        // onClick event for register button
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Chuyển sang màn hình đăng ký
-                Toast.makeText(mContext, "Chuyển sang màn hình đăng ký", Toast.LENGTH_SHORT).show();
+                // function to handle register button click event
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                startActivity(intent);
             }
         });
     }

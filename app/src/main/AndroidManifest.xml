@@ -38,6 +38,16 @@
             android:exported="false">
 
         </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false">
+
+        </activity>
     </application>
 
 </manifest>
