@@ -1,6 +1,6 @@
 package com.example.clientsellingmedicine.models;
 
-public class Cart {
+public class CartItem {
 
     private int id;
     private String name;
@@ -10,17 +10,19 @@ public class Cart {
     private int quantity;
 
     private String image;
+    private int status;
 
-    public Cart() {
+    public CartItem() {
     }
 
-    public Cart(int id, String name, Double price, String unit, int quantity, String image) {
+    public CartItem(int id, String name, Double price, String unit, int quantity, String image, int status) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.unit = unit;
         this.quantity = quantity;
         this.image = image;
+        this.status = status;
     }
 
     public int getId() {
@@ -69,5 +71,13 @@ public class Cart {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
