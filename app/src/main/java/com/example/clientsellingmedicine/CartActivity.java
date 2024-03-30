@@ -17,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
-import com.example.clientsellingmedicine.SQLite.CartDAO;
-import com.example.clientsellingmedicine.SQLite.DBHelper;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
@@ -37,14 +35,13 @@ public class CartActivity extends AppCompatActivity {
     RecyclerView rcvCart;
     LinearLayout bottom_view,linear_layout_dynamic;
 
-    TextView tvTotalAmountCart;
+    TextView tvTotalAmountCart,tvTotalItemCart;
 
 
     ImageView icon_arrow_up;
 
     CheckBox checkboxCartItem,masterCheckboxCart;
 
-    CartDAO cartDAO;
     List<CartItem> listProductsToBuy;
 
     @Override
@@ -69,7 +66,8 @@ public class CartActivity extends AppCompatActivity {
         tvTotalAmountCart = findViewById(R.id.tvTotalAmountCart);
 
 //        checkboxCartItem = findViewById(R.id.checkboxCartItem);
-//        masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
+        masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
+        tvTotalItemCart = findViewById(R.id.tvTotalItemCart);
     }
 
     private void addEvents() {
@@ -83,13 +81,14 @@ public class CartActivity extends AppCompatActivity {
 //        String totalCartItem = convertPrice(totalAmount);
 //        tvTotalAmountCart.setText(totalCartItem);
 
+
         icon_arrow_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 int height = bottom_view.getHeight();
                 Log.d("Height", "onClick: "+height);
-                if(height == 440){
+                if(height == 320){
                     // set new height
                     int desiredHeightInDp = 260;
 
@@ -105,7 +104,7 @@ public class CartActivity extends AppCompatActivity {
                     // set icon down
                    icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
                 }
-                else {
+                else if(height == 520) {
                     // set new height
                     int desiredHeightInDp = 160;
 
@@ -124,6 +123,18 @@ public class CartActivity extends AppCompatActivity {
 
             }
         });
+
+
+        masterCheckboxCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(masterCheckboxCart.isChecked())
+                    cartAdapter.setAllSelected(true);
+                else
+                    cartAdapter.setAllSelected(false);
+
+            }
+        });
     }
 
 
@@ -136,6 +147,7 @@ public class CartActivity extends AppCompatActivity {
             public void onResponse(Call<List<CartItem>> call, Response<List<CartItem>> response) {
                 if(response.isSuccessful()){
                     cartAdapter = new cartAdapter(response.body());
+                    tvTotalItemCart.setText("("+cartAdapter.getItemCount()+")"); // set total item in cart
                     rcvCart.setAdapter(cartAdapter);
                     LinearLayoutManager layoutManager
                             = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);

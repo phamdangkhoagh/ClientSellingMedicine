@@ -1,12 +1,13 @@
 package com.example.clientsellingmedicine.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,21 +15,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.clientsellingmedicine.SQLite.CartDAO;
+
 import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.CartItem;
-import com.example.clientsellingmedicine.models.Product;
+import com.example.clientsellingmedicine.utils.Convert;
+import com.example.clientsellingmedicine.utils.SharedPref;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
     private Context mContext;
     public static List<CartItem> listCartItems;
+    public static List<CartItem> listCartItemsChecked = new ArrayList<>();
 
-//    public List<Cart> listProductsToBuy;
-    CartDAO cartDAO;
-
+    private boolean isAllSelected = false;
     public cartAdapter(List<CartItem> listCartItems) {
         this.listCartItems = listCartItems;
     }
@@ -37,21 +43,18 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         public TextView tvNameCartItem, tvPriceCartItem, tvTotalAmountCart, tvQuantityCartItem;
         public ImageView ivCartItem;
 
-        public CheckBox checkboxCartItem, masterCheckboxCart;
+        public CheckBox checkboxCartItem;
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);
             tvNameCartItem = itemView.findViewById(R.id.tvNameCartItem);
             tvPriceCartItem = itemView.findViewById(R.id.tvPriceCartItem);
             ivCartItem = itemView.findViewById(R.id.ivCartItem);
-            masterCheckboxCart = itemView.findViewById(R.id.masterCheckboxCart);
 
-            CheckBox checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
+            checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
 
             this.setIsRecyclable(false);
 
-
-            checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
             tvTotalAmountCart = itemView.findViewById(R.id.tvTotalAmountCart);
             tvQuantityCartItem = itemView.findViewById(R.id.tvQuantityCartItem);
 
@@ -76,38 +79,49 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         holder.tvNameCartItem.setText(cart.getName());
         int quantity = cart.getQuantity();
         holder.tvQuantityCartItem.setText(String.valueOf(quantity));
-        String price = convertPrice(cart.getPrice());
+        String price = Convert.convertPrice(cart.getPrice());
         holder.tvPriceCartItem.setText(price + " đ");
 
+        holder.checkboxCartItem.setChecked( isAllSelected());
+
         // Add cartItem into database
-        holder.checkboxCartItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.checkboxCartItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int position = holder.getAdapterPosition();
-                CartItem cartItem = listCartItems.get(position);
-                CartDAO cartDAO = new CartDAO(holder.itemView.getContext());
-                if (isChecked){
-                    Log.d("check", "checked: " + isChecked);
-                    cartDAO.insertItem(cartItem);
-                    Log.d("check", "cartItem.getID: " + cartItem.getId());
+            public void onClick(View v) {
+                if(holder.checkboxCartItem.isChecked()){
+                    Log.d("tag", " Item checked: " + cart.getId());
+                    listCartItemsChecked.add(cart);
+                    // Save listCartItemsChecked to SharedPreferences
+                    SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, "cartSharedPrefs","listCartItemsChecked");
+
                 }else{
-                    cartDAO.deleteItem(cartItem.getId() + "");
-                    Log.d("uncheck", "uncheck: " + isChecked);
-                    Log.d("uncheck", "cartItem.getID: " + cartItem.getId());
+                    Log.d("tag", " Item remove: " + cart.getId());
+                    // Remove item from listCartItemsChecked
+                    for (CartItem cartItem : listCartItemsChecked) {
+                        if ( cart.getId() == cartItem.getId()) {
+                            listCartItemsChecked.remove(cartItem);
+                            break;
+                        }
+                    }
+                    // Save listCartItemsChecked to SharedPreferences
+                    SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, "cartSharedPrefs","listCartItemsChecked");
                 }
             }
         });
 
-        // setChecked cartItems
-        List<CartItem> cartItems = getAllCartItems(holder.itemView.getContext());
-        Log.d("TAG", "Size cartItems: " + cartItems.size());
 
 
-        for (CartItem item :cartItems){
-            if(cart.getId() == item.getId()){
-                holder.checkboxCartItem.setChecked(true);
+        Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
+        //get listCartItemsChecked from SharedPreferences
+        listCartItemsChecked = SharedPref.loadData(holder.itemView.getContext(), "cartSharedPrefs", "listCartItemsChecked", cartItemType);
+
+        if(listCartItemsChecked != null){
+            Log.d("check", "list Size: " + listCartItemsChecked.size());
+            for ( CartItem item : listCartItemsChecked){
+                if(cart.getId() == item.getId()){
+                    holder.checkboxCartItem.setChecked(true);  // checked item in cart
+                }
             }
-            Log.d("checkbox", "item.getId(): " + item.getId());
         }
 
         Glide.with(holder.itemView.getContext())
@@ -122,19 +136,22 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         return listCartItems.size();
     }
 
-    public String convertPrice(double number) {
-        long integerPart = (long) number;
-        int decimalPart = (int) ((number - integerPart) * 1000);
-
-        String formattedIntegerPart = String.format("%,d", integerPart).replace(",", ".");
-        String formattedDecimalPart = String.format("%03d", decimalPart);
-
-        return formattedIntegerPart + "." + formattedDecimalPart;
+    public void selectAllCartItem() {
+        listCartItemsChecked.clear();
+        for (CartItem data : listCartItems) {
+            listCartItemsChecked.add(data);
+        }
+        notifyDataSetChanged();
     }
 
-    public List<CartItem> getAllCartItems(Context context){
-        CartDAO cartDAO = new CartDAO(context);
-        return cartDAO.getProductsAll();
+
+    public void setAllSelected(boolean selected) {
+        isAllSelected = selected;
+        notifyDataSetChanged();
+    }
+
+    public boolean isAllSelected() {
+        return isAllSelected;
     }
 
 
