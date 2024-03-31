@@ -35,7 +35,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     public static List<CartItem> listCartItemsChecked = new ArrayList<>();
 
     private boolean isAllSelected = false;
-    public cartAdapter(List<CartItem> listCartItems) {
+    public cartAdapter(List<CartItem> listCartItems)
+    {
         this.listCartItems = listCartItems;
     }
 
@@ -90,6 +91,9 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             public void onClick(View v) {
                 if(holder.checkboxCartItem.isChecked()){
                     Log.d("tag", " Item checked: " + cart.getId());
+                    if(listCartItemsChecked == null){
+                        listCartItemsChecked = new ArrayList<>();
+                    }
                     listCartItemsChecked.add(cart);
                     // Save listCartItemsChecked to SharedPreferences
                     SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, "cartSharedPrefs","listCartItemsChecked");
@@ -106,6 +110,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                     // Save listCartItemsChecked to SharedPreferences
                     SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, "cartSharedPrefs","listCartItemsChecked");
                 }
+
             }
         });
 
@@ -134,14 +139,6 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return listCartItems.size();
-    }
-
-    public void selectAllCartItem() {
-        listCartItemsChecked.clear();
-        for (CartItem data : listCartItems) {
-            listCartItemsChecked.add(data);
-        }
-        notifyDataSetChanged();
     }
 
 
