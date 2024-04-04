@@ -94,6 +94,7 @@
                     android:src="@drawable/ic_phone" />
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -118,6 +119,7 @@
                     android:src="@drawable/ic_lock_closed" />
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -141,6 +143,7 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginStart="26dp"
@@ -148,7 +151,7 @@
                 android:background="@drawable/btn_login"
                 android:text="Đăng nhập"
                 android:textAllCaps="false"
-                android:enabled="false"
+                android:enabled="true"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 

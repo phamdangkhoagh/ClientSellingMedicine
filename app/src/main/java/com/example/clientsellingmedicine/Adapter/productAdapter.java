@@ -87,7 +87,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
         holder.tvNameProductItem.setText(product.getName());
         String unit = product.getUnit();
         String price = Convert.convertPrice(product.getPrice());
-        holder.tvProductPrice.setText(price+" đ/"+unit);
+        holder.tvProductPrice.setText(price+"/"+unit);
         Glide.with(holder.itemView.getContext())
                 .load(product.getImage())
                 .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải

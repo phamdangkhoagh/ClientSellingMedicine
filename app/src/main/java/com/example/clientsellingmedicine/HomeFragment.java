@@ -163,8 +163,8 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
             }
         });
 
-        getTopProductsSelling();
-        getTopProductsDiscount();
+//        getTopProductsSelling();
+//        getTopProductsDiscount();
         showSlider();
     }
 

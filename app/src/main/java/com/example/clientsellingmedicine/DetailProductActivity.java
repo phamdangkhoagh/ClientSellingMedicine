@@ -70,7 +70,7 @@ public class DetailProductActivity extends AppCompatActivity {
 
             tv_ProductName.setText(product.getName());
             String price = Convert.convertPrice(product.getPrice());
-            tv_ProductPrice.setText(price+" đ/"+product.getUnit());
+            tv_ProductPrice.setText(price+"/"+product.getUnit());
 //            tv_ProductCode.setText(productCode);
             Glide.with(mContext)
                     .load(product.getImage())

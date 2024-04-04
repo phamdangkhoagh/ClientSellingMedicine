@@ -13,13 +13,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
+import com.example.clientsellingmedicine.interfaces.IOnCheckboxChangedListener;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
+import com.example.clientsellingmedicine.utils.Constants;
+import com.example.clientsellingmedicine.utils.Convert;
+import com.example.clientsellingmedicine.utils.SharedPref;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,20 +35,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements IOnCheckboxChangedListener {
     private Context mContext;
-    cartAdapter cartAdapter;
+    cartAdapter cartAdapter = new cartAdapter();
     RecyclerView rcvCart;
-    LinearLayout bottom_view,linear_layout_dynamic;
+    LinearLayout bottom_view, linear_layout_dynamic;
 
-    TextView tvTotalAmountCart,tvTotalItemCart;
+    TextView tvTotalAmountCart, tvTotalItemCart, tvDelete, tvTotalPrice, tvTotalDiscount, tvTotalDiscountVoucher;
 
 
-    ImageView icon_arrow_up;
+    ImageView icon_arrow_up, ivBackCart;
 
-    CheckBox checkboxCartItem,masterCheckboxCart;
+    CheckBox checkboxCartItem, masterCheckboxCart;
 
     List<CartItem> listProductsToBuy;
+
+    private Boolean isShowBottomView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +58,8 @@ public class CartActivity extends AppCompatActivity {
         mContext = CartActivity.this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_screen);
-
         addControl();
         addEvents();
-
 
 
     }
@@ -65,15 +71,20 @@ public class CartActivity extends AppCompatActivity {
         icon_arrow_up = findViewById(R.id.icon_arrow_up);
         tvTotalAmountCart = findViewById(R.id.tvTotalAmountCart);
 
-//        checkboxCartItem = findViewById(R.id.checkboxCartItem);
         masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
         tvTotalItemCart = findViewById(R.id.tvTotalItemCart);
+        ivBackCart = findViewById(R.id.ivBackCart);
+        tvDelete = findViewById(R.id.tvDelete);
+        tvTotalPrice = findViewById(R.id.tvTotalPrice);
+        tvTotalDiscount = findViewById(R.id.tvTotalDiscount);
+        tvTotalDiscountVoucher = findViewById(R.id.tvTotalDiscountVoucher);
     }
 
     private void addEvents() {
-        Log.d("j", "--->this function addEvents: " );
+        cartAdapter.setOnCheckboxChangedListener(this);
+        Log.d("j", "--->this function addEvents: ");
         getCartItems();
-        Log.d("j", "--->After getCartItem: " );
+        Log.d("j", "--->After getCartItem: ");
 //        Log.d("TAG", "totalAmount: " + totalAmount);
 //        Log.d("j", "total: " + totalCartItem);
 
@@ -81,14 +92,17 @@ public class CartActivity extends AppCompatActivity {
 //        String totalCartItem = convertPrice(totalAmount);
 //        tvTotalAmountCart.setText(totalCartItem);
 
+        ivBackCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         icon_arrow_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                int height = bottom_view.getHeight();
-                Log.d("Height", "onClick: "+height);
-                if(height == 320){
+                if (isShowBottomView) {
                     // set new height
                     int desiredHeightInDp = 260;
 
@@ -102,9 +116,10 @@ public class CartActivity extends AppCompatActivity {
                     //display view
                     linear_layout_dynamic.setVisibility(View.VISIBLE);
                     // set icon down
-                   icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
-                }
-                else if(height == 520) {
+                    icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
+
+                    isShowBottomView = false;
+                } else {
                     // set new height
                     int desiredHeightInDp = 160;
 
@@ -119,6 +134,8 @@ public class CartActivity extends AppCompatActivity {
                     linear_layout_dynamic.setVisibility(View.GONE);
                     // set icon up
                     icon_arrow_up.setImageResource(R.drawable.ic_arrow_up);
+
+                    isShowBottomView = true;
                 }
 
             }
@@ -128,32 +145,63 @@ public class CartActivity extends AppCompatActivity {
         masterCheckboxCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(masterCheckboxCart.isChecked())
+                if (masterCheckboxCart.isChecked())
                     cartAdapter.setAllSelected(true);
                 else
                     cartAdapter.setAllSelected(false);
 
             }
         });
+
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+                        //set icon
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        //set title
+                        .setTitle("Xác nhận xóa sản phẩm")
+                        //set message
+                        .setMessage("Bạn có chắc chắn muốn xóa những sản phẩm này?")
+                        //set positive button
+                        .setPositiveButton("Yes", (dialogInterface, i) -> {
+                            //set what would happen when positive button is clicked
+                            cartAdapter.removeItems();
+                            tvTotalItemCart.setText("(" + cartAdapter.getItemCount() + ")");
+                        })
+                        //set negative button
+                        .setNegativeButton("No", (dialogInterface, i) -> {
+                            //set what should happen when negative button is clicked
+
+                        })
+                        .show();
+
+            }
+        });
+//
+
+
     }
 
 
-    public void getCartItems(){
+    public void getCartItems() {
         CartService cartService = ServiceBuilder.buildService(CartService.class);
         Call<List<CartItem>> request = cartService.getCart();
         request.enqueue(new Callback<List<CartItem>>() {
 
             @Override
             public void onResponse(Call<List<CartItem>> call, Response<List<CartItem>> response) {
-                if(response.isSuccessful()){
-                    cartAdapter = new cartAdapter(response.body());
-                    tvTotalItemCart.setText("("+cartAdapter.getItemCount()+")"); // set total item in cart
+                if (response.isSuccessful()) {
+//                    cartAdapter = new cartAdapter(response.body());
+                    cartAdapter.setListCartItems(response.body());
+//                    cartAdapter.setOnCheckboxChangedListener(CartActivity.this);
+                    tvTotalItemCart.setText("(" + cartAdapter.getItemCount() + ")"); // set total item in cart
                     rcvCart.setAdapter(cartAdapter);
                     LinearLayoutManager layoutManager
                             = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
                     rcvCart.setLayoutManager(layoutManager);
 
-                } else if(response.code() == 401) {
+                } else if (response.code() == 401) {
                     Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
@@ -162,7 +210,7 @@ public class CartActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<CartItem>> call, Throwable t) {
-                if (t instanceof IOException){
+                if (t instanceof IOException) {
                     Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
                 } else
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
@@ -179,6 +227,33 @@ public class CartActivity extends AppCompatActivity {
 
         return formattedIntegerPart + "." + formattedDecimalPart;
     }
+
+    @Override
+    public void setValueOfMasterCheckbox(boolean isChecked) {
+        if (isChecked) {
+            masterCheckboxCart.setChecked(true);
+        } else {
+            masterCheckboxCart.setChecked(false);
+        }
+    }
+
+    @Override
+    public void setStatusOfDeleteText(boolean isShowed) {
+        if (isShowed) {
+            tvDelete.setVisibility(View.VISIBLE);
+        } else {
+            tvDelete.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void getTotalAmount(double total) {
+        String totalAmount = Convert.convertPrice(total);
+        tvTotalPrice.setText(totalAmount);
+        tvTotalAmountCart.setText(totalAmount);
+    }
+
 
 //    public double calculateTotalAmount() {
 //        double totalAmount = 0;
