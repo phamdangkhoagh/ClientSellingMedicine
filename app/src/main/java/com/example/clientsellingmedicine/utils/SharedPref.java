@@ -3,6 +3,7 @@ package com.example.clientsellingmedicine.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.clientsellingmedicine.models.Token;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -46,16 +47,21 @@ public class SharedPref {
         return sharedPreferences.contains(key);
     }
 
-    public static void saveToken(Context context, String prefsName, String key, String value) {
+    public static void saveToken(Context context, String prefsName, String key, Token value) {
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
         SharedPreferences sharedPreferences = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
+        editor.putString(key, json);
         editor.apply();
     }
 
-    public static String loadToken(Context context, String prefsName, String key) {
+
+    public static Token loadToken(Context context, String prefsName, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(key, null);
+        String json = sharedPreferences.getString(key, null);
+        Gson gson = new Gson();
+        return gson.fromJson(json, Token.class);
     }
 
 }

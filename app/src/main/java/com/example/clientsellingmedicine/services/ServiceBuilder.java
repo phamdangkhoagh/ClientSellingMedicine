@@ -3,6 +3,11 @@ package com.example.clientsellingmedicine.services;
 
 import android.os.Build;
 
+import com.example.clientsellingmedicine.MyApplication;
+import com.example.clientsellingmedicine.models.Token;
+import com.example.clientsellingmedicine.utils.Constants;
+import com.example.clientsellingmedicine.utils.SharedPref;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +38,13 @@ public class ServiceBuilder {
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request();
 
+                            Token token = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                            if(token == null){
+                                token = new Token("","");
+                            }
+
                             request = request.newBuilder()
+                                    .addHeader("Authorization", "Bearer " + token.getAccessToken())
                                     .addHeader("x-device-type", Build.DEVICE)
                                     .addHeader("Accept-Language", Locale.getDefault().getLanguage())
                                     .build();

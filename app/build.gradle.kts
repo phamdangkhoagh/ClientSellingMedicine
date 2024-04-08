@@ -51,4 +51,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     //slider
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
+    implementation ("org.projectlombok:lombok:1.18.20")
+    annotationProcessor ("org.projectlombok:lombok:1.18.20")
+
 }
