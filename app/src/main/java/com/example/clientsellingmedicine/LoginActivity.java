@@ -5,26 +5,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.models.UserLogin;
-import com.example.clientsellingmedicine.models.token;
-import com.example.clientsellingmedicine.services.CartService;
+import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.services.LoginService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
+import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +30,7 @@ public class LoginActivity  extends AppCompatActivity {
     private Context mContext;
 
     TextInputEditText edt_phone_number, edt_password;
+    ImageView iv_back;
     Button btn_login;
 
     @Override
@@ -51,45 +48,26 @@ public class LoginActivity  extends AppCompatActivity {
         edt_phone_number = findViewById(R.id.edt_phone_number);
         edt_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_login);
+        iv_back = findViewById(R.id.iv_back);
     }
     private void addEvents() {
-        edt_phone_number.addTextChangedListener(new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (isLogin()) {
-                    btn_login.setEnabled(true);
-                }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
+            public void afterTextChanged(Editable s) {
+                // Enable the button if both EditTexts have values
+                btn_login.setEnabled(!edt_phone_number.getText().toString().trim().isEmpty() && !edt_password.getText().toString().trim().isEmpty());
             }
-        });
-
-        edt_password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (isLogin()) {
-                    btn_login.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        };
+        edt_phone_number.addTextChangedListener(textWatcher);
+        edt_password.addTextChangedListener(textWatcher);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,17 +76,26 @@ public class LoginActivity  extends AppCompatActivity {
             }
         });
 
+
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     public void Login(UserLogin userLogin) {
         LoginService loginService = ServiceBuilder.buildService(LoginService.class);
-        Call<token> request = loginService.login(userLogin);
-        request.enqueue(new Callback<token>() {
+        Call<Token> request = loginService.login(userLogin);
+        request.enqueue(new Callback<Token>() {
 
             @Override
-            public void onResponse(Call<token> call, Response<token> response) {
+            public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
-                    SharedPref.saveToken(mContext, "token", "token", response.body().getToken());
+                    Token token = response.body();
+                    SharedPref.saveToken(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN, token);
                     Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
 
@@ -120,19 +107,12 @@ public class LoginActivity  extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<token> call, Throwable t) {
+            public void onFailure(Call<Token> call, Throwable t) {
                 if (t instanceof IOException) {
                     Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
                 } else
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    public boolean isLogin() {
-        if(edt_phone_number.getText().equals("")  && edt_password.getText().equals("")) {
-            return true;
-        }
-        return false;
     }
 }

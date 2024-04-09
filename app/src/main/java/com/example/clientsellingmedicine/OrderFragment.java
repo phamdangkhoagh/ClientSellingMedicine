@@ -1,6 +1,7 @@
 package com.example.clientsellingmedicine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +26,12 @@ import com.example.clientsellingmedicine.Adapter.orderAdapter;
 import com.example.clientsellingmedicine.models.Order;
 
 import com.example.clientsellingmedicine.models.Product;
+import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.services.OrderService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
+import com.example.clientsellingmedicine.utils.Constants;
+import com.example.clientsellingmedicine.utils.SharedPref;
+import com.example.clientsellingmedicine.utils.Validator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +45,7 @@ import retrofit2.Response;
 public class OrderFragment extends Fragment {
     private Context mContext;
 
-    LinearLayout layout_allOrder, layout_processingStatus, layout_inTransitStatus, layout_deliveredStatus, layout_cancelledStatus, layout_empty_order;
+    LinearLayout layout_allOrder, layout_processingStatus, layout_inTransitStatus, layout_deliveredStatus, layout_cancelledStatus, layout_empty_order, layout_statusOrder;
 
     TextView processingStatus, inTransitStatus, deliveredStatus, cancelledStatus, allOrder, tv_empty_order;
 
@@ -77,6 +82,7 @@ public class OrderFragment extends Fragment {
 
 
     private void addControl(View view) {
+        layout_statusOrder = view.findViewById(R.id.layout_statusOrder);
         layout_processingStatus = view.findViewById(R.id.layout_processingStatus);
         layout_inTransitStatus = view.findViewById(R.id.layout_inTransitStatus);
         layout_deliveredStatus = view.findViewById(R.id.layout_deliveredStatus);
@@ -113,17 +119,17 @@ public class OrderFragment extends Fragment {
         });
 
 
-        // click on the shopping now button or login now button
-        View.OnClickListener shoppingNowClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view == btn_shopping_now) {
-                    //go to home fragment
-                    ((MainActivity) getActivity()).goToHomeFragment();
-                }
-            }
-        };
-        btn_shopping_now.setOnClickListener(shoppingNowClickListener);
+//        // click on the shopping now button or login now button
+//        View.OnClickListener shoppingNowClickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (view == btn_shopping_now) {
+//                    //go to home fragment
+//                    ((MainActivity) getActivity()).goToHomeFragment();
+//                }
+//            }
+//        };
+//        btn_shopping_now.setOnClickListener(shoppingNowClickListener);
 
 
         //get order status
@@ -186,8 +192,15 @@ public class OrderFragment extends Fragment {
         cancelledStatus.setOnClickListener(statusClickListener);
         allOrder.setOnClickListener(statusClickListener);
 
-        // get all orders
-        getOrders();
+        // validate token
+        Token token = SharedPref.loadToken(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+        if (token != null && Validator.isTokenValid(token)) {
+            // get all orders
+            getOrders();
+        } else {
+            showOrderHistoryWithoutLogin();
+        }
+
     }
 
     public void getOrders() {
@@ -199,7 +212,7 @@ public class OrderFragment extends Fragment {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if (response.isSuccessful()) {
                     listOrder = new ArrayList<>();
-                    listOrder = response.body(); //get list order for search status
+                    listOrder = response.body(); //get list order
                     if(listOrder != null && listOrder.size() > 0) {
                         // add list order to recycle view
                         orderAdapter = new orderAdapter(listOrder);
@@ -209,7 +222,6 @@ public class OrderFragment extends Fragment {
                         rcvOrder.setLayoutManager(layoutManager);
                     }
                     else {
-//                        showOrderHistoryWithoutLogin();
                         showOrderHistoryWithEmptyOrder();
                     }
 
@@ -239,6 +251,13 @@ public class OrderFragment extends Fragment {
         scrollview_content.setVisibility(View.GONE);
         horizontal_statusOrder.setVisibility(View.GONE);
         img_filter_order.setVisibility(View.GONE);
+        btn_shopping_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void showOrderHistoryWithEmptyOrder() {
@@ -248,5 +267,12 @@ public class OrderFragment extends Fragment {
         scrollview_content.setVisibility(View.GONE);
         horizontal_statusOrder.setVisibility(View.GONE);
         img_filter_order.setVisibility(View.GONE);
+
+        btn_shopping_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).goToHomeFragment();
+            }
+        });
     }
 }

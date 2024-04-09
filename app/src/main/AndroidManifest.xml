@@ -5,8 +5,15 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Always include this permission -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Include only if your app benefits from precise location access. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -56,6 +63,17 @@
             android:exported="false">
 
         </activity>
+        <activity
+            android:name=".RegisteredAddressActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".AddAddressActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            android:exported="false">
+        </activity>
+
     </application>
+
 
 </manifest>

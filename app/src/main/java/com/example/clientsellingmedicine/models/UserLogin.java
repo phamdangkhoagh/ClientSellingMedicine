@@ -1,14 +1,14 @@
 package com.example.clientsellingmedicine.models;
 
 public class UserLogin {
-    private String email;
+    private String phone;
     private String password;
 
     public UserLogin() {
     }
 
-    public UserLogin(String email, String password) {
-        this.email = email;
+    public UserLogin(String phone, String password) {
+        this.phone = phone;
         this.password = password;
     }
 }

@@ -1,11 +1,8 @@
 package com.example.clientsellingmedicine.services;
 
-import com.example.clientsellingmedicine.models.CartItem;
-import com.example.clientsellingmedicine.models.Product;
+import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.models.UserLogin;
-import com.example.clientsellingmedicine.models.token;
-
-import java.util.List;
+import com.example.clientsellingmedicine.models.Token;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,6 +11,15 @@ import retrofit2.http.POST;
 
 public interface LoginService {
     @POST("/api/auth/login")
-    Call<token> login(@Body UserLogin userLogin);
+    Call<Token> login(@Body UserLogin userLogin);
+
+    @GET("/api/user")
+    Call<User> login();
+
+    @POST("/api/token/check")
+    Call<Boolean> checkToken(@Body Token token);
+
+    @POST("/api/auth/refresh")
+    Call<Token> refreshToken(@Body Token token);
 
 }
