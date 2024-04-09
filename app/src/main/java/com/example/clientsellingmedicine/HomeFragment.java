@@ -130,7 +130,6 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
             }
         });
 
-
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -151,6 +150,8 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "Click on Notification", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(intent);
             }
         });
 

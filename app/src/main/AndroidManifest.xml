@@ -51,6 +51,11 @@
             android:exported="false">
 
         </activity>
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false">
+
+        </activity>
     </application>
 
 </manifest>

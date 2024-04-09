@@ -124,10 +124,12 @@
 
                     <CheckBox
                         android:id="@+id/masterCheckboxCart"
+                        android:button="@null"
+                        android:drawableStart="@drawable/custom_checkbox"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="0"/>
+                        android:layout_weight="0" />
 
                     <Space
                         android:layout_width="8dp"
