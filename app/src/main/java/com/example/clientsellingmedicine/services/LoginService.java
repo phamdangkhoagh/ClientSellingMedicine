@@ -14,7 +14,7 @@ public interface LoginService {
     Call<Token> login(@Body UserLogin userLogin);
 
     @GET("/api/user")
-    Call<User> login();
+    Call<User> getUserLogin();
 
     @POST("/api/token/check")
     Call<Boolean> checkToken(@Body Token token);

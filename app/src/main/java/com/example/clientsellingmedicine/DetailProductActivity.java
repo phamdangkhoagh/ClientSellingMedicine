@@ -2,6 +2,7 @@ package com.example.clientsellingmedicine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ public class DetailProductActivity extends AppCompatActivity {
 
     private Button btn_AddToCart,btn_BuyNow;
 
+    private WebView wv_ProductDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class DetailProductActivity extends AppCompatActivity {
         tv_ProductCode = findViewById(R.id.tv_ProductCode);
         btn_AddToCart = findViewById(R.id.btn_AddToCart);
         btn_BuyNow = findViewById(R.id.btn_BuyNow);
+        wv_ProductDescription = findViewById(R.id.wv_ProductDescription);
     }
 
     private void addEvents() {
@@ -70,7 +74,8 @@ public class DetailProductActivity extends AppCompatActivity {
 
             tv_ProductName.setText(product.getName());
             String price = Convert.convertPrice(product.getPrice());
-            tv_ProductPrice.setText(price+"/"+product.getUnit());
+            tv_ProductPrice.setText(price+"/"+product.getUnit().getName());
+            wv_ProductDescription.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
 //            tv_ProductCode.setText(productCode);
             Glide.with(mContext)
                     .load(product.getImage())

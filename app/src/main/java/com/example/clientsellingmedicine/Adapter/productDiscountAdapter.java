@@ -47,7 +47,7 @@ public class productDiscountAdapter extends RecyclerView.Adapter <productDiscoun
         Product product = (Product) mProducts.get(position);
 
         holder.tvNameProductItem.setText(product.getName());
-        String unit = product.getUnit();
+        String unit = product.getUnit().getName();
         String price = convertPrice(product.getPrice());
         holder.tvProductPrice.setText(price+" đ/"+unit);
         Glide.with(holder.itemView.getContext())

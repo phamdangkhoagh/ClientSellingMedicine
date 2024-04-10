@@ -149,7 +149,20 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/gray" />
+                <WebView
+                    android:id="@+id/wv_ProductDescription"
+                    android:layout_marginHorizontal="26dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:ignore="WebViewLayout">
+
+                </WebView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
                     android:background="@color/gray" />
 
             </LinearLayout>

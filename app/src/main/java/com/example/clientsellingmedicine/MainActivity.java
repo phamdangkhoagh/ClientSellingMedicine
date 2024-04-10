@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.fragment);
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
     HomeFragment homeFragment = new HomeFragment();
     CategoryFragment categoryFragment = new CategoryFragment();
     OrderFragment orderFragment = new OrderFragment();
@@ -83,30 +83,19 @@ public class MainActivity extends AppCompatActivity
             return true;
 
         } else if (id == R.id.navigation_user) {
-            Token token = SharedPref.loadToken(this, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
-            if(token != null && Validator.isTokenValid(token)){
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, profileFragment)
-                        .commit();
-            }
-            else {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, unLoginProfileFragment)
-                        .commit();
-            }
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, profileFragment)
+                    .commit();
             return true;
         }
+
         return false;
     }
 
     public void goToHomeFragment() {
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
-
-
-
 
 
 }
