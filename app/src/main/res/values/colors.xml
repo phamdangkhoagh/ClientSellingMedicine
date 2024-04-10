@@ -11,7 +11,7 @@
     <color name="lavender">#8692f7</color>
     <color name="coin_color">#EAAA04</color>
     <color name="minus_color">#FF0F00</color>
-
+    <color name="disable">#E2DEDE</color>
 
 
 </resources>
