@@ -64,9 +64,13 @@
 
         </activity>
         <activity
-            android:name=".RegisteredAddressActivity"
+            android:name=".NotificationActivity"
             android:exported="false">
 
+        </activity>
+        <activity
+            android:name=".RegisteredAddressActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".AddAddressActivity"
