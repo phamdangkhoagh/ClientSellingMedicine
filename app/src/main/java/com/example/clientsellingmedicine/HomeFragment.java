@@ -83,7 +83,6 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
     ImageSlider imageSlider;
     private SearchView searchView;
     private String lastQuery;
-    private static final String URL = "https://vnexpress.net/rss/suc-khoe.rss"; // Đường dẫn cần lấy response
 
     public HomeFragment() {
         // Required empty public constructor
