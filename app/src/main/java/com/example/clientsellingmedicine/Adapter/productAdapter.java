@@ -34,7 +34,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvNameProductItem,tvProductPrice;
+        public TextView tvNameProductItem,tvProductPrice,tv_Discount;
         public ImageView ivProductItem;
 
         public LinearLayout layout_Discount,layoutProductItem;
@@ -52,6 +52,7 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
             ivProductItem = itemView.findViewById(R.id.ivProductItem);
             layout_Discount = itemView.findViewById(R.id.layout_Discount);
             layoutProductItem = itemView.findViewById(R.id.layoutProductItem);
+            tv_Discount = itemView.findViewById(R.id.tv_Discount);
             //xử lý sự kiện khi click nút view
             btnAddtoCartProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,14 +79,17 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.layout_Discount.setVisibility(View.GONE);
+
         Product product = (Product) mProducts.get(position);
         if (product == null) {
             return;
         }
-
+        if(product.getDiscountPercent() == 0){
+            holder.layout_Discount.setVisibility(View.GONE);
+        }
+        holder.tv_Discount.setText("-"+product.getDiscountPercent()+"%");
         holder.tvNameProductItem.setText(product.getName());
-        String unit = product.getUnit();
+        String unit = product.getUnit().getName();
         String price = Convert.convertPrice(product.getPrice());
         holder.tvProductPrice.setText(price+"/"+unit);
         Glide.with(holder.itemView.getContext())

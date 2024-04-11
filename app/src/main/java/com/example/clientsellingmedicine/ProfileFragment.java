@@ -139,7 +139,6 @@ public class ProfileFragment extends Fragment {
                                 .circleCrop()
                                 .into(iv_Avatar);
                     }
-                    RefreshToken();
                 } else if (response.code() == 401) {
                     Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
                 } else {

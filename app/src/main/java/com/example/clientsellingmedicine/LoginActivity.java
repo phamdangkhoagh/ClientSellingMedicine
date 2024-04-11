@@ -33,6 +33,7 @@ public class LoginActivity  extends AppCompatActivity {
     ImageView iv_back;
     Button btn_login;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,7 @@ public class LoginActivity  extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 UserLogin userLogin = new UserLogin(edt_phone_number.getText().toString(), edt_password.getText().toString());
+                //loginServiceImpl.login(userLogin);
                 Login(userLogin);
             }
         });
@@ -85,6 +87,7 @@ public class LoginActivity  extends AppCompatActivity {
         });
 
     }
+
 
     public void Login(UserLogin userLogin) {
         LoginService loginService = ServiceBuilder.buildService(LoginService.class);

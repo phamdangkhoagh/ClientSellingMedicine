@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface IdeaService {
-    @GET("products")
+    @GET("/api/product")
     Call<List<Product>> getIdeas();
 
 
