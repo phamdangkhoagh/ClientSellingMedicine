@@ -14,6 +14,8 @@ import com.example.clientsellingmedicine.models.ResponseDto;
 import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -67,7 +69,9 @@ public class ServiceBuilder {
                                     //perform all 401 in sync blocks, to avoid multiply token updates
                                     Token currentToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
 
-                                    if(currentToken != null && currentToken.equals(token)) {
+                                    Log.d("Token", "Equals:  " +currentToken.equals(token) );
+                                    if(currentToken != null && currentToken.getAccessToken().equals(token.getAccessToken())) {
+                                        Log.d("TAG", "intercept: " + "401 error found");
                                         int code = refreshToken(token) / 100;
                                         if (code != 2) { //if refresh token failed for some reason
                                             if (code == 4) //only if response is 400, 500 might mean that token was not updated
@@ -76,6 +80,9 @@ public class ServiceBuilder {
                                         }
                                     }
                                     if(currentToken != null) {
+                                        Log.d("TAG", "intercept: " + "401 error found 2");
+                                        Token newToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                                        setAuthHeader(builder, newToken);
                                         Request newrequest = builder.build();
                                         return chain.proceed(newrequest); //repeat request with new token
                                     }
@@ -88,8 +95,11 @@ public class ServiceBuilder {
                     .addInterceptor(logger);
 
 
+    private static Gson gson = new GsonBuilder()
+            .setDateFormat("MMM d, yyyy, hh:mm:ss a")
+            .create();
     private static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttp.build());
 
     private static Retrofit retrofit = builder.build();
@@ -119,11 +129,9 @@ public class ServiceBuilder {
                 Log.d("tag", "onResponse: "+response.body());
                 return response.code();
             } else {
-                Toast.makeText(MyApplication.getContext(), "Failed to refresh token", Toast.LENGTH_LONG).show();
                 return response.code();
             }
         } catch (IOException e) {
-            Toast.makeText(MyApplication.getContext(), "A connection error occured", Toast.LENGTH_LONG).show();
             return 500; // Return a default error code
         }
     }

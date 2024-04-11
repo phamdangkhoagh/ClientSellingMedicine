@@ -83,11 +83,20 @@ public class MainActivity extends AppCompatActivity
             return true;
 
         } else if (id == R.id.navigation_user) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, profileFragment)
-                    .commit();
-            return true;
+            Token token = SharedPref.loadToken(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+            if (token == null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, unLoginProfileFragment)
+                        .commit();
+                return true;
+            } else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, profileFragment)
+                        .commit();
+                return true;
+            }
         }
 
         return false;

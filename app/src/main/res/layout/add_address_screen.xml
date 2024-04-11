@@ -107,6 +107,8 @@
                             android:background="@null"
                             android:hint="Nhập họ và tên"
                             android:textAlignment="textStart"
+                            android:singleLine="true"
+                            android:maxLength="50"
                             android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -136,6 +138,8 @@
                             android:hint="Nhập số điên thoại"
                             android:textAlignment="textStart"
                             android:inputType="number"
+                            android:singleLine="true"
+                            android:maxLength="10"
                             android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -228,6 +232,8 @@
                             android:background="@null"
                             android:hint="Nhập số nhà, tên đường"
                             android:textAlignment="textStart"
+                            android:maxLength="50"
+                            android:singleLine="true"
                             android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>

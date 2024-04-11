@@ -71,7 +71,6 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
         // go to add address screen
         btn_add_address.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, AddAddressActivity.class);
-            finish();
             startActivity(intent);
         });
 

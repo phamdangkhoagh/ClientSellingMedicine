@@ -47,8 +47,10 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
     LinearLayout loadingLayout;
     IOnItemClickListenerRecyclerView listener;
     private int currentPage = 0;
-   private boolean isEndOfPage = false;
+    private boolean isEndOfPage = false;
     private boolean isLoading = false;
+
+    private final ProductFilter productFilter = new ProductFilter();
 
     private List<Product> products = new ArrayList<>();
 
@@ -86,11 +88,18 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
             }
         });
 
-        products = getProducts(currentPage);
+
+        initRecyclerview();
+        initScrollListener();
+    }
+
+    public void initRecyclerview() {
+        // display all products of category from home screen
+        productFilter.setIdCategory(5);
+        products = getProductsFiltered(currentPage,productFilter);
         productAdapter = new productAdapter(products, this);
         rcvProduct.setLayoutManager(new GridLayoutManager(this, 2));
         rcvProduct.setAdapter(productAdapter);
-        initScrollListener();
     }
 
     public List<Product> getProducts(Integer page) {
@@ -125,9 +134,9 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
     }
 
 
-    public List<Product> getProductsFiltered(ProductFilter filter) {
+    public List<Product> getProductsFiltered(Integer page,ProductFilter filter) {
         ProductService addressService = ServiceBuilder.buildService(ProductService.class);
-        Call<List<Product>> call = addressService.getProductsFilter(filter);
+        Call<List<Product>> call = addressService.getProductsFilter(page,filter);
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<List<Product>> future = executorService.submit((Callable<List<Product>>) () -> {
@@ -182,10 +191,7 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
                     int currentTotalCount = productAdapter.getItemCount();
                     int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
 
-                    Log.d("TAG", "lastItem: " + lastItem);
-                    Log.d("TAG", "currentTotalCount: " + currentTotalCount);
-                    Log.d("TAG", "lastVisibleItemPosition: " + lastVisibleItemPosition);
-
+                    Log.d("TAG", "loadMore: " + "End of page");
                     if (lastItem + 1 == currentTotalCount && isLoading == false) {
                         // Đã cuộn tới cuối danh sách
                         loadMore();
@@ -199,8 +205,9 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
     private void loadMore() {
         isLoading = true;
         currentPage++;
-        List<Product> moreProducts = getProducts(currentPage);
+        List<Product> moreProducts = getProductsFiltered(currentPage,productFilter);
         if (moreProducts == null || moreProducts.size() == 0) {
+
             isEndOfPage = true;
             return;
         }
@@ -218,16 +225,20 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
     }
 
     private void performSearch(String searchText) {
+        currentPage = 0;
+        isEndOfPage = false;
+        isLoading = true;
         ProductFilter filter = new ProductFilter();
         filter.setKeySearch(searchText);
-        List<Product> filteredProducts = getProductsFiltered(filter);
+        List<Product> filteredProducts = getProductsFiltered(currentPage,filter);
         if (filteredProducts == null || filteredProducts.size() == 0) {
             Toast.makeText(mContext, "No result found", Toast.LENGTH_SHORT).show();
         }else {
             products.clear();
             products.addAll(filteredProducts);
-            productAdapter = new productAdapter(products, this);
+            //productAdapter = new productAdapter(products, this);
             productAdapter.notifyDataSetChanged();
+            isLoading = false;
         }
 
     }

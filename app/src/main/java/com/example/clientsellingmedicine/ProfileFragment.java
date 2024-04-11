@@ -1,5 +1,6 @@
 package com.example.clientsellingmedicine;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import com.example.clientsellingmedicine.services.LogoutService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.services.UserService;
 import com.example.clientsellingmedicine.utils.Constants;
+import com.example.clientsellingmedicine.utils.Convert;
 import com.example.clientsellingmedicine.utils.SharedPref;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -128,13 +130,27 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     user = response.body();
+//                    user = new User();
+//                    user.setId(response.body().getId());
+//                    user.setIdRole(response.body().getIdRole());
+//                    user.setPhone(response.body().getPhone());
+//                    user.setPhone(response.body().getPhone());
+//                    user.setPassword(response.body().getPassword());
+//                    user.setFirstName(response.body().getFirstName());
+//                    user.setLastName(response.body().getLastName());
+//                    user.setRank(response.body().getRank());
+//                    user.setPoint(response.body().getPoint());
+//                    user.setBirthday(Convert.convertToDate(response.body().getBirthday().toString().trim()));
+//                    user.setGender(response.body().getGender());
+//                    user.setImage(response.body().getImage());
+//                    user.setStatus(response.body().getStatus());
                     if(user != null){
                         tv_UserName.setText(user.getFirstName() + " " + user.getLastName());
                         progress_Point.setProgress(user.getPoint());
                         tv_Rank.setText(user.getRank());
                         Glide.with(mContext)
                                 .load(user.getImage())
-                                .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải
+                                .placeholder(R.drawable.ic_profile_user) // Hình ảnh thay thế khi đang tải
                                 .error(R.drawable.ic_profile_user) // Hình ảnh thay thế khi có lỗi
                                 .circleCrop()
                                 .into(iv_Avatar);
@@ -146,11 +162,13 @@ public class ProfileFragment extends Fragment {
                 }
             }
 
+            @SuppressLint("SuspiciousIndentation")
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 if (t instanceof IOException) {
                     Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
                 } else
+                    Log.d("TAG", "onFailure: " + t.getMessage());
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
             }
         });
@@ -214,6 +232,24 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public User convertUser(Response<User> response){
+        User u = new User();
+        u.setId(response.body().getId());
+        u.setIdRole(response.body().getIdRole());
+        u.setPhone(response.body().getPhone());
+        u.setPhone(response.body().getPhone());
+        u.setPassword(response.body().getPassword());
+        u.setFirstName(response.body().getFirstName());
+        u.setLastName(response.body().getLastName());
+        u.setRank(response.body().getRank());
+        u.setPoint(response.body().getPoint());
+        u.setBirthday(Convert.convertToDate(response.body().getBirthday().toString().trim()));
+        u.setGender(response.body().getGender());
+        u.setImage(response.body().getImage());
+        u.setStatus(response.body().getStatus());
+        return u;
     }
 
 }

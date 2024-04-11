@@ -13,8 +13,8 @@ import retrofit2.http.Path;
 
 public interface ProductService {
     @GET("/api/product/{page}")
-    Call<List<Product>> getProducts(@Path("page") int id);
+    Call<List<Product>> getProducts(@Path("page") int page);
 
-    @POST("/api/product/filter")
-    Call<List<Product>> getProductsFilter (@Body ProductFilter filter);
+    @POST("/api/product/filter/{page}")
+    Call<List<Product>> getProductsFilter (@Path("page") int page, @Body ProductFilter filter);
 }

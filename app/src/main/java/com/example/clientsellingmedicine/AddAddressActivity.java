@@ -139,14 +139,14 @@ public class AddAddressActivity extends AppCompatActivity {
             // set text for button
             btn_add_address.setText("Cập nhật");
             // set data for address update screen
-            txt_input_name.setText(address.getFullName());
-            txt_input_phone.setText(address.getPhone());
+            txt_input_name.setText(address.getFullName().trim());
+            txt_input_phone.setText(address.getPhone().trim());
             txt_input_province.setText(address.getProvince());
             txt_input_district.setEnabled(true);
             txt_input_district.setText(address.getDistrict());
             txt_input_ward.setEnabled(true);
             txt_input_ward.setText(address.getWard());
-            txt_input_specificAddress.setText(address.getSpecificAddress());
+            txt_input_specificAddress.setText(address.getSpecificAddress().trim());
             String type = address.getType();
             if (type.equals("Nhà riêng")) {
                 rb_home.setChecked(true);

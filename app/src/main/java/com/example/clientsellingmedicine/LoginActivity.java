@@ -1,6 +1,7 @@
 package com.example.clientsellingmedicine;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import com.example.clientsellingmedicine.services.LoginService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
@@ -103,7 +105,19 @@ public class LoginActivity  extends AppCompatActivity {
                     startActivity(intent);
 
                 } else if (response.code() == 401) {
-                    Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
+                    builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
+                            .setTitle("Sai thông tin đăng nhập")
+                            .setMessage("Vui lòng kiểm tra lại thông tin và đăng nhập lại !")
+//                            .setCancelable(false) // Bấm ra ngoài không mất dialog
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Xử lý khi nhấn nút OK
+
+                                }
+                            })
+                            .show();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
                 }
