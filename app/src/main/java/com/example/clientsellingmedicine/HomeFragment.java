@@ -63,6 +63,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class HomeFragment extends Fragment implements IOnItemClickListenerRecyclerView {
     private Context mContext;
@@ -90,6 +91,8 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.home_screen, container, false);
         mContext = view.getContext();
         // toolbar
@@ -102,7 +105,6 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
         setHasOptionsMenu(true);
         addControl(view);
         addEvents();
-
         return view;
 
 
@@ -278,6 +280,7 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
 
     }
 
+
     @Override
     public void onItemClick(Product product) {
         Intent intent = new Intent(getActivity(), DetailProductActivity.class);
@@ -286,4 +289,5 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
 }

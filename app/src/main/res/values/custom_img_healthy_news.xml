@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="img_cart">
+    <style name="img_healthy_news">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8%</item>
+        <item name="cornerSize">26%</item>
     </style>
 </resources>
