@@ -5,5 +5,5 @@ public interface IOnCheckboxChangedListener {
 
     void setStatusOfDeleteText(boolean isShowed);
 
-    void getTotalAmount(double total);
+    void getTotalAmount(int total);
 }

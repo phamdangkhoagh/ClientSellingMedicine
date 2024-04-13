@@ -211,6 +211,8 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     // remove token
                     SharedPref.removeData(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                    // remove checkbox product
+                    SharedPref.removeData(mContext, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
                     // return to login screen and finish all activity
                     Intent intent = new Intent(mContext, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.R;
+import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.utils.Convert;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHolder> {
@@ -26,12 +29,18 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
     private Context mContext;
 
     private IOnItemClickListenerRecyclerView mListener;
+    private IOnButtonAddToCartClickListener addToCartClickListener;
 
-    public productAdapter(List<Product> list, IOnItemClickListenerRecyclerView listener) {
+    public productAdapter(List<Product> list, IOnItemClickListenerRecyclerView listener, IOnButtonAddToCartClickListener addToCartClickListener) {
         this.mProducts = list;
         this.mListener = listener;
+        this.addToCartClickListener = addToCartClickListener;
     }
 
+    public void setFilteredList(List<Product> list){
+        mProducts = list;
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameProductItem,tvProductPrice,tv_Discount;
@@ -104,6 +113,13 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
                 mListener.onItemClick(product);
             }
         });
+
+        holder.btnAddtoCartProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToCartClickListener.onButtonAddToCartClick(product);
+            }
+        });
     }
 
 
@@ -112,6 +128,9 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
         return mProducts.size();
     }
 
-
+    public void sortProducts(Comparator<Product> comparator) {
+        Collections.sort(mProducts, comparator);
+        notifyDataSetChanged();
+    }
 
 }

@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface CartService {
-    @GET("carts")
+    @GET("/api/cart_detail")
     Call<List<CartItem>> getCart();
 
 

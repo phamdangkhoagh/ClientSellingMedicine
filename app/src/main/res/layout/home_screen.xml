@@ -290,6 +290,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_medicine"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -317,6 +318,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_health_care"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -344,6 +346,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_personal_care"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -355,7 +358,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/txtDanhMuc" />
+                                android:text="Chắm sóc cá nhân" />
 
                         </LinearLayout>
 
@@ -371,6 +374,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_convenient_product"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -398,6 +402,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_functional_food"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -425,6 +430,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_mom_baby"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -452,6 +458,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_beauty_care"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -479,6 +486,7 @@
                             tools:ignore="UseCompoundDrawables">
 
                             <ImageView
+                                android:id="@+id/iv_medical_equipment"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 android:background="@drawable/circle_background"
@@ -542,7 +550,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
                                 android:text="xem tất cả"
-                                android:textColor="@color/text_color" />
+                                android:textColor="#666BF7" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -628,7 +636,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
                                 android:text="xem tất cả"
-                                android:textColor="@color/text_color" />
+                                android:textColor="#666BF7" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -673,7 +681,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:background="@color/gray"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -707,13 +715,6 @@
                             android:gravity="end"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tvHealthyNewsAll"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="3dp"
-                                android:text="xem tất cả"
-                                android:textColor="#666BF7" />
                         </LinearLayout>
                     </LinearLayout>
                     <Space
@@ -722,7 +723,8 @@
 
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvHealthyNews"
+                    android:id="@+id/rcvFeeds"
+                    android:background="#edf2f2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <!--         Cam kết       -->

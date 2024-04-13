@@ -82,15 +82,8 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
 
     private void addEvents() {
         cartAdapter.setOnCheckboxChangedListener(this);
-        Log.d("j", "--->this function addEvents: ");
-        getCartItems();
-        Log.d("j", "--->After getCartItem: ");
-//        Log.d("TAG", "totalAmount: " + totalAmount);
-//        Log.d("j", "total: " + totalCartItem);
 
-//        double totalAmount = calculateTotalAmount();
-//        String totalCartItem = convertPrice(totalAmount);
-//        tvTotalAmountCart.setText(totalCartItem);
+        getCartItems();
 
         ivBackCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,10 +168,8 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
 
                         })
                         .show();
-
             }
         });
-//
 
 
     }
@@ -247,8 +238,9 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
 
     }
 
+
     @Override
-    public void getTotalAmount(double total) {
+    public void getTotalAmount(int total) {
         String totalAmount = Convert.convertPrice(total);
         tvTotalPrice.setText(totalAmount);
         tvTotalAmountCart.setText(totalAmount);

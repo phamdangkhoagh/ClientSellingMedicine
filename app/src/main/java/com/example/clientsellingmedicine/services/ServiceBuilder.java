@@ -35,7 +35,7 @@ public class ServiceBuilder {
     //emulater
 //    private static final String URL = "http://10.0.2.2:9000/";
     //device
-    private static final String URL = "http://192.168.43.175:8080/"; //ip Wireless LAN adapter Wi-Fi:
+    private static final String URL = "http://192.168.1.26:8080/"; //ip Wireless LAN adapter Wi-Fi:
     // Create logger
     private static HttpLoggingInterceptor logger =
             new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -146,6 +146,8 @@ public class ServiceBuilder {
                 if (response.isSuccessful()) {
                     // remove token
                     SharedPref.removeData(context, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                    // remove checkbox product
+                    SharedPref.removeData(context, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
                     // return to login screen and finish all activity
                     Intent intent = new Intent(context, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

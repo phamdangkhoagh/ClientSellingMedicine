@@ -44,6 +44,8 @@ dependencies {
     // Retrofit and GSON
     implementation ("com.squareup.retrofit2:retrofit:2.3.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
+    //Jsoup
+    implementation ("org.jsoup:jsoup:1.14.3")
 
     // Logging
     implementation ("com.squareup.okhttp3:logging-interceptor:3.9.0")

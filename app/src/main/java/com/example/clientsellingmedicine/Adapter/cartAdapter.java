@@ -65,11 +65,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             tvNameCartItem = itemView.findViewById(R.id.tvNameCartItem);
             tvPriceCartItem = itemView.findViewById(R.id.tvPriceCartItem);
             ivCartItem = itemView.findViewById(R.id.ivCartItem);
-
             checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
-
             this.setIsRecyclable(false);
-
             tvTotalAmountCart = itemView.findViewById(R.id.tvTotalAmountCart);
             tvQuantityCartItem = itemView.findViewById(R.id.tvQuantityCartItem);
 
@@ -93,10 +90,10 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull cartAdapter.ViewHolder holder, int position) {
         CartItem cart = listCartItems.get(position);
-        holder.tvNameCartItem.setText(cart.getName());
+        holder.tvNameCartItem.setText(cart.getProduct().getName());
         int quantity = cart.getQuantity();
         holder.tvQuantityCartItem.setText(String.valueOf(quantity));
-        String price = Convert.convertPrice(cart.getPrice());
+        String price = Convert.convertPrice(cart.getProduct().getPrice());
         holder.tvPriceCartItem.setText(price);
 
 //        holder.checkboxCartItem.setChecked(isAllSelected());
@@ -170,7 +167,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
         //load image
         Glide.with(holder.itemView.getContext())
-                .load(cart.getImage())
+                .load(cart.getProduct().getImage())
                 .placeholder(R.drawable.loading_icon) // Hình ảnh thay thế khi đang tải
                 .error(R.drawable.error_image) // Hình ảnh thay thế khi có lỗi
                 .into(holder.ivCartItem);
@@ -240,12 +237,12 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
     }
 
-    public double calculateTotalAmount() {
-        double total = 0;
+    public int calculateTotalAmount() {
+        int total = 0;
         if(listCartItemsChecked == null)
             return 0;
         for (CartItem item: listCartItemsChecked) {
-            total += item.getPrice() * item.getQuantity();
+            total += item.getProduct().getPrice() * item.getQuantity();
         }
         return total;
     }

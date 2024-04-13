@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Product implements Serializable {
     private Integer id;
-    private Integer idCategory;
-    private Integer idUnit;
     private String name;
     private String description;
     private Integer discountPercent;

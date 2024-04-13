@@ -12,9 +12,21 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ProductService {
-    @GET("/api/product/{page}")
-    Call<List<Product>> getProducts(@Path("page") int page);
+    @GET("/api/product")
+    Call<List<Product>> getProducts();
 
-    @POST("/api/product/filter/{page}")
-    Call<List<Product>> getProductsFilter (@Path("page") int page, @Body ProductFilter filter);
+    @POST("/api/product/filter")
+    Call<List<Product>> getProductsFilter ( @Body ProductFilter filter);
+
+    @GET("/api/product/new_product")
+    Call<List<Product>> getNewProducts();
+
+    @GET("/api/product/best_seller")
+    Call<List<Product>> getBestSellerProducts();
+
+    @GET("/api/product/have_sold")
+    Call<List<Product>> getHaveSoldProducts();
+
+    @GET("/api/product/best_promotion")
+    Call<List<Product>> getBestPromotionProducts();
 }

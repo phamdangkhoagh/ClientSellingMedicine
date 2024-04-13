@@ -1,20 +1,26 @@
 package com.example.clientsellingmedicine.utils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Convert {
-    public static String convertPrice(double number) {
+
+    // convert Price  1000000 -> 1,000,000 đ
+    public static String convertPrice(int number) {
         if(number == 0)
             return " 0 đ";
-        long integerPart = (long) number;
-        int decimalPart = (int) ((number - integerPart) * 1000);
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        return decimalFormat.format(number);
+    }
 
-        String formattedIntegerPart = String.format("%,d", integerPart).replace(",", ".");
-        String formattedDecimalPart = String.format("%03d", decimalPart);
+    // convert currency 1,000,000 đ -> 1000000
+    public static Integer convertCurrencyFormat(String currency) {
+        currency = currency.replace("đ", "");
+        currency = currency.replace(".", "");
 
-        return formattedIntegerPart + "." + formattedDecimalPart + " đ";
+        return Integer.parseInt(currency);
     }
 
     public static Date convertToDate(String inputDate) {

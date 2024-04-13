@@ -2,6 +2,6 @@
 <resources>
     <style name="img_healthy_news">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">26%</item>
+        <item name="cornerSize">15%</item>
     </style>
 </resources>
