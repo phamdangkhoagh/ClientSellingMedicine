@@ -20,24 +20,24 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-<!--                style="@style/CheckboxRounded"-->
-<!--                android:button="@drawable/checkbox_custom_cart"-->
+                <!--                style="@style/CheckboxRounded"-->
+                <!--                android:button="@drawable/checkbox_custom_cart"-->
 
                 <CheckBox
                     android:id="@+id/checkboxCartItem"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:button="@null"
-                    android:drawableStart="@drawable/custom_checkbox"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true" />
+                    android:layout_alignParentTop="true"
+                    android:button="@null"
+                    android:drawableStart="@drawable/custom_checkbox" />
             </LinearLayout>
             <!-- Image -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="5dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -57,8 +57,8 @@
                     android:id="@+id/tvNameCartItem"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:text="Hoạt huyết Nhất Nhất (3 vỉ x 10 viên/hộp)"
                     android:textAlignment="textStart" />
 
@@ -78,21 +78,20 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/retangle_radius"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="5dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="27dp"
-                        android:layout_height="23dp">
 
-                        <TextView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="4dp"
-                            android:background="@drawable/ic_minus" />
+                    <TextView
+                        android:id="@+id/tv_MinusCartItem"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_minus"
+                        android:gravity="center" />
 
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="26dp"
@@ -103,23 +102,20 @@
                             android:id="@+id/tvQuantityCartItem"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="2dp"
                             android:text="1"
+                            android:gravity="center"
                             android:textAlignment="center" />
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="27dp"
-                        android:layout_height="23dp"
-                        android:gravity="center">
 
-                        <TextView
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:background="@drawable/ic_plus" />
+                    <TextView
+                        android:id="@+id/tv_PlusCartItem"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_plus2" />
 
-                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

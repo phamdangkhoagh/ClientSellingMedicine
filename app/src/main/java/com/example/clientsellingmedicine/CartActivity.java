@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
-import com.example.clientsellingmedicine.interfaces.IOnCheckboxChangedListener;
+import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
@@ -40,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CartActivity extends AppCompatActivity implements IOnCheckboxChangedListener {
+public class CartActivity extends AppCompatActivity implements IOnCartItemListener {
     private Context mContext;
     cartAdapter cartAdapter = new cartAdapter();
     RecyclerView rcvCart;
@@ -294,5 +294,34 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
     public void getTotalProductDiscount(int total) {
         String totalProductDiscount = Convert.convertPrice(total);
         tv_TotalProductDiscount.setText(totalProductDiscount);
+    }
+
+    @Override
+    public void updateCartItemQuantity(CartItem cartItem) {
+        CartService cartService = ServiceBuilder.buildService(CartService.class);
+        Call<CartItem> request = cartService.updateCartItem(cartItem);
+        request.enqueue(new Callback<CartItem>() {
+            @Override
+            public void onResponse(Call<CartItem> call, Response<CartItem> response) {
+                if (response.isSuccessful()) {
+                    //Toast.makeText(CartActivity.this, "Updated item: " + cartItem.getProduct().getId(), Toast.LENGTH_LONG).show();
+                } else if (response.code() == 401) {
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "Somethings was wrong!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartItem> call, Throwable t) {
+                if (t instanceof IOException) {
+                    Toast.makeText(CartActivity.this, "A connection error occurred", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mContext, "Somethings was wrong!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

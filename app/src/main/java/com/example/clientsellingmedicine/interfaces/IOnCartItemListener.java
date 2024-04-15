@@ -1,6 +1,8 @@
 package com.example.clientsellingmedicine.interfaces;
 
-public interface IOnCheckboxChangedListener {
+import com.example.clientsellingmedicine.models.CartItem;
+
+public interface IOnCartItemListener {
     void setValueOfMasterCheckbox(boolean isChecked);
 
     void setStatusOfDeleteText(boolean isShowed);
@@ -8,4 +10,6 @@ public interface IOnCheckboxChangedListener {
     void getTotalAmount(int total);
 
     void getTotalProductDiscount(int total);
+
+    void updateCartItemQuantity(CartItem cartItem);
 }

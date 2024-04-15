@@ -12,17 +12,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.addressAdapter;
-import com.example.clientsellingmedicine.interfaces.IOnCheckboxChangedListener;
 import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
 import com.example.clientsellingmedicine.models.AddressDto;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.services.AddressService;
-import com.example.clientsellingmedicine.services.IdeaService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 
 import java.io.IOException;

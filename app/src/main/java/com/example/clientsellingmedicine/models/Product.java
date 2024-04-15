@@ -18,4 +18,22 @@ public class Product implements Serializable {
     private Integer status;
     private Unit unit;
     private Category category;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Product otherProduct = (Product) obj;
+        if (id == null) {
+            return otherProduct.id == null;
+        }
+
+        return id.equals(otherProduct.id);
+    }
 }

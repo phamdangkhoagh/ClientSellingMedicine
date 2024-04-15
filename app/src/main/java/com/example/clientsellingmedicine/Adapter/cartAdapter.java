@@ -1,7 +1,6 @@
 package com.example.clientsellingmedicine.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,26 +16,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import com.example.clientsellingmedicine.R;
-import com.example.clientsellingmedicine.interfaces.IOnCheckboxChangedListener;
+import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.Convert;
 import com.example.clientsellingmedicine.utils.SharedPref;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
-    private IOnCheckboxChangedListener onCheckboxChangedListener;
+    private IOnCartItemListener onCheckboxChangedListener;
 
-    public void setOnCheckboxChangedListener(IOnCheckboxChangedListener listener) {
+    public void setOnCheckboxChangedListener(IOnCartItemListener listener) {
         this.onCheckboxChangedListener = listener;
     }
 
@@ -55,7 +51,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvNameCartItem, tvPriceCartItem, tvQuantityCartItem;
+        public TextView tvNameCartItem, tvPriceCartItem, tvQuantityCartItem,tv_MinusCartItem, tv_PlusCartItem;
         public ImageView ivCartItem;
 
         public CheckBox checkboxCartItem;
@@ -68,6 +64,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
             this.setIsRecyclable(false);
             tvQuantityCartItem = itemView.findViewById(R.id.tvQuantityCartItem);
+            tv_MinusCartItem = itemView.findViewById(R.id.tv_MinusCartItem);
+            tv_PlusCartItem = itemView.findViewById(R.id.tv_PlusCartItem);
 
             mContext = context;
 
@@ -98,6 +96,19 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         String price = Convert.convertPrice(cart.getProduct().getPrice());
         holder.tvPriceCartItem.setText(price);
 
+        // minus quantity
+        holder.tv_MinusCartItem.setOnClickListener(v -> {
+            if (quantity > 1) {
+                updateQuantityCartItem(holder.itemView.getContext(), cart, -1);   // update on recycler view and shared preferences
+
+            }
+        });
+        // plus quantity
+        holder.tv_PlusCartItem.setOnClickListener(v -> {
+            updateQuantityCartItem(holder.itemView.getContext(), cart, 1);  // update on recycler view and shared preferences
+        });
+
+
 //        holder.checkboxCartItem.setChecked(isAllSelected());
 
         Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
@@ -109,8 +120,10 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         }
         if (listCartItemsChecked != null) {
             for (CartItem item : listCartItemsChecked) {
-                if (cart.getProduct().getId() == item.getProduct().getId()) {
-                    holder.checkboxCartItem.setChecked(true);  // checked item in cart
+                Log.d("tag", "onBindViewHolder: "+ (item.getProduct().equals(cart.getProduct())) );
+                if (item.getProduct().equals(cart.getProduct())) {
+                    holder.checkboxCartItem.setChecked(true);
+                    break;// checked item in cart
                 }
             }
         }
@@ -137,7 +150,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             } else {
                 // Remove item from CartItems Checked
                 for (CartItem cartItem : listCartItemsChecked) {
-                    if (cart.getId() == cartItem.getId()) {
+                    if (cartItem.getProduct().equals(cart.getProduct())) {
                         listCartItemsChecked.remove(cartItem);
                         break;
                     }
@@ -262,4 +275,24 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         return total;
     }
 
+    public void updateQuantityCartItem(Context context, CartItem item, int quantity) {
+        int oldQuantity = item.getQuantity();
+        int newQuantity = oldQuantity + quantity;
+        item.setQuantity(newQuantity);
+        notifyDataSetChanged();
+        // Save CartItems Checked to SharedPreferences
+        for (CartItem itemChecked : listCartItemsChecked) {
+            if (itemChecked.getProduct().equals(item.getProduct())) {
+                itemChecked.setQuantity(newQuantity);
+                SharedPref.saveData(context, listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
+                break;
+            }
+        }
+        // get Total Amount Item Checked
+        onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        // get Total Product Discount
+        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
+        //  update on database
+        onCheckboxChangedListener.updateCartItemQuantity(item);
+    }
 }
