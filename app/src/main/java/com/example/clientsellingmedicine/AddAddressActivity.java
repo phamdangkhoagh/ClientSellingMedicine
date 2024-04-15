@@ -122,12 +122,7 @@ public class AddAddressActivity extends AppCompatActivity {
     }
 
     public void addEvents() {
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(view -> finish());
 
 
         // get address update
@@ -276,26 +271,20 @@ public class AddAddressActivity extends AppCompatActivity {
         });
 
 
-        swt_default_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("TAG", "onClick: " + swt_default_address.isChecked());
-                if (isDefaultAddress) {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-                    builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
-                            .setTitle("Thông Báo")
-                            .setMessage("Bạn vui lòng chọn một địa chỉ khác làm mặc định !")
-                            .setCancelable(false) // Bấm ra ngoài không mất dialog
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Xử lý khi nhấn nút OK
+        swt_default_address.setOnClickListener(view -> {
+            Log.d("TAG", "onClick: " + swt_default_address.isChecked());
+            if (isDefaultAddress) {
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
+                builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
+                        .setTitle("Thông Báo")
+                        .setMessage("Bạn vui lòng chọn một địa chỉ khác làm mặc định !")
+                        .setCancelable(false) // Bấm ra ngoài không mất dialog
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            // Xử lý khi nhấn nút OK
 
-                                }
-                            })
-                            .show();
-                    swt_default_address.setChecked(true);
-                }
+                        })
+                        .show();
+                swt_default_address.setChecked(true);
             }
         });
     }
@@ -315,9 +304,10 @@ public class AddAddressActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseDto> call, Response<ResponseDto> response) {
                 if (response.isSuccessful()) {
-                    Intent intent = new Intent(mContext, RegisteredAddressActivity.class);
+                    Intent resultIntent = new Intent();
+                    // Đặt dữ liệu trả về vào intent nếu cần
+                    setResult(RESULT_OK, resultIntent);
                     finish();
-                    startActivity(intent);
 
                 } else if (response.code() == 401) {
                     Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
@@ -347,8 +337,10 @@ public class AddAddressActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseDto> call, Response<ResponseDto> response) {
                 if (response.isSuccessful()) {
-                    Intent intent = new Intent(mContext, RegisteredAddressActivity.class);
-                    startActivity(intent);
+                    Intent resultIntent = new Intent();
+                    // Đặt dữ liệu trả về vào intent nếu cần
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
 
                 } else if (response.code() == 401) {
                     Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();

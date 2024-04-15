@@ -211,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:padding="4dp">
                     <TextView
-
+                        android:id="@+id/tv_TotalPriceCart"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -220,7 +220,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
-                        android:id="@+id/tvTotalPrice"
+                        android:id="@+id/tv_TotalPrice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -245,8 +245,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
-                        android:id="@+id/tvTotalDiscount"
-
+                        android:id="@+id/tv_TotalProductDiscount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -269,7 +268,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
-                        android:id="@+id/tvTotalDiscountVoucher"
+                        android:id="@+id/tv_TotalVoucherDiscount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -309,10 +308,10 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tvTotalAmountCart"
+                            android:id="@+id/tv_TotalAmountCart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="220.000đ"
+                            android:text="0.000đ"
                             android:textColor="@color/header_color"
                             android:textSize="16sp"
                             android:textStyle="bold" />

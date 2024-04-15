@@ -57,5 +57,5 @@ dependencies {
     implementation ("org.projectlombok:lombok:1.18.20")
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
 
-
+    implementation ("androidx.activity:activity-ktx:1.4.0")
 }

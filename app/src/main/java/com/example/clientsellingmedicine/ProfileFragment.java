@@ -80,40 +80,28 @@ public class ProfileFragment extends Fragment {
     }
     private void addEvents(){
         // this layout is used to show the list of registered addresses
-        ll_AddressBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, RegisteredAddressActivity.class);
-                startActivity(intent);
-            }
+        ll_AddressBook.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, RegisteredAddressActivity.class);
+            startActivity(intent);
         });
 
         // logout button
-        tv_Logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                builder.setIcon(R.drawable.drug) // Đặt icon của Dialog
-                        .setTitle("Xác Nhận Đăng Xuất")
-                        .setMessage("Bạn có muốn đăng xuất khỏi ứng dụng không?")
-                        .setCancelable(false) // Bấm ra ngoài không mất dialog
+        tv_Logout.setOnClickListener(v -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+            builder.setIcon(R.drawable.drug) // Đặt icon của Dialog
+                    .setTitle("Xác Nhận Đăng Xuất")
+                    .setMessage("Bạn có muốn đăng xuất khỏi ứng dụng không?")
+                    .setCancelable(false) // Bấm ra ngoài không mất dialog
 
-                        .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Xử lý khi nhấn nút OK
-                                Logout();
-                            }
-                        })
+                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                        // Xử lý khi nhấn nút OK
+                        Logout();
+                    })
 
-                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Xử lý khi nhấn nút Cancel
-                            }
-                        })
-                        .show();
-            }
+                    .setNegativeButton("Hủy", (dialog, which) -> {
+                        // Xử lý khi nhấn nút Cancel
+                    })
+                    .show();
         });
 
         // login with token
@@ -130,20 +118,6 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     user = response.body();
-//                    user = new User();
-//                    user.setId(response.body().getId());
-//                    user.setIdRole(response.body().getIdRole());
-//                    user.setPhone(response.body().getPhone());
-//                    user.setPhone(response.body().getPhone());
-//                    user.setPassword(response.body().getPassword());
-//                    user.setFirstName(response.body().getFirstName());
-//                    user.setLastName(response.body().getLastName());
-//                    user.setRank(response.body().getRank());
-//                    user.setPoint(response.body().getPoint());
-//                    user.setBirthday(Convert.convertToDate(response.body().getBirthday().toString().trim()));
-//                    user.setGender(response.body().getGender());
-//                    user.setImage(response.body().getImage());
-//                    user.setStatus(response.body().getStatus());
                     if(user != null){
                         tv_UserName.setText(user.getFirstName() + " " + user.getLastName());
                         progress_Point.setProgress(user.getPoint());
@@ -156,7 +130,9 @@ public class ProfileFragment extends Fragment {
                                 .into(iv_Avatar);
                     }
                 } else if (response.code() == 401) {
-                    Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
                 }
@@ -219,7 +195,9 @@ public class ProfileFragment extends Fragment {
                     startActivity(intent);
                     getActivity().finish();
                 } else if (response.code() == 401) {
-                    Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
                 }

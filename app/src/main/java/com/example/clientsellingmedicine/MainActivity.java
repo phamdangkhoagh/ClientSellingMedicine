@@ -1,37 +1,27 @@
 package com.example.clientsellingmedicine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientsellingmedicine.models.Token;
-import com.example.clientsellingmedicine.services.LoginService;
-import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
-import com.example.clientsellingmedicine.utils.Validator;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView
         .OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
+    private ActivityResultLauncher<Intent> launcher;
     private Context mContext;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +36,12 @@ public class MainActivity extends AppCompatActivity
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
 
-
     }
 
     HomeFragment homeFragment = new HomeFragment();
     CategoryFragment categoryFragment = new CategoryFragment();
     OrderFragment orderFragment = new OrderFragment();
-
     ProfileFragment profileFragment = new ProfileFragment();
-
     UnLoginProfileFragment unLoginProfileFragment = new UnLoginProfileFragment();
 
 
@@ -107,6 +94,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeFragment.loadData();
+    }
 }
 
 

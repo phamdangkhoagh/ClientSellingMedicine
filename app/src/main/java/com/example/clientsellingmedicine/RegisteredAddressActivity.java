@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -40,8 +42,7 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
     private Button btn_add_address;
 
     private addressAdapter addressAdapter;
-
-
+    private ActivityResultLauncher<Intent> launcher;
     IOnItemClickListenerRecyclerView listener;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +50,14 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
         mContext = this;
         setContentView(R.layout.registered_address_screen);
 
+        // get result status from addAddress activity
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+//                Intent data = result.getData();
+                // Xử lý dữ liệu trả về từ màn hình B và cập nhật UI ở đây
+                getRegisteredAddress();
+            }
+        });
         addControl();
         addEvents();
     }
@@ -71,7 +80,7 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
         // go to add address screen
         btn_add_address.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, AddAddressActivity.class);
-            startActivity(intent);
+            launcher.launch(intent);
         });
 
         // get registered address
@@ -86,7 +95,7 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
             @Override
             public void onResponse(Call<List<AddressDto>> call, Response<List<AddressDto>> response) {
                 if(response.isSuccessful()){
-                    addressAdapter = new addressAdapter(response.body(), RegisteredAddressActivity.this);
+                    addressAdapter = new addressAdapter(response.body(), RegisteredAddressActivity.this, launcher);
                     rcv_address.setAdapter(addressAdapter);
                     rcv_address.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 

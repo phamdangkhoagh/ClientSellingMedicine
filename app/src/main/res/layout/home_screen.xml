@@ -131,7 +131,7 @@
                 </LinearLayout>
 
                 <FrameLayout
-                    android:id="@+id/redCircle"
+                    android:id="@+id/redCircleCart"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:layout_gravity="top|right"
@@ -513,6 +513,92 @@
                     android:orientation="vertical">
                     <!--                 title-->
                     <LinearLayout
+                        android:id="@+id/txt_topsanphammoi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingEnd="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:singleLine="true"
+                            android:text="Top sản phẩm mới"
+                            android:textAlignment="textStart"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_DisplayAllNewProduct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:text="xem tất cả"
+                                android:textColor="#666BF7" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="2dp"
+                                android:src="@drawable/arrow_left" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!--                 top sản phẩm bán chạy-->
+                    <ScrollView
+                        android:id="@+id/topsanphammoi_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_topsanphammoi"
+                        app:layout_constraintVertical_bias="0.525">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rcvTopNewProduct"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+                <!--                Top sản phẩm mới-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+                    <!--                 title-->
+                    <LinearLayout
                         android:id="@+id/txt_topsanpham"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -521,12 +607,12 @@
                         android:paddingEnd="16dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
+
                             android:singleLine="true"
                             android:text="Top sản phẩm bán chạy"
                             android:textAlignment="textStart"
@@ -545,7 +631,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvTopSale"
+                                android:id="@+id/tv_DisplayAllTopSale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
@@ -607,12 +693,11 @@
                         android:paddingEnd="16dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
                             android:singleLine="true"
                             android:text="Ưu đãi giảm giá"
                             android:textAlignment="textStart"
@@ -631,7 +716,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvTopDiscount"
+                                android:id="@+id/tv_DisplayAllTopDiscount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"

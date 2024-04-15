@@ -36,7 +36,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
+                android:layout_marginStart="5dp"
+                android:layout_gravity="center"
                 android:orientation="horizontal">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -57,8 +58,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="16dp"
                     android:text="Hoạt huyết Nhất Nhất (3 vỉ x 10 viên/hộp)"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textStart" />
 
                 <TextView
                     android:id="@+id/tvPriceCartItem"
@@ -88,7 +90,7 @@
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="4dp"
-                            android:background="@drawable/ic_bin" />
+                            android:background="@drawable/ic_minus" />
 
                     </LinearLayout>
 

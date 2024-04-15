@@ -45,6 +45,8 @@ public class ServiceBuilder {
             new OkHttpClient.Builder()
                     .readTimeout(15, TimeUnit.SECONDS)
                     .addInterceptor(new Interceptor() {
+                        private boolean isRefreshing = false; // check fresh token status
+
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request originalRequest = chain.request();
@@ -63,33 +65,28 @@ public class ServiceBuilder {
                             Request request = builder.build();
 
                             Response response = chain.proceed(request);
-                            // access token is expired
-                            if(response.code() == 401) {
-                                synchronized (okHttp) {
-                                    //perform all 401 in sync blocks, to avoid multiply token updates
-                                    Token currentToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                            // Access token is expired
+                            if (response.code() == 401) {
+                                if (!isRefreshing) { // Kiểm tra trạng thái làm mới token
+                                    synchronized (okHttp) {
+                                        isRefreshing = true; // Đánh dấu bắt đầu quá trình làm mới token
+                                        Token currentToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
 
-                                    Log.d("Token", "Equals:  " +currentToken.equals(token) );
-                                    if(currentToken != null && currentToken.getAccessToken().equals(token.getAccessToken())) {
-                                        Log.d("TAG", "intercept: " + "401 error found");
-                                        int code = refreshToken(token) / 100;
-                                        if (code != 2) { //if refresh token failed for some reason
-                                            if (code == 4) //only if response is 400, 500 might mean that token was not updated
-                                                Logout(MyApplication.getContext()); //go to login screen
-                                            return response; //if token refresh failed - show error to user
+                                        if (currentToken != null && currentToken.getAccessToken().equals(token.getAccessToken())) {
+                                            int code = refreshToken(token) / 100;
+                                            if (code == 2) { // Nếu refresh token thành công
+                                                Token newToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
+                                                setAuthHeader(builder, newToken);
+                                                Request newRequest = builder.build();
+                                                Response newResponse = chain.proceed(newRequest);
+                                                isRefreshing = false; // Đánh dấu kết thúc quá trình làm mới token
+                                                return newResponse; // Trả về response mới
+                                            }
                                         }
-                                    }
-                                    if(currentToken != null) {
-                                        Log.d("TAG", "intercept: " + "401 error found 2");
-                                        Token newToken = SharedPref.loadToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
-                                        setAuthHeader(builder, newToken);
-                                        Request newrequest = builder.build();
-                                        return chain.proceed(newrequest); //repeat request with new token
                                     }
                                 }
                             }
-
-                        return response;
+                            return response;
                         }
                     })
                     .addInterceptor(logger);
@@ -115,61 +112,24 @@ public class ServiceBuilder {
     }
 
     private static int refreshToken(Token token) {
-        // This method now returns an int
         LoginService loginService = ServiceBuilder.buildService(LoginService.class);
         Call<Token> requestRefreshToken = loginService.refreshToken(token);
 
         try {
-            // Make a synchronous request by calling execute()
             retrofit2.Response<Token> response = requestRefreshToken.execute();
 
             if (response.isSuccessful()) {
                 Token newToken = response.body();
                 SharedPref.saveToken(MyApplication.getContext(), Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN, newToken);
-                Log.d("tag", "onResponse: "+response.body());
+                Log.d("tag", "onResponse: " + response.body());
                 return response.code();
             } else {
                 return response.code();
             }
         } catch (IOException e) {
-            return 500; // Return a default error code
+            return 500; // Trả về mã lỗi mặc định
         }
     }
 
-    public static void Logout(Context context) {
-        LogoutService logoutService = ServiceBuilder.buildService(LogoutService.class);
-        Call<ResponseDto> request = logoutService.logout();
-        request.enqueue(new Callback<ResponseDto>() {
 
-            @Override
-            public void onResponse(Call<ResponseDto> call, retrofit2.Response<ResponseDto> response) {
-                if (response.isSuccessful()) {
-                    // remove token
-                    SharedPref.removeData(context, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
-                    // remove checkbox product
-                    SharedPref.removeData(context, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
-                    // return to login screen and finish all activity
-                    Intent intent = new Intent(context, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(intent);
-                    if(context instanceof Activity) {
-                        ((Activity) context).finish();
-                    }
-                } else if (response.code() == 401) {
-                    Toast.makeText(context, "Your session has expired", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseDto> call, Throwable t) {
-                if (t instanceof IOException) {
-                    Toast.makeText(context, "A connection error occured", Toast.LENGTH_LONG).show();
-                    Log.d("TAG", "onFailure: "+ t.getMessage());
-                } else
-                    Toast.makeText(context, "Failed to retrieve items", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 }

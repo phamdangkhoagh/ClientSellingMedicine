@@ -20,17 +20,4 @@ public class CartItem {
         this.quantity = quantity;
         this.status = status;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        CartItem cartItem = (CartItem) obj;
-        return id == cartItem.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

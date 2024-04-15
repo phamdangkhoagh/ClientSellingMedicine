@@ -6,4 +6,6 @@ public interface IOnCheckboxChangedListener {
     void setStatusOfDeleteText(boolean isShowed);
 
     void getTotalAmount(int total);
+
+    void getTotalProductDiscount(int total);
 }

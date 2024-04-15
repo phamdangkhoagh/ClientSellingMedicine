@@ -2,8 +2,10 @@ package com.example.clientsellingmedicine;
 
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,9 +27,13 @@ import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.Convert;
 import com.example.clientsellingmedicine.utils.SharedPref;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +46,7 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
     RecyclerView rcvCart;
     LinearLayout bottom_view, linear_layout_dynamic;
 
-    TextView tvTotalAmountCart, tvTotalItemCart, tvDelete, tvTotalPrice, tvTotalDiscount, tvTotalDiscountVoucher;
+    TextView tv_TotalAmountCart, tvTotalItemCart, tvDelete, tv_TotalPrice, tv_TotalProductDiscount, tv_TotalVoucherDiscount;
 
 
     ImageView icon_arrow_up, ivBackCart;
@@ -54,9 +59,9 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        mContext = CartActivity.this;
         super.onCreate(savedInstanceState);
+        mContext = this;
+
         setContentView(R.layout.cart_screen);
         addControl();
         addEvents();
@@ -69,15 +74,15 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
         bottom_view = findViewById(R.id.bottom_view);
         linear_layout_dynamic = findViewById(R.id.linear_layout_dynamic);
         icon_arrow_up = findViewById(R.id.icon_arrow_up);
-        tvTotalAmountCart = findViewById(R.id.tvTotalAmountCart);
+        tv_TotalAmountCart = findViewById(R.id.tv_TotalAmountCart);
 
         masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
         tvTotalItemCart = findViewById(R.id.tvTotalItemCart);
         ivBackCart = findViewById(R.id.ivBackCart);
         tvDelete = findViewById(R.id.tvDelete);
-        tvTotalPrice = findViewById(R.id.tvTotalPrice);
-        tvTotalDiscount = findViewById(R.id.tvTotalDiscount);
-        tvTotalDiscountVoucher = findViewById(R.id.tvTotalDiscountVoucher);
+        tv_TotalPrice = findViewById(R.id.tv_TotalPrice);
+        tv_TotalProductDiscount = findViewById(R.id.tv_TotalProductDiscount);
+        tv_TotalVoucherDiscount = findViewById(R.id.tv_TotalVoucherDiscount);
     }
 
     private void addEvents() {
@@ -85,94 +90,113 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
 
         getCartItems();
 
-        ivBackCart.setOnClickListener(new View.OnClickListener() {
+        ivBackCart.setOnClickListener(v -> finish());
+
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim());
+                int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim());
+                int totalVoucherDiscount = Convert.convertCurrencyFormat(tv_TotalVoucherDiscount.getText().toString().trim());
+                int totalAmount = total - totalProductDiscount - totalVoucherDiscount;
+                tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount));
+            }
+        };
+        tv_TotalPrice.addTextChangedListener(textWatcher);
+        tv_TotalProductDiscount.addTextChangedListener(textWatcher);
+        tv_TotalVoucherDiscount.addTextChangedListener(textWatcher);
+
+
+
+        icon_arrow_up.setOnClickListener(v -> {
+            if (isShowBottomView) {
+                // set new height
+                int desiredHeightInDp = 260;
+
+                float scale = getResources().getDisplayMetrics().density;
+                int desiredHeightInPixels = (int) (desiredHeightInDp * scale + 0.5f);
+
+                ViewGroup.LayoutParams layoutParams = bottom_view.getLayoutParams();
+                layoutParams.height = desiredHeightInPixels;
+                bottom_view.setLayoutParams(layoutParams);
+
+                //display view
+                linear_layout_dynamic.setVisibility(View.VISIBLE);
+                // set icon down
+                icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
+
+                isShowBottomView = false;
+            } else {
+                // set new height
+                int desiredHeightInDp = 160;
+
+                float scale = getResources().getDisplayMetrics().density;
+                int desiredHeightInPixels = (int) (desiredHeightInDp * scale + 0.5f);
+
+                ViewGroup.LayoutParams layoutParams = bottom_view.getLayoutParams();
+                layoutParams.height = desiredHeightInPixels;
+                bottom_view.setLayoutParams(layoutParams);
+
+                //display view
+                linear_layout_dynamic.setVisibility(View.GONE);
+                // set icon up
+                icon_arrow_up.setImageResource(R.drawable.ic_arrow_up);
+
+                isShowBottomView = true;
+            }
+
         });
 
-        icon_arrow_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isShowBottomView) {
-                    // set new height
-                    int desiredHeightInDp = 260;
 
-                    float scale = getResources().getDisplayMetrics().density;
-                    int desiredHeightInPixels = (int) (desiredHeightInDp * scale + 0.5f);
+        masterCheckboxCart.setOnClickListener(v -> {
+            if (masterCheckboxCart.isChecked())
+                cartAdapter.setAllSelected(true);
+            else
+                cartAdapter.setAllSelected(false);
 
-                    ViewGroup.LayoutParams layoutParams = bottom_view.getLayoutParams();
-                    layoutParams.height = desiredHeightInPixels;
-                    bottom_view.setLayoutParams(layoutParams);
-
-                    //display view
-                    linear_layout_dynamic.setVisibility(View.VISIBLE);
-                    // set icon down
-                    icon_arrow_up.setImageResource(R.drawable.ic_arrow_down);
-
-                    isShowBottomView = false;
-                } else {
-                    // set new height
-                    int desiredHeightInDp = 160;
-
-                    float scale = getResources().getDisplayMetrics().density;
-                    int desiredHeightInPixels = (int) (desiredHeightInDp * scale + 0.5f);
-
-                    ViewGroup.LayoutParams layoutParams = bottom_view.getLayoutParams();
-                    layoutParams.height = desiredHeightInPixels;
-                    bottom_view.setLayoutParams(layoutParams);
-
-                    //display view
-                    linear_layout_dynamic.setVisibility(View.GONE);
-                    // set icon up
-                    icon_arrow_up.setImageResource(R.drawable.ic_arrow_up);
-
-                    isShowBottomView = true;
-                }
-
-            }
         });
 
+        tvDelete.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
+            builder.setIcon(R.drawable.drug) // Đặt icon của Dialog
+                    .setTitle("Xác Nhận Xóa Sản Phẩm")
+                    .setMessage("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng không?")
+                    .setCancelable(false) // Bấm ra ngoài không mất dialog
 
-        masterCheckboxCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (masterCheckboxCart.isChecked())
-                    cartAdapter.setAllSelected(true);
-                else
-                    cartAdapter.setAllSelected(false);
+                    .setPositiveButton("Xóa", (dialog, which) -> {
+                        // Xử lý khi nhấn nút OK
+                        // get list cart items checked
+                        Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
+                        List<CartItem> listCartItemsChecked = SharedPref.loadData(CartActivity.this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
+                        if(listCartItemsChecked != null){
+                            // delete cart item
+                            for (CartItem item: listCartItemsChecked) {
+                                deleteCartItem(item);
+                                cartAdapter.removeItems(item);
+                                tvTotalItemCart.setText("(" + cartAdapter.getItemCount() + ")");
+                            }
+                        }
+                    })
 
-            }
-        });
-
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog alertDialog = new AlertDialog.Builder(mContext)
-                        //set icon
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        //set title
-                        .setTitle("Xác nhận xóa sản phẩm")
-                        //set message
-                        .setMessage("Bạn có chắc chắn muốn xóa những sản phẩm này?")
-                        //set positive button
-                        .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            //set what would happen when positive button is clicked
-                            cartAdapter.removeItems();
-                            tvTotalItemCart.setText("(" + cartAdapter.getItemCount() + ")");
-                        })
-                        //set negative button
-                        .setNegativeButton("No", (dialogInterface, i) -> {
-                            //set what should happen when negative button is clicked
-
-                        })
-                        .show();
-            }
+                    .setNegativeButton("Hủy", (dialog, which) -> {
+                        // Xử lý khi nhấn nút Cancel
+                    })
+                    .show();
         });
 
 
     }
+
 
 
     public void getCartItems() {
@@ -183,9 +207,7 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
             @Override
             public void onResponse(Call<List<CartItem>> call, Response<List<CartItem>> response) {
                 if (response.isSuccessful()) {
-//                    cartAdapter = new cartAdapter(response.body());
                     cartAdapter.setListCartItems(response.body());
-//                    cartAdapter.setOnCheckboxChangedListener(CartActivity.this);
                     tvTotalItemCart.setText("(" + cartAdapter.getItemCount() + ")"); // set total item in cart
                     rcvCart.setAdapter(cartAdapter);
                     LinearLayoutManager layoutManager
@@ -193,7 +215,9 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
                     rcvCart.setLayoutManager(layoutManager);
 
                 } else if (response.code() == 401) {
-                    Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
                 }
@@ -209,15 +233,35 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
         });
     }
 
-    public String convertPrice(double number) {
-        long integerPart = (long) number;
-        int decimalPart = (int) ((number - integerPart) * 1000);
 
-        String formattedIntegerPart = String.format("%,d", integerPart).replace(",", ".");
-        String formattedDecimalPart = String.format("%03d", decimalPart);
+    private void deleteCartItem(CartItem cartItem) {
+        CartService cartService = ServiceBuilder.buildService(CartService.class);
+        Call<CartItem> request = cartService.deleteCartItem(cartItem.getProduct().getId());
+        request.enqueue(new Callback<CartItem>() {
+            @Override
+            public void onResponse(Call<CartItem> call, Response<CartItem> response) {
+                if (response.isSuccessful()) {
+                    //Toast.makeText(CartActivity.this, "Deleted item: " + cartItem.getProduct().getId(), Toast.LENGTH_LONG).show();
+                } else if (response.code() == 401) {
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "Failed to Deleted item", Toast.LENGTH_LONG).show();
+                }
+            }
 
-        return formattedIntegerPart + "." + formattedDecimalPart;
+            @Override
+            public void onFailure(Call<CartItem> call, Throwable t) {
+                if (t instanceof IOException) {
+                    Toast.makeText(CartActivity.this, "A connection error occurred", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(CartActivity.this, "Failed to delete item: " + cartItem.getProduct().getName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
+
 
     @Override
     public void setValueOfMasterCheckbox(boolean isChecked) {
@@ -242,23 +286,13 @@ public class CartActivity extends AppCompatActivity implements IOnCheckboxChange
     @Override
     public void getTotalAmount(int total) {
         String totalAmount = Convert.convertPrice(total);
-        tvTotalPrice.setText(totalAmount);
-        tvTotalAmountCart.setText(totalAmount);
+        tv_TotalPrice.setText(totalAmount);
+        //tv_TotalAmountCart.setText(totalAmount);
     }
 
-
-//    public double calculateTotalAmount() {
-//        double totalAmount = 0;
-//        if (cartAdapter.listProductsToBuy != null) {
-//            Log.d("TAG", "--------cartAdapter-----:  " + cartAdapter.listProductsToBuy.size());
-//            for (int i = 0; i < cartAdapter.listProductsToBuy.size(); i++) {
-//                Cart cart = cartAdapter.listProductsToBuy.get(i);
-//
-//                totalAmount += cart.getPrice() * cart.getQuantity();
-//            }
-//        }
-//        Log.d("TAG", "calculateTotalAmount: " + totalAmount);
-//        return totalAmount;
-//    }
-
+    @Override
+    public void getTotalProductDiscount(int total) {
+        String totalProductDiscount = Convert.convertPrice(total);
+        tv_TotalProductDiscount.setText(totalProductDiscount);
+    }
 }

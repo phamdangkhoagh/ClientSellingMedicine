@@ -1,5 +1,8 @@
 package com.example.clientsellingmedicine;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,17 +43,23 @@ import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecycler
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.models.ProductFilter;
+import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.ProductService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
+import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.Convert;
+import com.example.clientsellingmedicine.utils.SharedPref;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,6 +67,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductActivity extends AppCompatActivity implements IOnItemClickListenerRecyclerView, IOnButtonAddToCartClickListener {
@@ -66,8 +77,10 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
 
     LinearLayout ll_Sort_low_to_high, ll_Sort_high_to_low;
 
-    ImageView imgFilter,ivBack;
+    FrameLayout redCircleCart;
+    ImageView imgFilter,ivBack,ivCart;
 
+    TextView tvNumberCart;
     TextInputEditText edtSearch;
     LinearLayout loadingLayout;
     IOnItemClickListenerRecyclerView listener;
@@ -101,6 +114,9 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
         ivBack = findViewById(R.id.iv_back);
         ll_Sort_low_to_high = findViewById(R.id.ll_Sort_low_to_high);
         ll_Sort_high_to_low = findViewById(R.id.ll_Sort_high_to_low);
+        tvNumberCart = findViewById(R.id.tvNumberCart);
+        redCircleCart = findViewById(R.id.redCircleCart);
+        ivCart = findViewById(R.id.ivCart);
     }
 
     private void addEvents() {
@@ -110,6 +126,10 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
             showFilterPriceDialog();
         });
 
+        ivCart.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
 
         // sort product by price low to high
         ll_Sort_low_to_high.setOnClickListener(v -> {
@@ -163,6 +183,7 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
         });
 
 
+        getTotalCartItem();
         // set data for recyclerview
         initRecyclerview();
     }
@@ -193,43 +214,104 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
             rcvProduct.setLayoutManager(new GridLayoutManager(this, 2));
             rcvProduct.setAdapter(productAdapter);
         }
+        else { // filter = all products
+            products = getAllNewProducts();
+            productAdapter = new productAdapter(products, this, this);
+            rcvProduct.setLayoutManager(new GridLayoutManager(this, 2));
+            rcvProduct.setAdapter(productAdapter);
+        }
 
     }
 
 
     public List<Product> getProductsTopDiscount() {
-        return null;
+        ProductService productService = ServiceBuilder.buildService(ProductService.class);
+        Call<List<Product>> call = productService.getHavePromotionProducts();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<List<com.example.clientsellingmedicine.models.Product>> future = executorService.submit((Callable<List<com.example.clientsellingmedicine.models.Product>>) () -> {
+            try {
+                Response<List<Product>> response = call.execute();
+                if (response.isSuccessful()) {
+                    return response.body();
+
+                } else {
+                    Log.d("Error", "Status Code : " + response.code() + ", Message : " + response.message());
+                    return null;
+                }
+            } catch (IOException e) {
+                Log.d("Error", "Get Product Exception : " + e.getMessage());
+                return null;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+
     }
 
+    public List<Product> getAllNewProducts() {
+        ProductService productService = ServiceBuilder.buildService(ProductService.class);
+        Call<List<Product>> call = productService.getNewProducts();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<List<com.example.clientsellingmedicine.models.Product>> future = executorService.submit((Callable<List<com.example.clientsellingmedicine.models.Product>>) () -> {
+            try {
+                Response<List<Product>> response = call.execute();
+                if (response.isSuccessful()) {
+                    return response.body();
+
+                } else {
+                    Log.d("Error", "Status Code : " + response.code() + ", Message : " + response.message());
+                    return null;
+                }
+            } catch (IOException e) {
+                Log.d("Error", "Get Product Exception : " + e.getMessage());
+                return null;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+    }
     public List<Product> getProductsTopSale() {
-        return null;
-//        ProductService addressService = ServiceBuilder.buildService(ProductService.class);
-//        Call<List<Product>> call = addressService.getProducts();
-//
-//        ExecutorService executorService = Executors.newSingleThreadExecutor();
-//        Future<List<com.example.clientsellingmedicine.models.Product>> future = executorService.submit((Callable<List<com.example.clientsellingmedicine.models.Product>>) () -> {
-//            try {
-//                Response<List<Product>> response = call.execute();
-//                if (response.isSuccessful()) {
-//                    return response.body();
-//
-//                } else {
-//                    Log.d("Error", "Status Code : " + response.code() + ", Message : " + response.message());
-//                    return null;
-//                }
-//            } catch (IOException e) {
-//                Log.d("Error", "Get Product Exception : " + e.getMessage());
-//                return null;
-//            }
-//        });
-//
-//        try {
-//            return future.get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            return null;
-//        } finally {
-//            executorService.shutdown();
-//        }
+        ProductService productService = ServiceBuilder.buildService(ProductService.class);
+        Call<List<Product>> call = productService.getBestSellerProducts();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<List<com.example.clientsellingmedicine.models.Product>> future = executorService.submit((Callable<List<com.example.clientsellingmedicine.models.Product>>) () -> {
+            try {
+                Response<List<Product>> response = call.execute();
+                if (response.isSuccessful()) {
+                    return response.body();
+
+                } else {
+                    Log.d("Error", "Status Code : " + response.code() + ", Message : " + response.message());
+                    return null;
+                }
+            } catch (IOException e) {
+                Log.d("Error", "Get Product Exception : " + e.getMessage());
+                return null;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
     }
 
     public List<Product> getProducts() {
@@ -263,6 +345,47 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
 
     }
 
+    private void getTotalCartItem(){
+        CartService cartService = ServiceBuilder.buildService(CartService.class);
+        Call<Integer> request = cartService.getTotalItem();
+
+        request.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if(response.isSuccessful()){
+                    displayCartItemCount(response.body());
+                } else if(response.code() == 401) {
+                    displayCartItemCount(0);
+                } else {
+                    Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                if (t instanceof IOException){
+                    Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+    private void displayCartItemCount(int num) {
+        if(num <= 0){
+            redCircleCart.setVisibility(GONE);
+        }
+        else if(num > 99){
+            tvNumberCart.setText("99");
+            redCircleCart.setVisibility(VISIBLE);
+        }
+        else {
+            tvNumberCart.setText(String.valueOf(num));
+            redCircleCart.setVisibility(VISIBLE);
+        }
+    }
 
     public List<Product> getProductsFiltered(ProductFilter filter) {
         ProductService addressService = ServiceBuilder.buildService(ProductService.class);
@@ -382,12 +505,35 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
 
         btn_AddToCart.setOnClickListener(v -> {
             CartItem cartItem = new CartItem(product, quantity.get(), 1);
-            int result = addToCart(cartItem);
-            if (result == 200) {
-                Toast.makeText(mContext, "Add to cart successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mContext, "Add to cart failed", Toast.LENGTH_SHORT).show();
-            }
+            addToCart(cartItem)
+                    .thenAccept(result -> {
+                        if (result == 200) {
+                            // reset total cart
+                            getTotalCartItem();
+
+                            //get CartItems Checked from SharedPreferences
+                            Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
+                            List<CartItem> listCartItemsChecked = SharedPref.loadData(this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
+                            if(listCartItemsChecked == null){
+                                listCartItemsChecked = new ArrayList<>();
+                            }
+                            listCartItemsChecked.add(cartItem);
+                            // update CartItems Checked to SharedPreferences
+                            SharedPref.saveData(this, listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
+                            Toast.makeText(mContext, "Add item to cart successfully", Toast.LENGTH_LONG).show();
+                        }
+                        else if(result == 401){
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(mContext, "Failed to add item to cart", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .exceptionally(ex -> {
+                        Log.e("Error", "Failed to add item to cart: " + ex.getMessage());
+                        return null;
+                    });
             dialog.dismiss();
         });
 
@@ -508,7 +654,39 @@ public class ProductActivity extends AppCompatActivity implements IOnItemClickLi
 
 
 
-    private Integer addToCart(CartItem cartItem) {
-        return 200;
+
+
+    private CompletableFuture<Integer> addToCart(CartItem cartItem) {
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+
+        CartService cartService = ServiceBuilder.buildService(CartService.class);
+        Call<CartItem> request = cartService.addCartItem(cartItem);
+
+        request.enqueue(new Callback<CartItem>() {
+            @Override
+            public void onResponse(Call<CartItem> call, Response<CartItem> response) {
+                if (response.isSuccessful()) {
+                    int result = response.code();
+                    future.complete(result);
+                }
+                else if(response.code() == 401){
+                    int result = response.code();
+                    future.complete(result);
+                }else {
+                    future.completeExceptionally(new Exception("Failed to add item to cart"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CartItem> call, Throwable t) {
+                if (t instanceof IOException) {
+                    future.completeExceptionally(new Exception("A connection error occurred"));
+                } else {
+                    future.completeExceptionally(new Exception("Failed to add item to cart"));
+                }
+            }
+        });
+
+        return future;
     }
 }

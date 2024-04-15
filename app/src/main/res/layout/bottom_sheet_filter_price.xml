@@ -219,7 +219,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/search_text"
-                        android:hint="Từ :   0.000đ"
+                        android:hint="Từ : 0.000đ"
                         android:inputType="number"
                         android:padding="10dp"
                         android:textSize="16dp" />
@@ -230,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/search_text"
-                        android:hint="Đến :   3.000.000đ"
+                        android:hint="Đến : 3.000.000đ"
                         android:inputType="number"
                         android:padding="10dp"
                         android:textSize="16dp" />

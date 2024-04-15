@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,9 +44,11 @@ public class addressAdapter extends RecyclerView.Adapter <addressAdapter.ViewHol
 
     private IOnItemClickListenerRecyclerView mListener;
 
-    public addressAdapter(List<AddressDto> list, IOnItemClickListenerRecyclerView listener) {
+    private ActivityResultLauncher<Intent> launcher;
+    public addressAdapter(List<AddressDto> list, IOnItemClickListenerRecyclerView listener,ActivityResultLauncher<Intent> launcher) {
         this.mAddress = list;
         this.mListener = listener;
+        this.launcher = launcher;
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -98,7 +101,7 @@ public class addressAdapter extends RecyclerView.Adapter <addressAdapter.ViewHol
             // go to update address screen
             Intent intent = new Intent(holder.itemView.getContext(), AddAddressActivity.class);
             intent.putExtra("address", (Serializable) address);
-            holder.itemView.getContext().startActivity(intent);
+            launcher.launch(intent);;
 
         });
 

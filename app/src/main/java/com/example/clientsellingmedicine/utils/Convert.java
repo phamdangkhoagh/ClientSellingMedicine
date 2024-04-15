@@ -12,7 +12,7 @@ public class Convert {
         if(number == 0)
             return " 0 đ";
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        return decimalFormat.format(number);
+        return decimalFormat.format(number) + " đ";
     }
 
     // convert currency 1,000,000 đ -> 1000000
@@ -20,7 +20,7 @@ public class Convert {
         currency = currency.replace("đ", "");
         currency = currency.replace(".", "");
 
-        return Integer.parseInt(currency);
+        return Integer.parseInt(currency.trim());
     }
 
     public static Date convertToDate(String inputDate) {

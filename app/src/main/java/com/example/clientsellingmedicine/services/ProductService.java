@@ -21,12 +21,13 @@ public interface ProductService {
     @GET("/api/product/new_product")
     Call<List<Product>> getNewProducts();
 
-    @GET("/api/product/best_seller")
+    @GET("/api/product/best_sellers")
     Call<List<Product>> getBestSellerProducts();
 
-    @GET("/api/product/have_sold")
-    Call<List<Product>> getHaveSoldProducts();
 
     @GET("/api/product/best_promotion")
     Call<List<Product>> getBestPromotionProducts();
+
+    @GET("/api/product/have_promotion")
+    Call<List<Product>> getHavePromotionProducts();
 }

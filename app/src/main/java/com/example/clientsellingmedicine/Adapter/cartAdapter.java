@@ -55,7 +55,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvNameCartItem, tvPriceCartItem, tvTotalAmountCart, tvQuantityCartItem;
+        public TextView tvNameCartItem, tvPriceCartItem, tvQuantityCartItem;
         public ImageView ivCartItem;
 
         public CheckBox checkboxCartItem;
@@ -67,7 +67,6 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             ivCartItem = itemView.findViewById(R.id.ivCartItem);
             checkboxCartItem = itemView.findViewById(R.id.checkboxCartItem);
             this.setIsRecyclable(false);
-            tvTotalAmountCart = itemView.findViewById(R.id.tvTotalAmountCart);
             tvQuantityCartItem = itemView.findViewById(R.id.tvQuantityCartItem);
 
             mContext = context;
@@ -90,6 +89,9 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull cartAdapter.ViewHolder holder, int position) {
         CartItem cart = listCartItems.get(position);
+        if (cart == null) {
+            return;
+        }
         holder.tvNameCartItem.setText(cart.getProduct().getName());
         int quantity = cart.getQuantity();
         holder.tvQuantityCartItem.setText(String.valueOf(quantity));
@@ -98,62 +100,63 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
 //        holder.checkboxCartItem.setChecked(isAllSelected());
 
-        Type cartItemType = new TypeToken<List<CartItem>>() {
-        }.getType();
-        //get listCartItemsChecked from SharedPreferences
+        Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
+        //get CartItems Checked from SharedPreferences
         listCartItemsChecked = SharedPref.loadData(holder.itemView.getContext(), Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
-        //if new user, listCartItemsChecked will be null
+        //if new user, CartItems Checked will be null
         if (listCartItemsChecked == null) {
             listCartItemsChecked = new ArrayList<>();
         }
         if (listCartItemsChecked != null) {
             for (CartItem item : listCartItemsChecked) {
-                if (cart.getId() == item.getId()) {
+                if (cart.getProduct().getId() == item.getProduct().getId()) {
                     holder.checkboxCartItem.setChecked(true);  // checked item in cart
                 }
             }
         }
 
-        holder.checkboxCartItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.checkboxCartItem.isChecked()) {
+        holder.checkboxCartItem.setOnClickListener(v -> {
+            if (holder.checkboxCartItem.isChecked()) {
 
-                    listCartItemsChecked.add(cart);
-                    // Save listCartItemsChecked to SharedPreferences
-                    SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
+                Log.d("tag", "check item: " + cart.getProduct().getName() + " checked");
+                listCartItemsChecked.add(cart);
+                // Save CartItems Checked to SharedPreferences
+                SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
 
-                    //set value for master checkbox
-                    onCheckboxChangedListener.setValueOfMasterCheckbox(listCartItemsChecked.size() == listCartItems.size());
+                //set value for master checkbox
+                onCheckboxChangedListener.setValueOfMasterCheckbox(listCartItemsChecked.size() == listCartItems.size());
 
-                    //set status for delete text
-                    onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
+                //set status for delete text
+                onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
 
-                    // get Total Amount Item Checked
-                    onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+                // get Total Amount Item Checked
+                onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+                // get Total Product Discount
+                onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
 
-                } else {
-                    // Remove item from listCartItemsChecked
-                    for (CartItem cartItem : listCartItemsChecked) {
-                        if (cart.getId() == cartItem.getId()) {
-                            listCartItemsChecked.remove(cartItem);
-                            break;
-                        }
+            } else {
+                // Remove item from CartItems Checked
+                for (CartItem cartItem : listCartItemsChecked) {
+                    if (cart.getId() == cartItem.getId()) {
+                        listCartItemsChecked.remove(cartItem);
+                        break;
                     }
-                    // Save listCartItemsChecked to SharedPreferences
-                    SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
-
-                    //set value for master checkbox
-                    onCheckboxChangedListener.setValueOfMasterCheckbox(listCartItemsChecked.size() == listCartItems.size());
-
-                    //set status for delete text
-                    onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
-
-                    // get Total Amount Item Checked
-                    onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
                 }
+                // Save CartItems Checked to SharedPreferences
+                SharedPref.saveData(holder.itemView.getContext(), listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
 
+                //set value for master checkbox
+                onCheckboxChangedListener.setValueOfMasterCheckbox(listCartItemsChecked.size() == listCartItems.size());
+
+                //set status for delete text
+                onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
+
+                // get Total Amount Item Checked
+                onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+                // get Total Product Discount
+                onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
             }
+
         });
 
 
@@ -164,6 +167,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
         onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        // get Total Product Discount
+        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
 
         //load image
         Glide.with(holder.itemView.getContext())
@@ -195,12 +200,12 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         if (isAllSelected) {
             // update listCartItemsChecked
             this.listCartItemsChecked = list;
-            // update listCartItemsChecked to SharedPreferences
+            // update CartItems Checked to SharedPreferences
             SharedPref.saveData(mContext, listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
         } else {
-            // clear listCartItemsChecked
+            // clear CartItems Checked
             this.listCartItemsChecked.clear();
-            // update listCartItemsChecked to SharedPreferences
+            // update CartItems Checked to SharedPreferences
             SharedPref.saveData(mContext, listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
         }
         notifyDataSetChanged();
@@ -211,22 +216,16 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void removeItems() {
+    public void removeItems(CartItem cartItem) {
         // Remove items from list Cart Items
-        Iterator<CartItem> iterator = listCartItems.iterator();
-        while (iterator.hasNext()) {
-            CartItem item = iterator.next();
-            for (CartItem checkedItem : listCartItemsChecked) {
-                if (item.equals(checkedItem)) {
-                    iterator.remove();
-                    break;
-                }
-            }
-        }
-        // update list Cart Items for RecyclerView
+        listCartItems.remove(cartItem);
+        // update CartItems for RecyclerView
         setListCartItems(listCartItems);
-        // after remove items, clear listCartItemsChecked
-        listCartItemsChecked.clear();
+        // Remove item from CartItems Checked
+        Log.d("tag", "remove: " + listCartItemsChecked.size());
+        listCartItemsChecked.remove(cartItem);
+        Log.d("tag", " after remove: " + listCartItemsChecked.size());
+        // Save CartItems Checked to SharedPreferences
         SharedPref.saveData(mContext, listCartItemsChecked, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED);
 
         //set value for master checkbox
@@ -235,14 +234,30 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
         onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        // get Total Product Discount
+        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
     }
 
     public int calculateTotalAmount() {
         int total = 0;
         if(listCartItemsChecked == null)
             return 0;
+        Log.d("tag", "listCartItemsChecked: " + listCartItemsChecked.size());
         for (CartItem item: listCartItemsChecked) {
+            Log.d("tag", "item: " + item.getProduct().getPrice() + " * " + item.getQuantity() + " = " + item.getProduct().getPrice() * item.getQuantity());
             total += item.getProduct().getPrice() * item.getQuantity();
+        }
+        return total;
+    }
+
+    public int calculateTotalProductDiscount() {
+        int total = 0;
+        if(listCartItemsChecked == null)
+            return 0;
+        for (CartItem item: listCartItemsChecked) {
+            int discountPercent = item.getProduct().getDiscountPercent();
+            int price = item.getProduct().getPrice();
+            total += (price * discountPercent) / 100;
         }
         return total;
     }
