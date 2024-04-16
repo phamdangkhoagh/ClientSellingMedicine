@@ -22,7 +22,7 @@
             android:id="@+id/ivFeed"
             android:layout_width="100dp"
             android:layout_height="100dp"
-
+            android:scaleType="centerCrop"
             android:background="@drawable/item_product"
             app:shapeAppearanceOverlay="@style/img_healthy_news" />
 
