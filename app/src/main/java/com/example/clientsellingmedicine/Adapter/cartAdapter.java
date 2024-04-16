@@ -120,7 +120,6 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         }
         if (listCartItemsChecked != null) {
             for (CartItem item : listCartItemsChecked) {
-                Log.d("tag", "onBindViewHolder: "+ (item.getProduct().equals(cart.getProduct())) );
                 if (item.getProduct().equals(cart.getProduct())) {
                     holder.checkboxCartItem.setChecked(true);
                     break;// checked item in cart
@@ -143,7 +142,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                 onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
 
                 // get Total Amount Item Checked
-                onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+                onCheckboxChangedListener.getTotal(calculateTotalAmount());
                 // get Total Product Discount
                 onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
 
@@ -165,7 +164,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
                 onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
 
                 // get Total Amount Item Checked
-                onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+                onCheckboxChangedListener.getTotal(calculateTotalAmount());
                 // get Total Product Discount
                 onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
             }
@@ -179,7 +178,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         //set status for delete items text
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
-        onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        onCheckboxChangedListener.getTotal(calculateTotalAmount());
         // get Total Product Discount
         onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
 
@@ -229,6 +228,8 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
+
     public void removeItems(CartItem cartItem) {
         // Remove items from list Cart Items
         listCartItems.remove(cartItem);
@@ -246,7 +247,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         //set status for delete items text
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
-        onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        onCheckboxChangedListener.getTotal(calculateTotalAmount());
         // get Total Product Discount
         onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
     }
@@ -255,9 +256,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         int total = 0;
         if(listCartItemsChecked == null)
             return 0;
-        Log.d("tag", "listCartItemsChecked: " + listCartItemsChecked.size());
         for (CartItem item: listCartItemsChecked) {
-            Log.d("tag", "item: " + item.getProduct().getPrice() + " * " + item.getQuantity() + " = " + item.getProduct().getPrice() * item.getQuantity());
             total += item.getProduct().getPrice() * item.getQuantity();
         }
         return total;
@@ -269,11 +268,13 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             return 0;
         for (CartItem item: listCartItemsChecked) {
             int discountPercent = item.getProduct().getDiscountPercent();
-            int price = item.getProduct().getPrice();
+            int price = item.getProduct().getPrice()*item.getQuantity();
             total += (price * discountPercent) / 100;
         }
         return total;
     }
+
+
 
     public void updateQuantityCartItem(Context context, CartItem item, int quantity) {
         int oldQuantity = item.getQuantity();
@@ -289,7 +290,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
             }
         }
         // get Total Amount Item Checked
-        onCheckboxChangedListener.getTotalAmount(calculateTotalAmount());
+        onCheckboxChangedListener.getTotal(calculateTotalAmount());
         // get Total Product Discount
         onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
         //  update on database

@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        homeFragment.loadData();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        homeFragment.loadData();
+//    }
 }
 
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -225,7 +226,7 @@ public class ProfileFragment extends Fragment {
         u.setLastName(response.body().getLastName());
         u.setRank(response.body().getRank());
         u.setPoint(response.body().getPoint());
-        u.setBirthday(Convert.convertToDate(response.body().getBirthday().toString().trim()));
+        u.setBirthday(response.body().getBirthday());
         u.setGender(response.body().getGender());
         u.setImage(response.body().getImage());
         u.setStatus(response.body().getStatus());

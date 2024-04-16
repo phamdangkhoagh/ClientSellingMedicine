@@ -258,7 +258,7 @@ public class HomeFragment extends Fragment implements IOnItemClickListenerRecycl
         });
 
         // load data when fragment is created
-        //loadData();
+        loadData();
     }
 
     public void loadData() {

@@ -1,14 +1,20 @@
 package com.example.clientsellingmedicine;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,19 +26,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
+import com.example.clientsellingmedicine.Adapter.couponCheckboxAdapter;
 import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
+import com.example.clientsellingmedicine.interfaces.IOnVoucherItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;
+import com.example.clientsellingmedicine.models.CouponDetail;
 import com.example.clientsellingmedicine.services.CartService;
+import com.example.clientsellingmedicine.services.CouponService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.Convert;
 import com.example.clientsellingmedicine.utils.SharedPref;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 import retrofit2.Call;
@@ -40,21 +58,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CartActivity extends AppCompatActivity implements IOnCartItemListener {
+public class CartActivity extends AppCompatActivity implements IOnCartItemListener, IOnVoucherItemClickListener {
     private Context mContext;
     cartAdapter cartAdapter = new cartAdapter();
+    couponCheckboxAdapter couponCheckboxAdapter ;
     RecyclerView rcvCart;
     LinearLayout bottom_view, linear_layout_dynamic;
-
-    TextView tv_TotalAmountCart, tvTotalItemCart, tvDelete, tv_TotalPrice, tv_TotalProductDiscount, tv_TotalVoucherDiscount;
-
-
+    TextView tv_TotalAmountCart, tvTotalItemCart, tvDelete,tv_Discount, tv_TotalPrice, tv_TotalProductDiscount, tv_TotalVoucherDiscount;
+    LinearLayout ll_Discount;
     ImageView icon_arrow_up, ivBackCart;
-
     CheckBox checkboxCartItem, masterCheckboxCart;
-
     List<CartItem> listProductsToBuy;
+    Integer voucherDiscountPercent = 0;
+    Integer positionVoucherItemSelected = -1;
 
+    Boolean isDialogShowing = false;
+    Button btn_Apply;
+    TextInputEditText txt_input_code;
     private Boolean isShowBottomView = false;
 
     @Override
@@ -83,6 +103,8 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         tv_TotalPrice = findViewById(R.id.tv_TotalPrice);
         tv_TotalProductDiscount = findViewById(R.id.tv_TotalProductDiscount);
         tv_TotalVoucherDiscount = findViewById(R.id.tv_TotalVoucherDiscount);
+        tv_Discount = findViewById(R.id.tv_Discount);
+        ll_Discount = findViewById(R.id.ll_Discount);
     }
 
     private void addEvents() {
@@ -91,6 +113,10 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         getCartItems();
 
         ivBackCart.setOnClickListener(v -> finish());
+
+        ll_Discount.setOnClickListener(v -> {
+            showSelectCouponDialog();
+        });
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -107,14 +133,18 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
             public void afterTextChanged(Editable editable) {
                 int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim());
                 int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim());
-                int totalVoucherDiscount = Convert.convertCurrencyFormat(tv_TotalVoucherDiscount.getText().toString().trim());
+//                int totalVoucherDiscount = Convert.convertCurrencyFormat(tv_TotalVoucherDiscount.getText().toString().trim());
+                int totalVoucherDiscount = voucherDiscountPercent * total / 100;
                 int totalAmount = total - totalProductDiscount - totalVoucherDiscount;
+                if(totalAmount < 0){
+                    totalAmount = 0;
+                }
                 tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount));
             }
         };
-        tv_TotalPrice.addTextChangedListener(textWatcher);
-        tv_TotalProductDiscount.addTextChangedListener(textWatcher);
-        tv_TotalVoucherDiscount.addTextChangedListener(textWatcher);
+//        tv_TotalPrice.addTextChangedListener(textWatcher);
+//        tv_TotalProductDiscount.addTextChangedListener(textWatcher);
+//        tv_TotalVoucherDiscount.addTextChangedListener(textWatcher);
 
 
 
@@ -284,10 +314,25 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
 
 
     @Override
-    public void getTotalAmount(int total) {
-        String totalAmount = Convert.convertPrice(total);
-        tv_TotalPrice.setText(totalAmount);
-        //tv_TotalAmountCart.setText(totalAmount);
+    public void getTotal(int total) {
+        String totalPrice = Convert.convertPrice(total);
+        tv_TotalPrice.setText(totalPrice); //display total price
+
+        int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim()); // get total product discount
+        if(voucherDiscountPercent == 0){
+            String totalAmount = Convert.convertPrice(total  - totalProductDiscount); // calculate total amount without voucher discount
+            tv_TotalVoucherDiscount.setText( "0 đ"); // display voucher discount
+            tv_TotalAmountCart.setText(totalAmount); // display total amount
+        }
+        else {
+            int totalVoucherDiscount =  (total * voucherDiscountPercent / 100);
+            int  totalAmount = total - totalVoucherDiscount - totalProductDiscount; // calculate total amount
+            tv_TotalVoucherDiscount.setText( Convert.convertPrice(totalVoucherDiscount)); // display voucher discount
+            tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount)); // display total amount
+        }
+
+
+
     }
 
     @Override
@@ -323,5 +368,145 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
                 }
             }
         });
+    }
+
+    public List<CouponDetail> getCoupons() {
+        CouponService couponService = ServiceBuilder.buildService(CouponService.class);
+        Call<List<CouponDetail>> call = couponService.getCoupon();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<List<CouponDetail>> future = executorService.submit(new Callable<List<CouponDetail>>() {
+            @Override
+            public List<CouponDetail> call() throws Exception {
+                try {
+                    Response<List<CouponDetail>> response = call.execute();
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else if (response.code() == 401) {
+                        // Xử lý khi mã trạng thái là 401 (Unauthorized)
+                        // Ví dụ: chuyển đến màn hình đăng nhập
+                        Intent intent = new Intent(mContext, LoginActivity.class);
+                        finish();
+                        mContext.startActivity(intent);
+                        return null;
+                    } else {
+                        Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
+                        return null;
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(mContext, "A connection error occurred", Toast.LENGTH_LONG).show();
+                    return null;
+                }
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+    }
+    private void showSelectCouponDialog() {
+
+        if(isDialogShowing){
+            return;
+        }
+
+        final Dialog dialog = new Dialog(this);
+
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_select_coupon);
+
+        // add control
+        ImageView iv_close = dialog.findViewById(R.id.iv_close);
+        TextInputLayout txt_input_code_layout = dialog.findViewById(R.id.txt_input_code_layout);
+        txt_input_code = dialog.findViewById(R.id.txt_input_code);
+        btn_Apply = dialog.findViewById(R.id.btn_Apply);
+        RecyclerView rcv_coupon = dialog.findViewById(R.id.rcv_coupon);
+
+        // add event
+        iv_close.setOnClickListener(v -> dialog.dismiss()); // close dialog
+
+        txt_input_code.addTextChangedListener( new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    btn_Apply.setEnabled(true);
+                } else {
+                    btn_Apply.setEnabled(false);
+                }
+            }
+        });
+
+        couponCheckboxAdapter = new couponCheckboxAdapter(getCoupons(), CartActivity.this, positionVoucherItemSelected);
+        rcv_coupon.setAdapter(couponCheckboxAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        rcv_coupon.setLayoutManager(layoutManager);
+
+        btn_Apply.setOnClickListener( v -> {
+            CouponDetail couponDetail = couponCheckboxAdapter.getCouponSelected();
+            voucherDiscountPercent = couponDetail.getCoupon().getDiscountPercent();  // get voucher discount percent
+            positionVoucherItemSelected = couponCheckboxAdapter.getPositionVoucherSelected(); // get position of voucher selected
+            handlerApplyCoupon(couponDetail);
+
+            dialog.dismiss();
+        });
+
+        dialog.setOnShowListener( dialog1 -> {
+            isDialogShowing = true;
+        });
+        dialog.setOnDismissListener( dialog1 -> {
+            isDialogShowing = false;
+        });
+
+        // show dialog
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    public void handlerApplyCoupon(CouponDetail couponDetail) {
+        if(couponDetail != null){
+            tv_Discount.setText("Mã khuyến mãi: "+ couponDetail.getCoupon().getCode()); // display coupon code
+            int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim()); // get total price
+            int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim()); // get total product discount
+            int totalVoucherDiscount = couponDetail.getCoupon().getDiscountPercent() * total / 100; // calculate voucher discount
+            int totalAmountCart = total - totalVoucherDiscount - totalProductDiscount; // calculate total amount
+            tv_TotalVoucherDiscount.setText(Convert.convertPrice(totalVoucherDiscount)); // display voucher discount
+            tv_TotalAmountCart.setText( Convert.convertPrice(totalAmountCart)); // display total amount
+        }
+        else {
+            tv_Discount.setText("Chọn hoặc nhập mã khuyến mãi"); // display coupon code
+            int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim()); // get total price
+            int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim()); // get total product discount
+            int totalAmountCart = total - totalProductDiscount; // calculate total amount
+            tv_TotalVoucherDiscount.setText("0 đ"); // display voucher discount
+            tv_TotalAmountCart.setText( Convert.convertPrice(totalAmountCart)); // display total amount
+        }
+    }
+
+    @Override
+    public void onVoucherItemClick(int position) {
+        if(position == -1 && txt_input_code.getText().toString().isEmpty()){
+            btn_Apply.setEnabled(false);
+            CouponDetail couponDetail = couponCheckboxAdapter.getCouponSelected();
+            voucherDiscountPercent = 0;
+            positionVoucherItemSelected = -1;
+            handlerApplyCoupon(couponDetail);
+        }
+        if(position != -1){
+            btn_Apply.setEnabled(true);
+        }
     }
 }

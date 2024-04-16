@@ -1,9 +1,20 @@
 package com.example.clientsellingmedicine.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Convert {
 
@@ -23,13 +34,17 @@ public class Convert {
         return Integer.parseInt(currency.trim());
     }
 
-    public static Date convertToDate(String inputDate) {
-        SimpleDateFormat inputFormatter = new SimpleDateFormat("MMM d, yyyy, hh:mm:ss a");
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String convertToDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH);
+
         try {
-            return inputFormatter.parse(inputDate);
+            Date date = inputFormat.parse(inputDate);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
+            return "Invalid date string";
         }
-        return null;
     }
 }

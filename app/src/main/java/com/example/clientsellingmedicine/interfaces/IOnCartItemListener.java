@@ -7,7 +7,7 @@ public interface IOnCartItemListener {
 
     void setStatusOfDeleteText(boolean isShowed);
 
-    void getTotalAmount(int total);
+    void getTotal(int total);
 
     void getTotalProductDiscount(int total);
 

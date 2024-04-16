@@ -1,5 +1,6 @@
 package com.example.clientsellingmedicine.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -79,7 +80,7 @@ public class addressAdapter extends RecyclerView.Adapter <addressAdapter.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull addressAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull addressAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         AddressDto address = (AddressDto) mAddress.get(position);
         if (address == null) {
             return;
