@@ -29,7 +29,7 @@ public class Convert {
     // convert currency 1,000,000 đ -> 1000000
     public static Integer convertCurrencyFormat(String currency) {
         currency = currency.replace("đ", "");
-        currency = currency.replace(".", "");
+        currency = currency.replace(".", "").replace(",", "");
 
         return Integer.parseInt(currency.trim());
     }

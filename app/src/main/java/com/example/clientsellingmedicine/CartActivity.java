@@ -215,7 +215,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         // get list cart items checked
         Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
         List<CartItem> listCartItemsChecked = SharedPref.loadData(CartActivity.this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
-        if(listCartItemsChecked != null){
+        if(listCartItemsChecked != null && listCartItemsChecked.size() > 0){
 
         }
         else {
@@ -223,13 +223,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
             builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
                     .setTitle("Không có sản phẩm nào được chọn")
                     .setMessage("Vui lòng chọn ít nhất 1 sản phẩm trước khi thanh toán !")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Xử lý khi nhấn nút OK
-
-                        }
-                    })
+                    .setPositiveButton("OK", (dialog, which) -> {}) // do nothing
                     .show();
         }
     }
