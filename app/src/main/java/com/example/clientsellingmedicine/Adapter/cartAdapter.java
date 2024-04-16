@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
 import com.example.clientsellingmedicine.models.CartItem;
+import com.example.clientsellingmedicine.models.Total;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.Convert;
 import com.example.clientsellingmedicine.utils.SharedPref;
@@ -143,8 +144,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
                 // get Total Amount Item Checked
                 onCheckboxChangedListener.getTotal(calculateTotalAmount());
-                // get Total Product Discount
-                onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
+
 
             } else {
                 // Remove item from CartItems Checked
@@ -165,8 +165,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
 
                 // get Total Amount Item Checked
                 onCheckboxChangedListener.getTotal(calculateTotalAmount());
-                // get Total Product Discount
-                onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
+
             }
 
         });
@@ -179,8 +178,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
         onCheckboxChangedListener.getTotal(calculateTotalAmount());
-        // get Total Product Discount
-        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
+
 
         //load image
         Glide.with(holder.itemView.getContext())
@@ -248,31 +246,38 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         onCheckboxChangedListener.setStatusOfDeleteText(listCartItemsChecked.size() != 0);
         // get Total Amount Item Checked
         onCheckboxChangedListener.getTotal(calculateTotalAmount());
-        // get Total Product Discount
-        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
+
     }
 
-    public int calculateTotalAmount() {
-        int total = 0;
+    public Total calculateTotalAmount() {
+        Total totalItem = new Total(0,0);
+        int total = 0, totalProductDiscount = 0;
         if(listCartItemsChecked == null)
-            return 0;
+            return totalItem;
         for (CartItem item: listCartItemsChecked) {
             total += item.getProduct().getPrice() * item.getQuantity();
-        }
-        return total;
-    }
 
-    public int calculateTotalProductDiscount() {
-        int total = 0;
-        if(listCartItemsChecked == null)
-            return 0;
-        for (CartItem item: listCartItemsChecked) {
             int discountPercent = item.getProduct().getDiscountPercent();
             int price = item.getProduct().getPrice()*item.getQuantity();
-            total += (price * discountPercent) / 100;
+            totalProductDiscount+= (price * discountPercent) / 100;
         }
-        return total;
+        totalItem.setTotalPrice(total);
+        totalItem.setTotalProductDiscount(totalProductDiscount);
+        return totalItem;
     }
+
+//    public int calculateTotalProductDiscount() {
+//        Total totalItem = new Total();
+//        int total = 0, totalProductDiscount = 0;
+//        if(listCartItemsChecked == null)
+//            return 0;
+//        for (CartItem item: listCartItemsChecked) {
+//            int discountPercent = item.getProduct().getDiscountPercent();
+//            int price = item.getProduct().getPrice()*item.getQuantity();
+//            total += (price * discountPercent) / 100;
+//        }
+//        return total;
+//    }
 
 
 
@@ -291,8 +296,6 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.ViewHolder> {
         }
         // get Total Amount Item Checked
         onCheckboxChangedListener.getTotal(calculateTotalAmount());
-        // get Total Product Discount
-        onCheckboxChangedListener.getTotalProductDiscount(calculateTotalProductDiscount());
         //  update on database
         onCheckboxChangedListener.updateCartItemQuantity(item);
     }

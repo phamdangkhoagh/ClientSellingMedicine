@@ -3,6 +3,7 @@ package com.example.clientsellingmedicine;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +32,7 @@ import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
 import com.example.clientsellingmedicine.interfaces.IOnVoucherItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.models.CouponDetail;
+import com.example.clientsellingmedicine.models.Total;
 import com.example.clientsellingmedicine.services.CartService;
 import com.example.clientsellingmedicine.services.CouponService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
@@ -70,10 +72,12 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
     CheckBox checkboxCartItem, masterCheckboxCart;
     List<CartItem> listProductsToBuy;
     Integer voucherDiscountPercent = 0;
+
+    Integer totalProductDiscount = 0;
     Integer positionVoucherItemSelected = -1;
 
     Boolean isDialogShowing = false;
-    Button btn_Apply;
+    Button btn_Buy,btn_Apply;
     TextInputEditText txt_input_code;
     private Boolean isShowBottomView = false;
 
@@ -95,6 +99,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         linear_layout_dynamic = findViewById(R.id.linear_layout_dynamic);
         icon_arrow_up = findViewById(R.id.icon_arrow_up);
         tv_TotalAmountCart = findViewById(R.id.tv_TotalAmountCart);
+        btn_Buy = findViewById(R.id.btn_Buy);
 
         masterCheckboxCart = findViewById(R.id.masterCheckboxCart);
         tvTotalItemCart = findViewById(R.id.tvTotalItemCart);
@@ -110,44 +115,19 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
     private void addEvents() {
         cartAdapter.setOnCheckboxChangedListener(this);
 
+        // get cart items
         getCartItems();
 
+        // back to previous screen
         ivBackCart.setOnClickListener(v -> finish());
 
+        // show or hide discount view
         ll_Discount.setOnClickListener(v -> {
             showSelectCouponDialog();
         });
 
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim());
-                int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim());
-//                int totalVoucherDiscount = Convert.convertCurrencyFormat(tv_TotalVoucherDiscount.getText().toString().trim());
-                int totalVoucherDiscount = voucherDiscountPercent * total / 100;
-                int totalAmount = total - totalProductDiscount - totalVoucherDiscount;
-                if(totalAmount < 0){
-                    totalAmount = 0;
-                }
-                tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount));
-            }
-        };
-//        tv_TotalPrice.addTextChangedListener(textWatcher);
-//        tv_TotalProductDiscount.addTextChangedListener(textWatcher);
-//        tv_TotalVoucherDiscount.addTextChangedListener(textWatcher);
-
-
-
+        // show or hide bottom view
         icon_arrow_up.setOnClickListener(v -> {
             if (isShowBottomView) {
                 // set new height
@@ -187,15 +167,15 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
 
         });
 
-
+        // checkbox master
         masterCheckboxCart.setOnClickListener(v -> {
             if (masterCheckboxCart.isChecked())
                 cartAdapter.setAllSelected(true);
             else
                 cartAdapter.setAllSelected(false);
-
         });
 
+        // delete cart item
         tvDelete.setOnClickListener(view -> {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
             builder.setIcon(R.drawable.drug) // Đặt icon của Dialog
@@ -224,10 +204,35 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
                     .show();
         });
 
-
+        // buy products
+        btn_Buy.setOnClickListener(v -> {
+            buyProducts();
+        });
     }
 
 
+    public void buyProducts() {
+        // get list cart items checked
+        Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
+        List<CartItem> listCartItemsChecked = SharedPref.loadData(CartActivity.this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
+        if(listCartItemsChecked != null){
+
+        }
+        else {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+            builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
+                    .setTitle("Không có sản phẩm nào được chọn")
+                    .setMessage("Vui lòng chọn ít nhất 1 sản phẩm trước khi thanh toán !")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Xử lý khi nhấn nút OK
+
+                        }
+                    })
+                    .show();
+        }
+    }
 
     public void getCartItems() {
         CartService cartService = ServiceBuilder.buildService(CartService.class);
@@ -309,36 +314,41 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         } else {
             tvDelete.setVisibility(View.GONE);
         }
-
     }
 
 
     @Override
-    public void getTotal(int total) {
-        String totalPrice = Convert.convertPrice(total);
-        tv_TotalPrice.setText(totalPrice); //display total price
+    public void getTotal(Total total) {
+        tv_TotalPrice.setText(Convert.convertPrice(total.getTotalPrice())); //display total price
+        tv_TotalProductDiscount.setText(Convert.convertPrice(total.getTotalProductDiscount())); // display total product discount
 
-        int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim()); // get total product discount
         if(voucherDiscountPercent == 0){
-            String totalAmount = Convert.convertPrice(total  - totalProductDiscount); // calculate total amount without voucher discount
-            tv_TotalVoucherDiscount.setText( "0 đ"); // display voucher discount
-            tv_TotalAmountCart.setText(totalAmount); // display total amount
+            if(total.getTotalPrice() == 0){
+                String totalAmount = Convert.convertPrice(0); // calculate total amount without voucher discount
+                tv_TotalVoucherDiscount.setText( "0 đ"); // display voucher discount
+                tv_TotalAmountCart.setText(totalAmount); // display total amount
+            }
+            else {
+                String totalAmount = Convert.convertPrice(total.getTotalPrice()  - total.getTotalProductDiscount()); // calculate total amount without voucher discount
+                tv_TotalVoucherDiscount.setText( "0 đ"); // display voucher discount
+                tv_TotalAmountCart.setText(totalAmount); // display total amount
+            }
+
         }
         else {
-            int totalVoucherDiscount =  (total * voucherDiscountPercent / 100);
-            int  totalAmount = total - totalVoucherDiscount - totalProductDiscount; // calculate total amount
-            tv_TotalVoucherDiscount.setText( Convert.convertPrice(totalVoucherDiscount)); // display voucher discount
-            tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount)); // display total amount
+            if(total.getTotalPrice() == 0){
+                int totalVoucherDiscount =  0;
+                int  totalAmount = 0; // calculate total amount
+                tv_TotalVoucherDiscount.setText( Convert.convertPrice(totalVoucherDiscount)); // display voucher discount
+                tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount)); // display total amount
+            }else {
+                int totalVoucherDiscount =  (total.getTotalPrice() * voucherDiscountPercent / 100);
+                int  totalAmount = total.getTotalPrice() - totalVoucherDiscount - total.getTotalProductDiscount(); // calculate total amount
+                tv_TotalVoucherDiscount.setText( Convert.convertPrice(totalVoucherDiscount)); // display voucher discount
+                tv_TotalAmountCart.setText(Convert.convertPrice(totalAmount)); // display total amount
+            }
+
         }
-
-
-
-    }
-
-    @Override
-    public void getTotalProductDiscount(int total) {
-        String totalProductDiscount = Convert.convertPrice(total);
-        tv_TotalProductDiscount.setText(totalProductDiscount);
     }
 
     @Override
