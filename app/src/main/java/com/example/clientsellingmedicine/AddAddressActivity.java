@@ -535,13 +535,10 @@ public class AddAddressActivity extends AppCompatActivity {
         convertedList.addAll(list);
         adapter = new SubdivisionsAdapter(this, convertedList);
         lv_administrative_divisions.setAdapter(adapter);
-        lv_administrative_divisions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object item = lv_administrative_divisions.getItemAtPosition(position);
-                handleSelectedItem(item);
-                dialog.dismiss();
-            }
+        lv_administrative_divisions.setOnItemClickListener((parent, view, position, id) -> {
+            Object item = lv_administrative_divisions.getItemAtPosition(position);
+            handleSelectedItem(item);
+            dialog.dismiss();
         });
 
         // show dialog

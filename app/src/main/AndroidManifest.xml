@@ -30,9 +30,9 @@
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".ProductActivity"
@@ -78,7 +78,22 @@
             android:name=".HealthyNewsDetailActivity"
             android:exported="false">
         </activity>
-
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".MomoPaymentActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="myapp"
+                    android:host="payment-completed" />
+            </intent-filter>
+        </activity>
 
 
     </application>

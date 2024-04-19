@@ -14,6 +14,7 @@ public class Order {
 
     private Integer id;
     private String code;
+    private Integer idUser;
     private String paymentMethod;
     private Integer discountCoupon;
     private Integer discountProduct;
@@ -22,4 +23,5 @@ public class Order {
     private Integer point;
     private Integer total;
     private Integer status;
+    private String userAddress;
 }

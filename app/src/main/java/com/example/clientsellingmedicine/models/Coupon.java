@@ -1,11 +1,13 @@
 package com.example.clientsellingmedicine.models;
 
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Coupon {
+public class Coupon implements Serializable {
     private Integer id;
     private String code;
     private String description;

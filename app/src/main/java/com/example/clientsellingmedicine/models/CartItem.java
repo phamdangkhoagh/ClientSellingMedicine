@@ -1,5 +1,6 @@
 package com.example.clientsellingmedicine.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItem {
+public class CartItem implements Serializable {
     private int id;
     private Product product;
     private int quantity;

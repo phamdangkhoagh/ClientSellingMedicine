@@ -45,6 +45,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -79,6 +80,8 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
     Boolean isDialogShowing = false;
     Button btn_Buy,btn_Apply;
     TextInputEditText txt_input_code;
+
+    private CouponDetail couponDetail ;
     private Boolean isShowBottomView = false;
 
     @Override
@@ -216,7 +219,16 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         Type cartItemType = new TypeToken<List<CartItem>>() {}.getType();
         List<CartItem> listCartItemsChecked = SharedPref.loadData(CartActivity.this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
         if(listCartItemsChecked != null && listCartItemsChecked.size() > 0){
-
+            Intent intent = new Intent(mContext, PaymentActivity.class);
+            List<CartItem> listCartItems = SharedPref.loadData(CartActivity.this, Constants.CART_PREFS_NAME, Constants.KEY_CART_ITEMS_CHECKED, cartItemType);
+            intent.putExtra("products", (Serializable) listCartItems);
+            intent.putExtra("totalPrice", tv_TotalPrice.getText().toString());
+            intent.putExtra("totalAmount", tv_TotalAmountCart.getText().toString());
+            intent.putExtra("totalProductDiscount", tv_TotalProductDiscount.getText().toString());
+            intent.putExtra("totalVoucherDiscount", tv_TotalVoucherDiscount.getText().toString());
+            intent.putExtra("couponDetail", (Serializable) couponDetail);
+            intent.putExtra("positionVoucherItemSelected",positionVoucherItemSelected);
+            startActivity(intent);
         }
         else {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
@@ -457,7 +469,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
         rcv_coupon.setLayoutManager(layoutManager);
 
         btn_Apply.setOnClickListener( v -> {
-            CouponDetail couponDetail = couponCheckboxAdapter.getCouponSelected();
+            couponDetail = couponCheckboxAdapter.getCouponSelected();
             voucherDiscountPercent = couponDetail.getCoupon().getDiscountPercent();  // get voucher discount percent
             positionVoucherItemSelected = couponCheckboxAdapter.getPositionVoucherSelected(); // get position of voucher selected
             handlerApplyCoupon(couponDetail);
@@ -491,7 +503,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
             tv_TotalAmountCart.setText( Convert.convertPrice(totalAmountCart)); // display total amount
         }
         else {
-            tv_Discount.setText("Chọn hoặc nhập mã khuyến mãi"); // display coupon code
+            tv_Discount.setText("Chọn hoặc nhập mã giảm giá"); // display coupon code
             int total = Convert.convertCurrencyFormat(tv_TotalPrice.getText().toString().trim()); // get total price
             int totalProductDiscount = Convert.convertCurrencyFormat(tv_TotalProductDiscount.getText().toString().trim()); // get total product discount
             int totalAmountCart = total - totalProductDiscount; // calculate total amount
@@ -504,7 +516,7 @@ public class CartActivity extends AppCompatActivity implements IOnCartItemListen
     public void onVoucherItemClick(int position) {
         if(position == -1 && txt_input_code.getText().toString().isEmpty()){
             btn_Apply.setEnabled(false);
-            CouponDetail couponDetail = couponCheckboxAdapter.getCouponSelected();
+            couponDetail = couponCheckboxAdapter.getCouponSelected();
             voucherDiscountPercent = 0;
             positionVoucherItemSelected = -1;
             handlerApplyCoupon(couponDetail);
