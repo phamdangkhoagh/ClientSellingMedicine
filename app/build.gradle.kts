@@ -58,4 +58,6 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
 
     implementation ("androidx.activity:activity-ktx:1.4.0")
+    //webview
+    implementation("androidx.webkit:webkit:1.8.0")
 }

@@ -92,8 +92,11 @@
                 <data
                     android:scheme="myapp"
                     android:host="payment-completed" />
+
             </intent-filter>
         </activity>
+
+
 
 
     </application>
