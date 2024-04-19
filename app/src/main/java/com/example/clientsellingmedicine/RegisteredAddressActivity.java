@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.addressAdapter;
-import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
+import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.AddressDto;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.services.AddressService;
@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisteredAddressActivity extends AppCompatActivity implements IOnItemClickListenerRecyclerView {
+public class RegisteredAddressActivity extends AppCompatActivity implements IOnProductItemClickListener {
 
     private Context mContext;
 
@@ -40,7 +40,7 @@ public class RegisteredAddressActivity extends AppCompatActivity implements IOnI
 
     private addressAdapter addressAdapter;
     private ActivityResultLauncher<Intent> launcher;
-    IOnItemClickListenerRecyclerView listener;
+    IOnProductItemClickListener listener;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,17 +15,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.AddAddressActivity;
 import com.example.clientsellingmedicine.R;
-import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
+import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.AddressDto;
-import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.models.ResponseDto;
-import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.services.AddressService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
-import com.example.clientsellingmedicine.services.UserService;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.IOException;
@@ -43,10 +37,10 @@ public class addressAdapter extends RecyclerView.Adapter <addressAdapter.ViewHol
     private List<AddressDto> mAddress;
     private Context mContext;
 
-    private IOnItemClickListenerRecyclerView mListener;
+    private IOnProductItemClickListener mListener;
 
     private ActivityResultLauncher<Intent> launcher;
-    public addressAdapter(List<AddressDto> list, IOnItemClickListenerRecyclerView listener,ActivityResultLauncher<Intent> launcher) {
+    public addressAdapter(List<AddressDto> list, IOnProductItemClickListener listener, ActivityResultLauncher<Intent> launcher) {
         this.mAddress = list;
         this.mListener = listener;
         this.launcher = launcher;

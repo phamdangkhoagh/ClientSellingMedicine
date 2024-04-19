@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     >
     <LinearLayout
+        android:id="@+id/ll_orderItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -127,14 +128,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="26dp"
-                        android:text="Mua tại nhà thuốc :"
+                        android:text="Thời gian :"
                         android:textStyle="bold" />
                     <TextView
                         android:id="@+id/tvAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="SJHLKAJFHLWEKY"
+                        android:text="04/04/2023"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>

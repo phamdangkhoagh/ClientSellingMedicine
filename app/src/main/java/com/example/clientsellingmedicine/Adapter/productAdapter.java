@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListener;
-import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
+import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.utils.Convert;
 
@@ -28,10 +28,10 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
     private List<Product> mProducts;
     private Context mContext;
 
-    private IOnItemClickListenerRecyclerView mListener;
+    private IOnProductItemClickListener mListener;
     private IOnButtonAddToCartClickListener addToCartClickListener;
 
-    public productAdapter(List<Product> list, IOnItemClickListenerRecyclerView listener, IOnButtonAddToCartClickListener addToCartClickListener) {
+    public productAdapter(List<Product> list, IOnProductItemClickListener listener, IOnButtonAddToCartClickListener addToCartClickListener) {
         this.mProducts = list;
         this.mListener = listener;
         this.addToCartClickListener = addToCartClickListener;
@@ -107,19 +107,9 @@ public class productAdapter extends RecyclerView.Adapter <productAdapter.ViewHol
                 .error(R.drawable.error_image) // Hình ảnh thay thế khi có lỗi
                 .into(holder.ivProductItem);
 
-        holder.layoutProductItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onItemClick(product);
-            }
-        });
+        holder.layoutProductItem.setOnClickListener(view -> mListener.onItemClick(product));
 
-        holder.btnAddtoCartProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addToCartClickListener.onButtonAddToCartClick(product);
-            }
-        });
+        holder.btnAddtoCartProduct.setOnClickListener(view -> addToCartClickListener.onButtonAddToCartClick(product));
     }
 
 

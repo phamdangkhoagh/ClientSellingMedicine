@@ -6,22 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.clientsellingmedicine.R;
-import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
-import com.example.clientsellingmedicine.interfaces.IOnSelectItemListView;
 import com.example.clientsellingmedicine.models.District;
-import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.models.Province;
 import com.example.clientsellingmedicine.models.Ward;
 

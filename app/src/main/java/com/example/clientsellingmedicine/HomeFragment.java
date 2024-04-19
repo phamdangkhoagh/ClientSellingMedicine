@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -59,7 +58,7 @@ import com.example.clientsellingmedicine.Adapter.productAdapter;
 import com.example.clientsellingmedicine.Adapter.feedAdapter;
 import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnFeedItemClickListener;
-import com.example.clientsellingmedicine.interfaces.IOnItemClickListenerRecyclerView;
+import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.models.Feed;
 import com.example.clientsellingmedicine.models.Product;
@@ -90,10 +89,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment implements IOnItemClickListenerRecyclerView, IOnFeedItemClickListener, IOnButtonAddToCartClickListener {
+public class HomeFragment extends Fragment implements IOnProductItemClickListener, IOnFeedItemClickListener, IOnButtonAddToCartClickListener {
     private Context mContext;
 
-    IOnItemClickListenerRecyclerView listener;
+    IOnProductItemClickListener listener;
     IOnFeedItemClickListener feedListener;
     productAdapter productAdapter;
 

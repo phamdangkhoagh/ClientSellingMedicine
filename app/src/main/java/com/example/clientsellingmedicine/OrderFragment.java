@@ -3,7 +3,6 @@ package com.example.clientsellingmedicine;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,23 +17,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.orderAdapter;
+import com.example.clientsellingmedicine.interfaces.IOnOrderItemClickListener;
 import com.example.clientsellingmedicine.models.Order;
 
-import com.example.clientsellingmedicine.models.Product;
-import com.example.clientsellingmedicine.models.Token;
+import com.example.clientsellingmedicine.models.OrderDetail;
 import com.example.clientsellingmedicine.services.OrderService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
-import com.example.clientsellingmedicine.utils.Constants;
-import com.example.clientsellingmedicine.utils.SharedPref;
-import com.example.clientsellingmedicine.utils.Validator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderFragment extends Fragment {
+public class OrderFragment extends Fragment implements IOnOrderItemClickListener {
     private Context mContext;
 
     LinearLayout layout_allOrder, layout_processingStatus, layout_inTransitStatus, layout_deliveredStatus, layout_cancelledStatus, layout_empty_order, layout_statusOrder;
@@ -144,9 +140,27 @@ public class OrderFragment extends Fragment {
 
                 if (view == processingStatus) {
                     layout_processingStatus.setBackgroundResource(R.drawable.order_selection_background);
+                    if (listOrder != null) {
+                        //get orders delivered
+                        List<Order> ordersDelivered = listOrder.stream()
+                                .filter(order -> order.getStatus() == 2)
+                                .sorted(Comparator.comparing(Order::getOrderTime).reversed())
+                                .collect(Collectors.toList());
+
+                        orderAdapter.setListOrder(ordersDelivered);
+                    }
 
                 } else if (view == inTransitStatus) {
                     layout_inTransitStatus.setBackgroundResource(R.drawable.order_selection_background);
+                    if (listOrder != null) {
+                        //get orders delivered
+                        List<Order> ordersDelivered = listOrder.stream()
+                                .filter(order -> order.getStatus() == 3)
+                                .sorted(Comparator.comparing(Order::getOrderTime).reversed())
+                                .collect(Collectors.toList());
+
+                        orderAdapter.setListOrder(ordersDelivered);
+                    }
 
                 } else if (view == deliveredStatus) {
                     //set background color delivered status
@@ -155,11 +169,10 @@ public class OrderFragment extends Fragment {
                         //get orders delivered
                         List<Order> ordersDelivered = listOrder.stream()
                                 .filter(order -> order.getStatus() == 1)
+                                .sorted(Comparator.comparing(Order::getOrderTime).reversed())
                                 .collect(Collectors.toList());
 
-                        orderAdapter = new orderAdapter(ordersDelivered);
-                        rcvOrder.setAdapter(orderAdapter);
-
+                        orderAdapter.setListOrder(ordersDelivered);
                     }
 
                 } else if (view == cancelledStatus) {
@@ -169,16 +182,15 @@ public class OrderFragment extends Fragment {
                         //get orders cancelled
                         List<Order> ordersCancelled = listOrder.stream()
                                 .filter(order -> order.getStatus() == 0)
+                                .sorted(Comparator.comparing(Order::getOrderTime).reversed())
                                 .collect(Collectors.toList());
 
-                        orderAdapter = new orderAdapter(ordersCancelled);
-                        rcvOrder.setAdapter(orderAdapter);
+                        orderAdapter.setListOrder(ordersCancelled);
                     }
                 } else if (view == allOrder) {
                     layout_allOrder.setBackgroundResource(R.drawable.order_selection_background);
                     if (listOrder != null) {
-                        orderAdapter = new orderAdapter(listOrder);
-                        rcvOrder.setAdapter(orderAdapter);
+                        orderAdapter.setListOrder(listOrder);
                     }
 
                 }
@@ -192,15 +204,8 @@ public class OrderFragment extends Fragment {
         cancelledStatus.setOnClickListener(statusClickListener);
         allOrder.setOnClickListener(statusClickListener);
 
-        // validate token
-        Token token = SharedPref.loadToken(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN);
-        if (token != null && Validator.isTokenValid(token)) {
-            // get all orders
-            getOrders();
-        } else {
-            showOrderHistoryWithoutLogin();
-        }
 
+        getOrders();
     }
 
     public void getOrders() {
@@ -212,10 +217,12 @@ public class OrderFragment extends Fragment {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if (response.isSuccessful()) {
                     listOrder = new ArrayList<>();
-                    listOrder = response.body(); //get list order
+                    listOrder = response.body().stream() //get list order
+                            .sorted(Comparator.comparing(Order::getOrderTime).reversed())  // sort by date
+                            .collect(Collectors.toList());
                     if(listOrder != null && listOrder.size() > 0) {
                         // add list order to recycle view
-                        orderAdapter = new orderAdapter(listOrder);
+                        orderAdapter = new orderAdapter(listOrder, OrderFragment.this);
                         rcvOrder.setAdapter(orderAdapter);
                         LinearLayoutManager layoutManager
                                 = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -226,7 +233,7 @@ public class OrderFragment extends Fragment {
                     }
 
                 } else if (response.code() == 401) {
-                    Toast.makeText(mContext, "Your session has expired", Toast.LENGTH_LONG).show();
+                    showOrderHistoryWithoutLogin();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
                 }
@@ -251,12 +258,9 @@ public class OrderFragment extends Fragment {
         scrollview_content.setVisibility(View.GONE);
         horizontal_statusOrder.setVisibility(View.GONE);
         img_filter_order.setVisibility(View.GONE);
-        btn_shopping_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, LoginActivity.class);
-                startActivity(intent);
-            }
+        btn_shopping_now.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -268,11 +272,13 @@ public class OrderFragment extends Fragment {
         horizontal_statusOrder.setVisibility(View.GONE);
         img_filter_order.setVisibility(View.GONE);
 
-        btn_shopping_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getActivity()).goToHomeFragment();
-            }
-        });
+        btn_shopping_now.setOnClickListener(view -> ((MainActivity) getActivity()).goToHomeFragment());
+    }
+
+    @Override
+    public void onItemClick(Order order) {
+        Intent intent = new Intent(mContext, OrderDetailActivity.class);
+        intent.putExtra("order", order);
+        startActivity(intent);
     }
 }

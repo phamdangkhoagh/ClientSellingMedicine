@@ -11,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.R;
+import com.example.clientsellingmedicine.interfaces.IOnOrderItemClickListener;
 import com.example.clientsellingmedicine.models.Order;
+import com.example.clientsellingmedicine.utils.Convert;
 
+import java.util.Date;
 import java.util.List;
 
 public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> {
@@ -20,13 +23,16 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
 
     private Context mContext;
 
-    public orderAdapter(List<Order> listOrder) {
+    private IOnOrderItemClickListener listener;
+
+    public orderAdapter(List<Order> listOrder,IOnOrderItemClickListener listener) {
         this.listOrder = listOrder;
+        this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvOrderCode, tvTotalPrice, tvAddress,orderStatus;
-        public LinearLayout statusBackground;
+        public LinearLayout statusBackground,ll_orderItem;
 
 
         public ViewHolder (View itemView, Context context){
@@ -36,6 +42,7 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
             tvAddress = itemView.findViewById(R.id.tvAddress);
             statusBackground = itemView.findViewById(R.id.statusBackground);
             orderStatus = itemView.findViewById(R.id.orderStatus);
+            ll_orderItem = itemView.findViewById(R.id.ll_orderItem);
         }
     }
     @NonNull
@@ -52,11 +59,17 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull orderAdapter.ViewHolder holder, int position) {
         Order order = (Order) listOrder.get(position);
-
+        if(order == null){
+            return;
+        }
         holder.tvOrderCode.setText(order.getCode());
-        String price = convertPrice(order.getTotal());
-        holder.tvTotalPrice.setText(price+" đ");
-        holder.tvAddress.setText("Nhà thuốc Pharmacity");
+        String price = Convert.convertPrice(order.getTotal());
+        holder.tvTotalPrice.setText(price);
+        String date = order.getOrderTime().toString();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+             date = Convert.convertToDate(order.getOrderTime().toString());
+        }
+        holder.tvAddress.setText(date);
         if(order.getStatus() == 1){
             holder.orderStatus.setText("Thành công");
             holder.statusBackground.setBackgroundResource(R.drawable.success_background);
@@ -65,7 +78,17 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
             holder.orderStatus.setText("Thất bại");
             holder.statusBackground.setBackgroundResource(R.drawable.dicount_background);
         }
+        else if(order.getStatus() == 2){
+            holder.orderStatus.setText("Chờ xử lý");
+            holder.statusBackground.setBackgroundResource(R.drawable.pending_background);
+        }
+        else if(order.getStatus() == 3){
+            holder.orderStatus.setText("Đang giao");
+            holder.statusBackground.setBackgroundResource(R.drawable.shipping_background);
+        }
 
+        // get item when click
+        holder.ll_orderItem.setOnClickListener(view -> listener.onItemClick(order));
     }
 
     @Override
@@ -73,14 +96,9 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.ViewHolder> 
         return listOrder.size();
     }
 
-    public String convertPrice(double number) {
-        long integerPart = (long) number;
-        int decimalPart = (int) ((number - integerPart) * 1000);
-
-        String formattedIntegerPart = String.format("%,d", integerPart).replace(",", ".");
-        String formattedDecimalPart = String.format("%03d", decimalPart);
-
-        return formattedIntegerPart + "." + formattedDecimalPart;
+    public void setListOrder(List<Order> listOrder) {
+        this.listOrder = listOrder;
+        notifyDataSetChanged();
     }
 
 

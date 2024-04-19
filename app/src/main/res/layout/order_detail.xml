@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/ivArrowLeftCart"
+                android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_left" />
@@ -90,43 +90,47 @@
                         android:textSize="16dp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    >
+                    android:paddingBottom="8dp">
 
                     <Space
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/tv_userName"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Khoa"
                         android:textSize="16dp"
-                        android:textStyle="bold" />
+                         />
 
                     <TextView
+                        android:id="@+id/tv_Phone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="0386749xxx"
                         android:textSize="16dp" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/gray" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="8dp"
-                    >
+                    android:paddingTop="8dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -140,36 +144,38 @@
                         android:textSize="16dp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    >
+                    android:paddingBottom="8dp">
 
                     <Space
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/tv_Address"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="99 An dương Vương,p16,Quận 8"
                         android:textSize="16dp" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="6dp"
                     android:background="@color/gray" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    >
+                    android:paddingBottom="8dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -184,24 +190,33 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/gray" />
                 <!--                        recycle view -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvOrderDetail"
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rcvOrderDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </androidx.core.widget.NestedScrollView>
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="8dp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="6dp"
                     android:background="@color/gray" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -221,12 +236,12 @@
                         android:textSize="18dp" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="4dp"
-                    >
+                    android:paddingBottom="4dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -240,6 +255,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_totalPrice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -251,6 +267,7 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -280,12 +297,12 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    >
+                    android:paddingBottom="8dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -301,6 +318,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_totalPayment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -315,6 +333,7 @@
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -328,8 +347,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    >
+                    android:paddingBottom="8dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -343,10 +361,13 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_totalPoint"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="0đ"
+                        android:text="+125"
+                        android:textColor="@color/coin_color"
+                        android:textStyle="bold"
                         android:textAlignment="viewEnd"
                         android:textSize="16dp" />
 
@@ -364,35 +385,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginHorizontal="18dp"
                     android:paddingTop="14dp"
-                    android:paddingBottom="14dp"
-                    >
+                    android:paddingBottom="14dp">
 
-                    <Space
-                        android:layout_width="18dp"
-                        android:layout_height="wrap_content" />
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Phương thức thanh toán"
                         android:textSize="16dp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <Space
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tv_paymentMethod"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Tiền mặt"
                         android:textAlignment="viewEnd"
                         android:textColor="@color/header_color"
                         android:textSize="16dp" />
 
-                    <Space
-                        android:layout_width="18dp"
-                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="6dp"
@@ -403,8 +424,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="14dp"
-                    android:paddingBottom="4dp"
-                    >
+                    android:paddingBottom="4dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -422,18 +442,19 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="4dp"
-                    >
+                    android:paddingBottom="4dp">
 
                     <Space
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/tv_orderCode"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -444,12 +465,12 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingBottom="4dp"
-                    >
+                    android:paddingBottom="4dp">
 
                     <Space
                         android:layout_width="18dp"
@@ -463,6 +484,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_orderTime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -475,6 +497,7 @@
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="14dp" />

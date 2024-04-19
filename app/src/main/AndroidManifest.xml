@@ -83,6 +83,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".MomoPaymentActivity"
             android:exported="true">
             <intent-filter>
@@ -95,10 +99,6 @@
 
             </intent-filter>
         </activity>
-
-
-
-
     </application>
 
 

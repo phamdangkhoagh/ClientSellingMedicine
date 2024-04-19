@@ -1,6 +1,13 @@
 package com.example.clientsellingmedicine.models;
 
-public class Order_Detail {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDetail {
     private Integer discountPrice;
     private Integer productPrice;
     private Integer quantity;
