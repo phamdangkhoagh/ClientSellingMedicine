@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">ClientBanThuoc</string>
+    <string name="channel_name">Channel</string>
+    <string name="channel_description">Channel</string>
+    <string name="app_name">Medimate</string>
     <string name="txtTrangChu">Trang chủ</string>
     <string name="txtDanhMuc">Danh mục</string>
     <string name="txtDonHang">Đơn Hàng</string>

@@ -13,20 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.R;
+import com.example.clientsellingmedicine.interfaces.IOnButtonExchangeCouponClickListener;
 import com.example.clientsellingmedicine.models.Coupon;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 
-
-public class couponAdapter extends RecyclerView.Adapter <couponAdapter.ViewHolder> {
+public class couponAdapter extends RecyclerView.Adapter<couponAdapter.ViewHolder> {
     private List<Coupon> mCoupons;
     private Context mContext;
 
-
-    public couponAdapter(List<Coupon> list) {
+    private IOnButtonExchangeCouponClickListener mListener;
+    public couponAdapter(List<Coupon> list,IOnButtonExchangeCouponClickListener listener) {
         this.mCoupons = list;
+        this.mListener = listener;
     }
 
     @NonNull
@@ -48,15 +50,19 @@ public class couponAdapter extends RecyclerView.Adapter <couponAdapter.ViewHolde
         }
 
 
-            holder.tvNameDiscountItem.setText(coupon.getDescription());
-            // Expire date = current date + expire date
-            Integer expire_date = coupon.getExpirationTime();
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, expire_date);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            String  expire = dateFormat.format(calendar.getTime());
-            holder.tvExpireDiscountItem.setText(expire);
-            holder.tv_Point.setText(String.valueOf(coupon.getPoint()));
+        holder.tvNameDiscountItem.setText(coupon.getDescription());
+        // Expire date = current date + expire date
+        Integer expire_date = coupon.getExpirationTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, expire_date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String expire = dateFormat.format(calendar.getTime());
+        holder.tvExpireDiscountItem.setText(expire);
+        holder.tv_Point.setText(String.valueOf(coupon.getPoint()));
+
+        holder.btn_ExchangePoints.setOnClickListener(v -> {
+            mListener.onButtonExchangeCouponItemClick(coupon);
+        });
 
 
     }
@@ -69,6 +75,7 @@ public class couponAdapter extends RecyclerView.Adapter <couponAdapter.ViewHolde
     public class ViewHolder extends RecyclerView.ViewHolder {
         public Button btn_ExchangePoints;
         public TextView tvNameDiscountItem, tvExpireDiscountItem, tv_Point;
+
         public ViewHolder(View itemView, Context context) {
             super(itemView);
             tvNameDiscountItem = itemView.findViewById(R.id.tvNameDiscountItem);

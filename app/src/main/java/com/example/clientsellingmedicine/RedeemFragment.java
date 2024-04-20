@@ -68,7 +68,7 @@ public class RedeemFragment extends Fragment {
 
     private void getAllRedeemPointHistory() {
         CouponService couponService = ServiceBuilder.buildService(CouponService.class);
-        Call<List<CouponDetail>> request = couponService.getCoupon();
+        Call<List<CouponDetail>> request = couponService.getAllCoupon();
 
         request.enqueue(new Callback<List<CouponDetail>>() {
             @Override
