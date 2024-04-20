@@ -25,7 +25,7 @@ import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.services.CouponService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.services.UserService;
-import com.example.clientsellingmedicine.utils.NotificationHelper;
+import com.example.clientsellingmedicine.Helper.NotificationHelper;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.IOException;
