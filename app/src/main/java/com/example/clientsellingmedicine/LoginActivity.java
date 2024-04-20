@@ -71,22 +71,14 @@ public class LoginActivity  extends AppCompatActivity {
         };
         edt_phone_number.addTextChangedListener(textWatcher);
         edt_password.addTextChangedListener(textWatcher);
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserLogin userLogin = new UserLogin(edt_phone_number.getText().toString(), edt_password.getText().toString());
-                //loginServiceImpl.login(userLogin);
-                Login(userLogin);
-            }
+        btn_login.setOnClickListener(view -> {
+            UserLogin userLogin = new UserLogin(edt_phone_number.getText().toString(), edt_password.getText().toString());
+            //loginServiceImpl.login(userLogin);
+            Login(userLogin);
         });
 
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(view -> finish());
 
     }
 

@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment implements IOnProductItemClickListene
     private SearchView searchView;
     private String lastQuery;
 
-        private boolean isReloadData = false;
+    private boolean isReloadData = false;
 
     public HomeFragment() {
     }

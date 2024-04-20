@@ -5,76 +5,69 @@
     android:orientation="vertical"
     android:background="@drawable/line_background"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
-        <Space
-            android:layout_width="26dp"
-            android:layout_height="wrap_content"/>
+
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tv_label_code"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Mã đơn hàng :"
+
             android:textSize="16sp"
             />
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tv_Code"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:text="HAPPY0604"
+            android:layout_marginStart="10dp"
             android:textStyle="bold"
             android:textColor="@color/header_color"
-            android:textSize="18dp"
+            android:textSize="16dp"
             />
-        <Space
-            android:layout_width="46dp"
-            android:layout_height="wrap_content"/>
+
     </LinearLayout>
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
-        <Space
-            android:layout_width="26dp"
-            android:layout_height="wrap_content"/>
+
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Thời gian giao dịch:"
             android:textSize="16sp"
             />
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tv_Time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="10dp"
             android:text="9:15  06/04/2024"
-            android:textSize="18dp"
+            android:textSize="16dp"
             />
-        <Space
-            android:layout_width="46dp"
-            android:layout_height="wrap_content"/>
+
     </LinearLayout>
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
-        <Space
-            android:layout_width="26dp"
-            android:layout_height="wrap_content"/>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -94,26 +87,22 @@
             android:visibility="gone"
             />
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tv_label_point"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Điểm sử dụng:"
             android:textSize="16sp"
             />
+
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/tv_Point"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_marginStart="0dp"
             android:text="-1.800"
-            android:textStyle="bold"
             android:textColor="@color/minus_color"
-            android:textSize="18dp"
-            />
-        <Space
-            android:layout_width="46dp"
-            android:layout_height="wrap_content"/>
+            android:textSize="16dp" />
+
     </LinearLayout>
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+
 </LinearLayout>

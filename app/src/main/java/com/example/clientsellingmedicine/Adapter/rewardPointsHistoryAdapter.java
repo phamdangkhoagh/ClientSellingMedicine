@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.clientsellingmedicine.AccumulateFragment;
+import com.example.clientsellingmedicine.ExchangeFragment;
 import com.example.clientsellingmedicine.RedeemFragment;
 
 public class rewardPointsHistoryAdapter extends FragmentStatePagerAdapter {
@@ -20,8 +21,6 @@ public class rewardPointsHistoryAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0:
-                return new AccumulateFragment();
             case 1:
                 return new RedeemFragment();
             default:

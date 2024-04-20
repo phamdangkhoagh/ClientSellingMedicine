@@ -87,6 +87,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".RewardPointsHistoryActvity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".MomoPaymentActivity"
             android:exported="true">
             <intent-filter>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,7 +38,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     HomeFragment homeFragment = new HomeFragment();
-    CategoryFragment categoryFragment = new CategoryFragment();
+//    CategoryFragment categoryFragment = new CategoryFragment();
+    ExchangeFragment exchangeFragment = new ExchangeFragment();
     OrderFragment orderFragment = new OrderFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     UnLoginProfileFragment unLoginProfileFragment = new UnLoginProfileFragment();
@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.container, homeFragment)
                     .commit();
             return true;
-        } else if (id == R.id.navigation_pills) {
+        } else if (id == R.id.navigation_medal) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, categoryFragment)
+                    .replace(R.id.container, exchangeFragment)
                     .commit();
             return true;
 

@@ -120,7 +120,12 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     user = response.body();
                     if(user != null){
-                        tv_UserName.setText(user.getFirstName() + " " + user.getLastName());
+                        if(user.getFirstName() == null || user.getLastName() == null){
+                            tv_UserName.setText(user.getPhone());
+                        }else {
+                            tv_UserName.setText(user.getFirstName() + " " + user.getLastName());
+                        }
+
                         progress_Point.setProgress(user.getPoint());
                         tv_Rank.setText(user.getRank());
                         Glide.with(mContext)
