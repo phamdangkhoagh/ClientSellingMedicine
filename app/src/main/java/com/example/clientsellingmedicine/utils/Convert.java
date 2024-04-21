@@ -34,17 +34,17 @@ public class Convert {
         return Integer.parseInt(currency.trim());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public static String convertToDate(String inputDate) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH);
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
         try {
-            Date date = inputFormat.parse(inputDate);
+            Date date = inputDateFormat.parse(inputDate);
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return "Invalid date string";
+            return null;
         }
     }
 }

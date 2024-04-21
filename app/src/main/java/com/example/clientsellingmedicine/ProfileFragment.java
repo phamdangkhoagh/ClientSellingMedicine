@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 
     private ProgressBar progress_Point;
 
-    private LinearLayout ll_AddressBook;
+    private LinearLayout ll_AddressBook,ll_EditProfile;
 
 
     private static User user = new User();
@@ -78,11 +78,18 @@ public class ProfileFragment extends Fragment {
         tv_Logout = view.findViewById(R.id.tv_Logout);
 
         ll_AddressBook = view.findViewById(R.id.ll_AddressBook);
+        ll_EditProfile = view.findViewById(R.id.ll_EditProfile);
     }
     private void addEvents(){
         // this layout is used to show the list of registered addresses
         ll_AddressBook.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, RegisteredAddressActivity.class);
+            startActivity(intent);
+        });
+
+        // this layout is used to edit the user's profile
+        ll_EditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, IndividualActivity.class);
             startActivity(intent);
         });
 

@@ -69,15 +69,17 @@
                 android:orientation="vertical">
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"/>
+                    android:layout_height="10dp"/>
                 <ImageView
-                    android:layout_width="84dp"
-                    android:layout_height="82dp"
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:src="@drawable/ic_avartar"/>
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="8dp"/>
                 <TextView
+                    android:id="@+id/tvChangeAvatar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Thay đổi ảnh đại diện"
@@ -89,46 +91,86 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"/>
             </LinearLayout>
-<!--            Họ và tên -->
+<!--            Họ và tên-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content" />
-
-                <TextView
+<!--                first name-->
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Họ và tên"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"/>
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content" />
+                    android:orientation="vertical">
+                    <!--                label-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Họ "
+                        android:textSize="14sp"
+                        android:layout_marginStart="18dp"
+                        android:textColor="@color/black"/>
+                    <!--                input-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/input_note_order_background"
+                        android:orientation="vertical">
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/input_note_order_background"
-                android:orientation="vertical">
-
-                <EditText
-                    android:layout_width="match_parent"
+                        <EditText
+                            android:id="@+id/edtFirstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Nhập họ "
+                            android:textColor="@color/black"
+                            android:background="@android:color/transparent"
+                            android:padding="15dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+<!--                last name-->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Nhập họ và tên"
-                    android:textColor="@color/black"
-                    android:background="@android:color/transparent"
-                    android:padding="18dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <!--                label-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên"
+                        android:layout_marginStart="18dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"/>
+                    <!--                input-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/input_note_order_background"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/edtLastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Nhập tên"
+                            android:textColor="@color/black"
+                            android:background="@android:color/transparent"
+                            android:padding="15dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
+
 <!--            Giới tính -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,6 +261,7 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/edtPhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nhập số điện thoại"
@@ -269,14 +312,18 @@
                         android:padding="18dp"
                         android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/tvIndividualUpdateDate"
-                            android:layout_width="0dp"
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:hint="Chọn ngày sinh"
                             android:textSize="16sp"
-                            android:textColor="@color/gray"/>
+                            android:textColor="@color/black"/>
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
                         <ImageView
+                            android:id="@+id/ivCalendar"
                             android:layout_width="46dp"
                             android:layout_height="26dp"
                             android:src="@drawable/ic_calendar" />
@@ -299,6 +346,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUpdateInfo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"

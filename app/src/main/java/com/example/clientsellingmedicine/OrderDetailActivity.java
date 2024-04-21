@@ -104,7 +104,12 @@ public class OrderDetailActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    tv_userName.setText(user.getFirstName() + " " + user.getLastName());
+                    if( user.getFirstName() == null || user.getLastName() == null) {
+                        tv_userName.setText("user#" + user.getId());
+                    }else{
+                        tv_userName.setText(user.getFirstName() + " " + user.getLastName());
+                    }
+
                     tv_Phone.setText(user.getPhone());
                 } else if (response.code() == 401) {
                     Intent intent = new Intent(mContext, LoginActivity.class);

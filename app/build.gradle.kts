@@ -60,4 +60,7 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.4.0")
     //webview
     implementation("androidx.webkit:webkit:1.8.0")
+
+    //cloudinary
+    implementation ("com.cloudinary:cloudinary-android:2.7.1")
 }

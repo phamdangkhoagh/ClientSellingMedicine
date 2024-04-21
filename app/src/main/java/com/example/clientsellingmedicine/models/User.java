@@ -1,6 +1,7 @@
 package com.example.clientsellingmedicine.models;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     private Integer id;
     private Integer idRole;
     private String phone;

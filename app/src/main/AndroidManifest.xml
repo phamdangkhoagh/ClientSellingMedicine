@@ -92,6 +92,14 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".IndividualActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".MomoPaymentActivity"
             android:exported="true">
             <intent-filter>

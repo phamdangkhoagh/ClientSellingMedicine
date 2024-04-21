@@ -93,7 +93,7 @@ public class ServiceBuilder {
 
 
     private static Gson gson = new GsonBuilder()
-            .setDateFormat("MMM d, yyyy, hh:mm:ss a")
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
             .create();
     private static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
