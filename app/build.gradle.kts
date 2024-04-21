@@ -63,4 +63,6 @@ dependencies {
 
     //cloudinary
     implementation ("com.cloudinary:cloudinary-android:2.7.1")
+    //Oauth google
+    implementation ("com.google.android.gms:play-services-auth:20.6.0")
 }

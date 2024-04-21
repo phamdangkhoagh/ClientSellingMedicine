@@ -127,10 +127,12 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     user = response.body();
                     if(user != null){
-                        if(user.getFirstName() == null || user.getLastName() == null){
+                        if(user.getUsername() != null ){
+                            tv_UserName.setText(user.getUsername());
+                        }else if(user.getPhone() != null) {
                             tv_UserName.setText(user.getPhone());
                         }else {
-                            tv_UserName.setText(user.getFirstName() + " " + user.getLastName());
+                            tv_UserName.setText(user.getEmail());
                         }
 
                         progress_Point.setProgress(user.getPoint());
@@ -227,22 +229,5 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public User convertUser(Response<User> response){
-        User u = new User();
-        u.setId(response.body().getId());
-        u.setIdRole(response.body().getIdRole());
-        u.setPhone(response.body().getPhone());
-        u.setPhone(response.body().getPhone());
-        u.setPassword(response.body().getPassword());
-        u.setFirstName(response.body().getFirstName());
-        u.setLastName(response.body().getLastName());
-        u.setRank(response.body().getRank());
-        u.setPoint(response.body().getPoint());
-        u.setBirthday(response.body().getBirthday());
-        u.setGender(response.body().getGender());
-        u.setImage(response.body().getImage());
-        u.setStatus(response.body().getStatus());
-        return u;
-    }
 
 }

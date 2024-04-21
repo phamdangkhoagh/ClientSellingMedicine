@@ -48,7 +48,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Context mContext;
     private ImageView ivAvatar, ivCalendar;
     private TextView tvChangeAvatar, tvDate;
-    private EditText edtFirstName, edtLastName, edtPhoneNumber;
+    private EditText edtUserName, edtPhoneNumber;
     private RadioButton rdbMale, rdbFeMale;
 
     private Button btnUpdateInfo;
@@ -74,8 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
         ivCalendar = findViewById(R.id.ivCalendar);
         tvChangeAvatar = findViewById(R.id.tvChangeAvatar);
         tvDate = findViewById(R.id.tvDate);
-        edtFirstName = findViewById(R.id.edtFirstName);
-        edtLastName = findViewById(R.id.edtLastName);
+        edtUserName = findViewById(R.id.edtUserName);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
         rdbMale = findViewById(R.id.rdbMale);
         rdbFeMale = findViewById(R.id.rdbFeMale);
@@ -118,8 +117,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         User user = (User) intent.getSerializableExtra("user");
         if (user != null) {
-            edtFirstName.setText(user.getFirstName() == null ? "" : user.getFirstName());
-            edtLastName.setText(user.getLastName() == null ? "" : user.getLastName());
+            edtUserName.setText(user.getUsername() == null ? "" : user.getUsername());
             edtPhoneNumber.setText(user.getPhone());
             if (user.getGender() == 1) {
                 rdbMale.setChecked(true);
@@ -162,8 +160,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void handleUpdateInfo() {
         // Xử lý cập nhật thông tin cá nhân
         User userUpdate = new User();
-        userUpdate.setFirstName(edtFirstName.getText().toString());
-        userUpdate.setLastName(edtLastName.getText().toString());
+        userUpdate.setUsername(edtUserName.getText().toString());
         userUpdate.setPhone(edtPhoneNumber.getText().toString());
         userUpdate.setGender(rdbMale.isChecked() ? 1 : 0);
         String date = tvDate.getText().toString();
@@ -246,7 +243,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onError(String requestId, ErrorInfo error) {
                 Log.d("tag", "onError: " + error);
             }
-            
+
             @Override
             public void onReschedule(String requestId, ErrorInfo error) {
                 Log.d("tag", "onReschedule: " + error);

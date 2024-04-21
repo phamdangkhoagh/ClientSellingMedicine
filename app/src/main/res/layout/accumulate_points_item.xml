@@ -73,13 +73,20 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HSD : "
+                        android:textColor="#989898"
+                        android:gravity="end|start"
+                        android:textAlignment="viewStart" />
 
                     <TextView
                         android:id="@+id/tvExpireDiscountItem"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="HSD : 10/04/2024"
+                        android:text="10/04/2024"
                         android:textColor="#989898"
                         android:gravity="end|start"
                         android:textAlignment="viewStart" />

@@ -1,4 +1,5 @@
 <resources>
+    <string name="web_client_id">929394835463-1dqh7n748mbfk7dbrrbms1b344r079av.apps.googleusercontent.com</string>
     <string name="channel_name">Channel</string>
     <string name="channel_description">Channel</string>
     <string name="app_name">Medimate</string>

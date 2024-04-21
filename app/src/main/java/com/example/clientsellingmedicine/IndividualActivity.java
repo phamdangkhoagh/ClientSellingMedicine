@@ -74,7 +74,7 @@ public class IndividualActivity extends AppCompatActivity {
                     user = response.body();
                     if(user != null){
                         tvUserID.setText("user#"+user.getId());
-                        tvName.setText(user.getFirstName() != null ? user.getFirstName()+" "+user.getLastName() : "Unknown");
+                        tvName.setText(user.getUsername() != null ? user.getUsername() : "Unknown");
                         tvPhone.setText(user.getPhone());
                         tvGender.setText(user.getGender() == 1 ? "Nam" : "Nữ");
                         String birthday = Convert.convertToDate(user.getBirthday().toString());

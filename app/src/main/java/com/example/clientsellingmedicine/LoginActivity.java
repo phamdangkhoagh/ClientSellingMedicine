@@ -6,11 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientsellingmedicine.models.UserLogin;
@@ -19,6 +26,14 @@ import com.example.clientsellingmedicine.services.LoginService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,9 +48,13 @@ public class LoginActivity  extends AppCompatActivity {
 
     TextInputEditText edt_phone_number, edt_password;
     ImageView iv_back;
-    Button btn_login;
+    Button btn_login,btn_google_signin;
 
-
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signUpRequest;
+    private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
+    private boolean showOneTapUI = true;
+    ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +64,43 @@ public class LoginActivity  extends AppCompatActivity {
         addControl();
         addEvents();
 
+        oneTapClient = Identity.getSignInClient(this);
+        signUpRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.web_client_id))
+                        // Show all accounts on the device.
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .build();
+
+         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+             try {
+                 SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
+                 String idToken = credential.getGoogleIdToken();
+                 if (idToken !=  null) {
+                     // Got an ID token from Google. Use it to authenticate
+                     // with your backend.
+                     String email = credential.getId();
+                     String username = credential.getDisplayName();
+                     Toast.makeText(getApplicationContext(),"Email : "+email+" Name : "+username, Toast.LENGTH_SHORT).show();
+                     //
+
+                     Log.d("TAG", idToken);
+                 }
+             } catch (ApiException e) {
+                 e.printStackTrace();
+             }
+         });
+
     }
 
     private void addControl() {
         edt_phone_number = findViewById(R.id.edt_phone_number);
         edt_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_login);
+        btn_google_signin = findViewById(R.id.btn_google_signin);
         iv_back = findViewById(R.id.iv_back);
     }
     private void addEvents() {
@@ -79,6 +129,19 @@ public class LoginActivity  extends AppCompatActivity {
 
 
         iv_back.setOnClickListener(view -> finish());
+
+        btn_google_signin.setOnClickListener(v -> oneTapClient.beginSignIn(signUpRequest)
+                .addOnSuccessListener(LoginActivity.this, result -> {
+
+                    IntentSenderRequest intentSenderRequest =
+                            new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
+                    activityResultLauncher.launch(intentSenderRequest);
+
+                })
+                .addOnFailureListener(LoginActivity.this, e -> {
+                    // No Google Accounts found. Just continue presenting the signed-out UI.
+                    Log.d("TAG", e.getLocalizedMessage());
+                }));
 
     }
 

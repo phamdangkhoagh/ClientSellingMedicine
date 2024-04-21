@@ -106,7 +106,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Họ "
+                        android:text="Họ và tên"
                         android:textSize="14sp"
                         android:layout_marginStart="18dp"
                         android:textColor="@color/black"/>
@@ -122,53 +122,16 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/edtFirstName"
+                            android:id="@+id/edtUserName"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Nhập họ "
+                            android:hint="Nhập họ và tên "
                             android:textColor="@color/black"
                             android:background="@android:color/transparent"
                             android:padding="15dp"
                             />
                     </LinearLayout>
                 </LinearLayout>
-<!--                last name-->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <!--                label-->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tên"
-                        android:layout_marginStart="18dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"/>
-                    <!--                input-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/input_note_order_background"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/edtLastName"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="Nhập tên"
-                            android:textColor="@color/black"
-                            android:background="@android:color/transparent"
-                            android:padding="15dp"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
-
             </LinearLayout>
 
 <!--            Giới tính -->

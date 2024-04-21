@@ -104,10 +104,12 @@ public class OrderDetailActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    if( user.getFirstName() == null || user.getLastName() == null) {
-                        tv_userName.setText("user#" + user.getId());
-                    }else{
-                        tv_userName.setText(user.getFirstName() + " " + user.getLastName());
+                    if(user.getUsername() != null ){
+                        tv_userName.setText(user.getUsername());
+                    }else if(user.getPhone() != null) {
+                        tv_userName.setText(user.getPhone());
+                    }else {
+                        tv_userName.setText(user.getEmail());
                     }
 
                     tv_Phone.setText(user.getPhone());
