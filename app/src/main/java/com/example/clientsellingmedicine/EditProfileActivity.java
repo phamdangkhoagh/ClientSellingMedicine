@@ -85,7 +85,7 @@ public class EditProfileActivity extends AppCompatActivity {
         tvChangeAvatar.setOnClickListener(v -> pickImage());
         ivCalendar.setOnClickListener(v -> handleSelectBirthday());
         btnUpdateInfo.setOnClickListener(v -> upLoadImage());
-        initCongif();
+        //initCongif();
         loadInfo();
     }
 
@@ -124,8 +124,8 @@ public class EditProfileActivity extends AppCompatActivity {
             } else {
                 rdbFeMale.setChecked(true);
             }
-            String birthday = Convert.convertToDate(user.getBirthday().toString());
-            tvDate.setText(birthday != null ? birthday : "Unknown");
+            String birthday = (user.getBirthday() != null ? Convert.convertToDate(user.getBirthday().toString()): null);
+            tvDate.setText(birthday != null ? birthday : "");
             Glide.with(mContext)
                     .load(user.getImage())
                     .placeholder(R.drawable.ic_avartar) // Hình ảnh thay thế khi đang tải
@@ -161,15 +161,19 @@ public class EditProfileActivity extends AppCompatActivity {
         // Xử lý cập nhật thông tin cá nhân
         User userUpdate = new User();
         userUpdate.setUsername(edtUserName.getText().toString());
-        userUpdate.setPhone(edtPhoneNumber.getText().toString());
+        if(edtPhoneNumber.getText() != null && !edtPhoneNumber.getText().toString().isEmpty()){
+            userUpdate.setPhone(edtPhoneNumber.getText().toString());
+        }
         userUpdate.setGender(rdbMale.isChecked() ? 1 : 0);
         String date = tvDate.getText().toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        try {
-            Date birthday = sdf.parse(date);
-            userUpdate.setBirthday(birthday);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if( !date.isEmpty() && date != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            try {
+                Date birthday = sdf.parse(date);
+                userUpdate.setBirthday(birthday);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         if(imageLink != null){
             userUpdate.setImage(imageLink);
@@ -205,15 +209,7 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void initCongif() {
 
-        Map config = new HashMap();
-        config.put("cloud_name", "dwrd1yxgh");
-        config.put("api_key", "716447925773513");
-        config.put("api_secret", "JD584oxI3Qb9VTy6ZiQJYqSO6YY");
-        //config.put("secure", true);
-        MediaManager.init(this, config);
-    }
     private void upLoadImage(){
         if(imagePath == null){
             handleUpdateInfo();

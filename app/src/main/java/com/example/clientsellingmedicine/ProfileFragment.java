@@ -228,6 +228,10 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
+    @Override
+    public void onResume () {
+        super.onResume();
+        getUserLogin();
+    }
 
 }

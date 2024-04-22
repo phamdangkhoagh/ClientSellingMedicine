@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientsellingmedicine.models.GoogleToken;
 import com.example.clientsellingmedicine.models.UserLogin;
 import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.services.LoginService;
@@ -80,14 +81,17 @@ public class LoginActivity  extends AppCompatActivity {
                  SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
                  String idToken = credential.getGoogleIdToken();
                  if (idToken !=  null) {
-                     // Got an ID token from Google. Use it to authenticate
-                     // with your backend.
-                     String email = credential.getId();
-                     String username = credential.getDisplayName();
-                     Toast.makeText(getApplicationContext(),"Email : "+email+" Name : "+username, Toast.LENGTH_SHORT).show();
-                     //
-
-                     Log.d("TAG", idToken);
+                     LoginWithGoogle(new GoogleToken(idToken));
+                 }else {
+                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
+                     builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
+                             .setTitle("Đăng nhập thất bại")
+                             .setMessage("Vui lòng kiểm tra lại tài khoản Google đã đăng nhập !")
+//                            .setCancelable(false) // Bấm ra ngoài không mất dialog
+                             .setPositiveButton("OK", (dialog, which) -> {
+                                 // Xử lý khi nhấn nút OK
+                             })
+                             .show();
                  }
              } catch (ApiException e) {
                  e.printStackTrace();
@@ -175,6 +179,34 @@ public class LoginActivity  extends AppCompatActivity {
                             .show();
                 } else {
                     Toast.makeText(mContext, "Failed to retrieve items (response)", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                if (t instanceof IOException) {
+                    Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void LoginWithGoogle(GoogleToken googleToken){
+        LoginService loginService = ServiceBuilder.buildService(LoginService.class);
+        Call<Token> request = loginService.loginWithGoogle(googleToken);
+        request.enqueue(new Callback<Token>() {
+
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    Token token = response.body();
+                    SharedPref.saveToken(mContext, Constants.TOKEN_PREFS_NAME, Constants.KEY_TOKEN, token);
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    startActivity(intent);
+                }
+               else {
+                    Toast.makeText(mContext, "Đăng nhập thất bại, đã có lỗi xảy ra !", Toast.LENGTH_LONG).show();
                 }
             }
 

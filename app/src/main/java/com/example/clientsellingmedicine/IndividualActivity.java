@@ -28,10 +28,11 @@ import retrofit2.Response;
 
 public class IndividualActivity extends AppCompatActivity {
     private Context mContext;
-    private TextView tvName,tvPhone,tvGender,tvBirthday,tvUserID;
+    private TextView tvName, tvPhone, tvGender, tvBirthday, tvUserID;
     private Button btnEditProfile;
     private ImageView ivAvatar;
     private static User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,7 @@ public class IndividualActivity extends AppCompatActivity {
         // Lấy thông tin cá nhân
         getUserLogin();
     }
+
     public void getUserLogin() {
         UserService userService = ServiceBuilder.buildService(UserService.class);
         Call<User> request = userService.getUser();
@@ -72,13 +74,13 @@ public class IndividualActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     user = response.body();
-                    if(user != null){
-                        tvUserID.setText("user#"+user.getId());
+                    if (user != null) {
+                        tvUserID.setText("user#" + user.getId());
                         tvName.setText(user.getUsername() != null ? user.getUsername() : "Unknown");
-                        tvPhone.setText(user.getPhone());
+                        tvPhone.setText(user.getPhone() != null ? user.getPhone() : "Unknown");
                         tvGender.setText(user.getGender() == 1 ? "Nam" : "Nữ");
-                        String birthday = Convert.convertToDate(user.getBirthday().toString());
-                        tvBirthday.setText(birthday != null ? birthday : "Unknown");
+                        String birthday = (user.getBirthday() != null ? Convert.convertToDate(user.getBirthday().toString()) : null);
+                        tvBirthday.setText(birthday != null ? birthday : "");
 
                         Glide.with(mContext)
                                 .load(user.getImage())
@@ -106,5 +108,12 @@ public class IndividualActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "Failed to retrieve items", Toast.LENGTH_LONG).show();
             }
         });
+
+
+    }
+    @Override
+    protected void onResume () {
+        super.onResume();
+        getUserLogin();
     }
 }
