@@ -19,7 +19,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        setContentView(R.layout.forgot_password_screen);
+        setContentView(R.layout.otp_confirm_screen);
 
         addControl();
         addEvents();
