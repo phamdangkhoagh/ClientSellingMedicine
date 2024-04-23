@@ -39,12 +39,15 @@
 
         </activity>
         <activity
-            android:name=".ProductActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+            android:name=".RegisterActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".OtpActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".OtpConfirmActivity"
             android:exported="false">
         </activity>
         <activity
@@ -63,16 +66,11 @@
         </activity>
         <activity
             android:name=".DetailNotificationActivity"
-            android:exported="false"> </activity>
-        <activity
-            android:name=".RegisterActivity"
             android:exported="false">
-
         </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="false">
-
         </activity>
         <activity
             android:name=".NotificationActivity"
