@@ -21,12 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< Updated upstream
 import com.example.clientsellingmedicine.models.GoogleToken;
-=======
-import com.example.clientsellingmedicine.models.Device;
-import com.example.clientsellingmedicine.models.Notification;
->>>>>>> Stashed changes
 import com.example.clientsellingmedicine.models.UserLogin;
 import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.services.DeviceService;
@@ -58,13 +53,8 @@ public class LoginActivity  extends AppCompatActivity {
 
     TextInputEditText edt_phone_number, edt_password;
     ImageView iv_back;
-<<<<<<< Updated upstream
     Button btn_login,btn_google_signin;
-=======
-    Button btn_login;
     TextView tvRegister;
-
->>>>>>> Stashed changes
 
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
@@ -79,7 +69,6 @@ public class LoginActivity  extends AppCompatActivity {
 
         addControl();
         addEvents();
-<<<<<<< Updated upstream
 
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
@@ -98,7 +87,7 @@ public class LoginActivity  extends AppCompatActivity {
                  String idToken = credential.getGoogleIdToken();
                  if (idToken !=  null) {
                      LoginWithGoogle(new GoogleToken(idToken));
-                 }else {
+                 } else {
                      MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
                      builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
                              .setTitle("Đăng nhập thất bại")
@@ -114,8 +103,6 @@ public class LoginActivity  extends AppCompatActivity {
              }
          });
 
-=======
->>>>>>> Stashed changes
     }
 
 
@@ -123,11 +110,8 @@ public class LoginActivity  extends AppCompatActivity {
         edt_phone_number = findViewById(R.id.edt_phone_number);
         edt_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_login);
-<<<<<<< Updated upstream
         btn_google_signin = findViewById(R.id.btn_google_signin);
-=======
         tvRegister = findViewById(R.id.tvRegister);
->>>>>>> Stashed changes
         iv_back = findViewById(R.id.iv_back);
     }
     private void addEvents() {
