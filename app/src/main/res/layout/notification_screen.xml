@@ -21,7 +21,7 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/ivArrowLeftCart"
+                android:id="@+id/ivBackNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_left" />
@@ -36,6 +36,7 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/tvReadAllNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Đọc tất cả"
@@ -82,6 +83,7 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
                 <LinearLayout
+                    android:id="@+id/layoutEmptyNotification"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/white"

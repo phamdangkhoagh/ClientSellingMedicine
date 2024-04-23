@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "322503683001",
+    "project_id": "medimate-48dac",
+    "storage_bucket": "medimate-48dac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322503683001:android:5eba3f892919bb7d042468",
+        "android_client_info": {
+          "package_name": "com.example.clientsellingmedicine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1TedfwKP6jaZWL5sVFoT1kVYf_D1jKuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

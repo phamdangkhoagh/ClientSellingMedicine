@@ -240,6 +240,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:text="Đăng ký ngay"

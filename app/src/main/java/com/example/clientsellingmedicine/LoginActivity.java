@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -23,7 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.clientsellingmedicine.models.GoogleToken;
 import com.example.clientsellingmedicine.models.UserLogin;
 import com.example.clientsellingmedicine.models.Token;
+import com.example.clientsellingmedicine.services.DeviceService;
 import com.example.clientsellingmedicine.services.LoginService;
+import com.example.clientsellingmedicine.services.NotificationService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
@@ -39,6 +42,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +54,7 @@ public class LoginActivity  extends AppCompatActivity {
     TextInputEditText edt_phone_number, edt_password;
     ImageView iv_back;
     Button btn_login,btn_google_signin;
+    TextView tvRegister;
 
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
@@ -82,7 +87,7 @@ public class LoginActivity  extends AppCompatActivity {
                  String idToken = credential.getGoogleIdToken();
                  if (idToken !=  null) {
                      LoginWithGoogle(new GoogleToken(idToken));
-                 }else {
+                 } else {
                      MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
                      builder.setIcon(R.drawable.ic_warning) // Đặt icon của Dialog
                              .setTitle("Đăng nhập thất bại")
@@ -100,11 +105,13 @@ public class LoginActivity  extends AppCompatActivity {
 
     }
 
+
     private void addControl() {
         edt_phone_number = findViewById(R.id.edt_phone_number);
         edt_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_login);
         btn_google_signin = findViewById(R.id.btn_google_signin);
+        tvRegister = findViewById(R.id.tvRegister);
         iv_back = findViewById(R.id.iv_back);
     }
     private void addEvents() {
@@ -130,8 +137,12 @@ public class LoginActivity  extends AppCompatActivity {
             //loginServiceImpl.login(userLogin);
             Login(userLogin);
         });
-
-
+        tvRegister.setOnClickListener(view -> {
+            Intent i = new Intent(mContext, OtpActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            System.out.println("Hello");
+        });
         iv_back.setOnClickListener(view -> finish());
 
         btn_google_signin.setOnClickListener(v -> oneTapClient.beginSignIn(signUpRequest)
