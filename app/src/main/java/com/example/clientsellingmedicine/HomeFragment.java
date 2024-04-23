@@ -60,9 +60,11 @@ import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListe
 import com.example.clientsellingmedicine.interfaces.IOnFeedItemClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;
+import com.example.clientsellingmedicine.models.Device;
 import com.example.clientsellingmedicine.models.Feed;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.services.CartService;
+import com.example.clientsellingmedicine.services.DeviceService;
 import com.example.clientsellingmedicine.services.ProductService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.utils.Constants;
@@ -130,6 +132,7 @@ public class HomeFragment extends Fragment implements IOnProductItemClickListene
 
         addControl(view);
         addEvents();
+        saveDevice();
         return view;
 
 
@@ -644,6 +647,43 @@ public class HomeFragment extends Fragment implements IOnProductItemClickListene
         });
 
         return future;
+    }
+    private void saveDevice() {
+
+        // Ensure device token is valid
+        if (MainActivity.tokenDevice == null || MainActivity.tokenDevice.isEmpty()) {
+            // Handle case of missing token (e.g., log a warning)
+            return;
+        }
+        Device device = new Device();
+        device.setIdUser(1);
+        device.setStatus(1);
+        device.setToken(MainActivity.tokenDevice.toString().trim());
+
+        DeviceService deviceService = ServiceBuilder.buildService(DeviceService.class);
+
+        Call<Device> saveRequest = deviceService.saveDevice(device);
+
+        saveRequest.enqueue(new Callback<Device>() {
+            @Override
+            public void onResponse(Call<Device> call, Response<Device> response) {
+                if (response.isSuccessful()) {
+                    // Update notification list and UI (optional, based on your needs)
+                    Toast.makeText(mContext, "Notification updated successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Failed to update notification", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Device> call, Throwable t) {
+                if (t instanceof IOException) {
+                    Toast.makeText(mContext, "A connection error occured", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mContext, "Failed to update notification", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 

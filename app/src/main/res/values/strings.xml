@@ -30,5 +30,6 @@
     <string name="txtCouponName">“HAPPY0405” giành tặng ngay cho bạn! Giảm 20% với đơn hàng từ 800K</string>
     <string name="txtNameNotificationItem"><b>Mã hết hạn</b> vào <b>ngày 04-04-2024</b>!Áp dụng ngay để không bỏ lỡ!~</string>
     <string name="txtPhiVanChuyen">Giá đã bao gồm thuế.Phí vận chuyển và các chi phí khác (nếu có)sẽ được thể hiện khi đặt hàng.</string>
+    <string name="msg_token_fmt" />
 
 </resources>

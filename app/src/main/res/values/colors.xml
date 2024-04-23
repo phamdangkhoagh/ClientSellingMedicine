@@ -12,6 +12,6 @@
     <color name="coin_color">#EAAA04</color>
     <color name="minus_color">#FF0F00</color>
     <color name="disable">#E2DEDE</color>
-
+    <color name="transparent_green">#4A97D89A</color>
 
 </resources>
