@@ -118,8 +118,8 @@ public class OtpActivity extends AppCompatActivity {
                             // if the code is correct and the task is successful
                             // we are sending our user to new activity.
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            UserLogin userLogin = new UserLogin(user.getPhoneNumber(), edtPhone.getText().toString());
-                            sendRegister(userLogin);
+//                            UserLogin userLogin = new UserLogin(user.getPhoneNumber(), edtPhone.getText().toString());
+//                            sendRegister(userLogin);
                             Intent i = new Intent(OtpActivity.this, HomeActivity.class);
                             startActivity(i);
                             finish();
