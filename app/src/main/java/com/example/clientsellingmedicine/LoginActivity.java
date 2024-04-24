@@ -48,7 +48,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity  extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private Context mContext;
 
     TextInputEditText edt_phone_number, edt_password;
@@ -138,10 +138,9 @@ public class LoginActivity  extends AppCompatActivity {
             Login(userLogin);
         });
         tvRegister.setOnClickListener(view -> {
-            Intent i = new Intent(mContext, OtpActivity.class);
+            Intent i = new Intent(mContext, RegisterActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
-            System.out.println("Hello");
         });
         iv_back.setOnClickListener(view -> finish());
 

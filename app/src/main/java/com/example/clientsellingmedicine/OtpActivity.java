@@ -118,11 +118,13 @@ public class OtpActivity extends AppCompatActivity {
                             // if the code is correct and the task is successful
                             // we are sending our user to new activity.
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                            UserLogin userLogin = new UserLogin(user.getPhoneNumber(), edtPhone.getText().toString());
-//                            sendRegister(userLogin);
-                            Intent i = new Intent(OtpActivity.this, HomeActivity.class);
+
+                            UserLogin userLogin = new UserLogin(user.getPhoneNumber(), edtPhone.getText().toString());
+                            sendRegister(userLogin);
+                            Intent i = new Intent(mContext, RegisterActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                             startActivity(i);
-                            finish();
                         } else {
                             // if the code is not correct then we are
                             // displaying an error message to the user.
@@ -169,7 +171,7 @@ public class OtpActivity extends AppCompatActivity {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
                         .setPhoneNumber(number)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setTimeout(90L, TimeUnit.SECONDS) // Timeout and unit
                         .setCallbacks(mCallBack)
                         .setActivity(this)
                         .build();

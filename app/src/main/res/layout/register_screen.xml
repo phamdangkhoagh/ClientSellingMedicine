@@ -85,6 +85,7 @@
                     android:src="@drawable/ic_phone"/>
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -107,6 +108,7 @@
                     android:src="@drawable/ic_lock_closed"/>
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -130,6 +132,7 @@
                     android:src="@drawable/ic_lock_closed"/>
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tvConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -141,6 +144,7 @@
             </RelativeLayout>
 
             <CheckBox
+                android:id="@+id/cbPolicy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -156,6 +160,7 @@
                 android:layout_marginTop="26dp"
                 android:gravity="center"/>
             <Button
+                android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginStart="26dp"
@@ -202,7 +207,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_google_signin"
+                    android:id="@+id/btn_google_signin_register"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
                     android:text="Tiếp tục với Google"

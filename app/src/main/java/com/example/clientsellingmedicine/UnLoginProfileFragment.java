@@ -28,9 +28,6 @@ public class UnLoginProfileFragment extends Fragment {
         // Thực hiện các thao tác cần thiết trên giao diện view của fragment
         addControl(view);
         addEvents();
-
-
-
         return view;
     }
 
@@ -56,8 +53,9 @@ public class UnLoginProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // function to handle register button click event
-                Intent intent = new Intent(mContext, RegisterActivity.class);
-                startActivity(intent);
+                Intent i = new Intent(mContext, RegisterActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         });
     }
