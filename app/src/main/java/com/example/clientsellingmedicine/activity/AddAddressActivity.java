@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientsellingmedicine.Adapter.SubdivisionsAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.AddressDto;
 import com.example.clientsellingmedicine.models.District;
 import com.example.clientsellingmedicine.models.Province;

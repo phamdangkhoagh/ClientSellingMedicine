@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.Notification;
 
 import java.text.SimpleDateFormat;

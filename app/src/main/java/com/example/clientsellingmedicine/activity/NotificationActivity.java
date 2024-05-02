@@ -1,56 +1,31 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 // Imports for UI elements and RecyclerView
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
 // Imports for UI elements
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.clientsellingmedicine.Adapter.notificationAdapter;
 // Import for your reward points history adapter (if applicable)
-import com.example.clientsellingmedicine.Adapter.orderAdapter;
-import com.example.clientsellingmedicine.Adapter.orderDetailAdapter;
-import com.example.clientsellingmedicine.Adapter.rewardPointsHistoryAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnNotificationItemClickListener;
 import com.example.clientsellingmedicine.models.Notification;
-import com.example.clientsellingmedicine.models.Order;
 import com.example.clientsellingmedicine.services.NotificationService;
-import com.example.clientsellingmedicine.services.OrderService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthSettings;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;

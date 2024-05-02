@@ -1,10 +1,8 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 import android.view.KeyEvent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -17,8 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.clientsellingmedicine.R;
 
 public class OtpConfirmActivity extends AppCompatActivity {
     private Context mContext;

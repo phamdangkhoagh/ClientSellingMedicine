@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,15 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.ResponseDto;
-import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.models.UserLogin;
-import com.example.clientsellingmedicine.services.AddressService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.services.UserService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;

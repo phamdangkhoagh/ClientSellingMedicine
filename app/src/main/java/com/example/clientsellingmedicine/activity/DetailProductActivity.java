@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.CartItem;
 import com.example.clientsellingmedicine.models.Product;
 import com.example.clientsellingmedicine.services.CartService;

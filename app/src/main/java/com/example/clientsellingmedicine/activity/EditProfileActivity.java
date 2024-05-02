@@ -1,10 +1,9 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -19,24 +18,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.cloudinary.Cloudinary;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
-import com.cloudinary.api.ApiResponse;
-import com.cloudinary.utils.ObjectUtils;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.services.UserService;
 import com.example.clientsellingmedicine.utils.Convert;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
@@ -24,6 +24,7 @@ import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebResourceRequestCompat;
 import androidx.webkit.WebViewFeature;
 
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.MomoResponse;
 
 import java.net.URISyntaxException;

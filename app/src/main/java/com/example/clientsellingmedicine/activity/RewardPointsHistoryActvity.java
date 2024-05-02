@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.clientsellingmedicine.Adapter.rewardPointsHistoryAdapter;
+import com.example.clientsellingmedicine.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class RewardPointsHistoryActvity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.orderAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnOrderItemClickListener;
 import com.example.clientsellingmedicine.models.Order;
 
-import com.example.clientsellingmedicine.models.OrderDetail;
 import com.example.clientsellingmedicine.services.OrderService;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 

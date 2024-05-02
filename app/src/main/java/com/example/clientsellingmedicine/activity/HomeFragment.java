@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -56,6 +56,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.clientsellingmedicine.Adapter.productAdapter;
 import com.example.clientsellingmedicine.Adapter.feedAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnFeedItemClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;

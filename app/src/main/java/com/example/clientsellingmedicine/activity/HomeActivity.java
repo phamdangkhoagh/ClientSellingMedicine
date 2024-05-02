@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.ResponseDto;
 import com.example.clientsellingmedicine.models.UserLogin;
 import com.example.clientsellingmedicine.services.ServiceBuilder;

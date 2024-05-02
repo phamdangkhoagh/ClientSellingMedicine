@@ -1,16 +1,10 @@
 package com.example.clientsellingmedicine.services;
 
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.clientsellingmedicine.LoginActivity;
-import com.example.clientsellingmedicine.MyApplication;
-import com.example.clientsellingmedicine.models.ResponseDto;
+import com.example.clientsellingmedicine.activity.MyApplication;
 import com.example.clientsellingmedicine.models.Token;
 import com.example.clientsellingmedicine.utils.Constants;
 import com.example.clientsellingmedicine.utils.SharedPref;
@@ -27,7 +21,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -35,8 +28,9 @@ public class ServiceBuilder {
     //emulater
 //    private static final String URL = "http://10.0.2.2:9000/";
     //device
-//    private static final String URL = "http://192.168.1.26:8080/"; //ip Wireless LAN adapter Wi-Fi:
-    private static final String URL = "http://192.168.1.4:8080/"; //ip Wireless LAN adapter Wi-Fi:
+    private static final String URL = "http://192.168.1.17:8080/"; //ip Wireless LAN adapter Wi-Fi:
+    //private static final String URL = "https://8d67-2402-9d80-3ac-37e7-a180-6d1d-43d5-2676.ngrok-free.app/"; //ip Wireless LAN adapter Wi-Fi:
+    //private static final String URL = "http://192.168.43.175:8080/"; //ip Wireless LAN adapter Wi-Fi:
     // Create logger
     private static HttpLoggingInterceptor logger =
             new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);

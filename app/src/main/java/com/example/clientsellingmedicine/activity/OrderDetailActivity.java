@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.Order;
 import com.example.clientsellingmedicine.models.OrderDetail;
 import com.example.clientsellingmedicine.models.User;

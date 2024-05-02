@@ -1,9 +1,11 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.clientsellingmedicine.R;
 
 public class CouponActivity extends AppCompatActivity {
     private Context mContext;

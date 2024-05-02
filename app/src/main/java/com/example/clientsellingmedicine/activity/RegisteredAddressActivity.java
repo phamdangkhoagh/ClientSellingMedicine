@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.addressAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.AddressDto;
 import com.example.clientsellingmedicine.models.Product;

@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.clientsellingmedicine.MainActivity;
+import com.example.clientsellingmedicine.activity.MainActivity;
 import com.example.clientsellingmedicine.R;
 
 public class NotificationHelper {
@@ -39,7 +39,7 @@ public class NotificationHelper {
                 .setAutoCancel(true);
 
         Intent intent = new Intent(context, MainActivity.class); // Thay thế MainActivity bằng activity mà bạn muốn mở khi người dùng nhấp vào thông báo
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         builder.setContentIntent(pendingIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

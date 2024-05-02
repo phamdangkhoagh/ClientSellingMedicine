@@ -1,11 +1,10 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,10 +24,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.clientsellingmedicine.Adapter.SubdivisionsAdapter;
 import com.example.clientsellingmedicine.Adapter.confirmOrderAdapter;
 
 import com.example.clientsellingmedicine.Adapter.couponCheckboxAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnVoucherItemClickListener;
 import com.example.clientsellingmedicine.models.AddressDto;
 import com.example.clientsellingmedicine.models.CartItem;

@@ -1,4 +1,4 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.clientsellingmedicine.Adapter.productAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnButtonAddToCartClickListener;
 import com.example.clientsellingmedicine.interfaces.IOnProductItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;

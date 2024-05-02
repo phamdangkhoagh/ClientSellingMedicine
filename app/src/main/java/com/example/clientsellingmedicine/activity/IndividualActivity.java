@@ -1,9 +1,8 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -14,13 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.models.User;
 import com.example.clientsellingmedicine.services.ServiceBuilder;
 import com.example.clientsellingmedicine.services.UserService;
 import com.example.clientsellingmedicine.utils.Convert;
 
 import java.io.IOException;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;

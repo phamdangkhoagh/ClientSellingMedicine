@@ -1,16 +1,14 @@
-package com.example.clientsellingmedicine;
+package com.example.clientsellingmedicine.activity;
 
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientsellingmedicine.Adapter.cartAdapter;
 import com.example.clientsellingmedicine.Adapter.couponCheckboxAdapter;
+import com.example.clientsellingmedicine.R;
 import com.example.clientsellingmedicine.interfaces.IOnCartItemListener;
 import com.example.clientsellingmedicine.interfaces.IOnVoucherItemClickListener;
 import com.example.clientsellingmedicine.models.CartItem;
@@ -53,7 +52,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 import retrofit2.Call;
